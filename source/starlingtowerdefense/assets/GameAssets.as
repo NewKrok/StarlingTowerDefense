@@ -1,6 +1,6 @@
 package starlingtowerdefense.assets
 {
-	public class EmbeddedAssets2x
+	public class GameAssets
 	{
 		[Embed(source="../../../assets/texture/atlas.png")]
 		public static const atlas:Class;

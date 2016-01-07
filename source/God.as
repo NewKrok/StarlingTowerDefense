@@ -3,37 +3,31 @@
  */
 package
 {
-	import net.fpp.starling.StaticAssetManager;
+	import starlingtowerdefense.game.GameMain;
+	import starlingtowerdefense.menu.MenuMain;
 
-	import starling.core.Starling;
 	import starling.display.Sprite;
-
-	import starlingtowerdefense.assets.EmbeddedAssets2x;
 
 	public class God extends Sprite
 	{
+		private var _menuMain:MenuMain;
+		private var _gameMain:GameMain;
+
 		public function start():void
 		{
-			this.loadAssets();
+			this.createGame();
 		}
 
-		private function loadAssets():void
+		private function createMenu():void
 		{
-			StaticAssetManager.instance.enqueue( EmbeddedAssets2x );
-			StaticAssetManager.instance.loadQueue( this.onLoadQueue );
+			this._menuMain = new MenuMain();
+			this.addChild( this._menuMain );
 		}
 
-		private function onLoadQueue( ratio:Number ):void
+		private function createGame():void
 		{
-			if( ratio == 1 )
-			{
-				this.init();
-			}
-		}
-
-		private function init():void
-		{
-			trace('inited')
+			this._gameMain = new GameMain();
+			this.addChild( this._gameMain );
 		}
 	}
 }
