@@ -22,7 +22,7 @@ package
 
 	import starling.core.Starling;
 
-	[SWF(width="480", height="320", frameRate="60", backgroundColor="#000000")]
+	[SWF(width="480", height="320", frameRate="60", backgroundColor="#CCCCCC")]
 	public class Main extends Sprite
 	{
 		private var _starlingObject:*;

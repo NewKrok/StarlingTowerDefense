@@ -8,5 +8,9 @@ package starlingtowerdefense.game.module.unit
 	public interface IUnitModule extends IModule
 	{
 		function setPosition( x:Number, y:Number ):void;
+
+		function moveTo( x:Number, y:Number ):void;
+
+		function attack():void;
 	}
 }
