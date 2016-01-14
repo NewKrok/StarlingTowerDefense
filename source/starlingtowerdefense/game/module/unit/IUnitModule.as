@@ -12,5 +12,7 @@ package starlingtowerdefense.game.module.unit
 		function moveTo( x:Number, y:Number ):void;
 
 		function attack():void;
+
+		function changeSkin():void;
 	}
 }

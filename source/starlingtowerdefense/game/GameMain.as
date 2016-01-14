@@ -7,6 +7,8 @@ package starlingtowerdefense.game
 
 	import net.fpp.starling.StaticAssetManager;
 
+	import starling.display.Quad;
+
 	import starling.events.EnterFrameEvent;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
@@ -18,12 +20,12 @@ package starlingtowerdefense.game
 	import starling.display.Sprite;
 
 	import starlingtowerdefense.assets.GameAssets;
-	import starlingtowerdefense.game.service.animatedgraphic.AnimatedGraphicService;
-	import starlingtowerdefense.game.service.animatedgraphic.events.AnimatedGraphicServiceEvent;
+	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
+	import starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
 
 	public class GameMain extends Sprite
 	{
-		private var _animatedGraphicService:AnimatedGraphicService;
+		private var _dragonBonesGraphicService:DragonBonesGraphicService;
 
 		private var _backgroundModule:BackgroundModule;
 
@@ -31,16 +33,16 @@ package starlingtowerdefense.game
 
 		public function GameMain()
 		{
-			this.loadAnimatedGraphicAssets();
+			this.loadDragonBonesGraphicAssets();
 		}
 
-		private function loadAnimatedGraphicAssets():void
+		private function loadDragonBonesGraphicAssets():void
 		{
-			this._animatedGraphicService = new AnimatedGraphicService();
-			this._animatedGraphicService.addEventListener( AnimatedGraphicServiceEvent.COMPLETE, this.loadStarlingAssets );
+			this._dragonBonesGraphicService = new DragonBonesGraphicService();
+			this._dragonBonesGraphicService.addEventListener( DragonBonesGraphicServiceEvent.COMPLETE, this.loadStarlingAssets );
 		}
 
-		private function loadStarlingAssets( e:AnimatedGraphicServiceEvent ):void
+		private function loadStarlingAssets( e:DragonBonesGraphicServiceEvent ):void
 		{
 			StaticAssetManager.instance.enqueue( GameAssets );
 			StaticAssetManager.instance.loadQueue( this.onAssetsLoadProgress );
@@ -56,7 +58,9 @@ package starlingtowerdefense.game
 
 		private function build():void
 		{
-			for ( var i:int = 0; i < 50; i++ )
+			this.addChild( new Quad( stage.stageWidth, stage.stageHeight, 0, false ) );
+
+			for ( var i:int = 0; i < 25; i++ )
 			{
 				this.createUnit( stage.stageWidth * Math.random(), stage.stageHeight * Math.random() );
 			}
@@ -67,7 +71,7 @@ package starlingtowerdefense.game
 
 		private function createUnit( x:Number, y:Number ):void
 		{
-			var unitModule:IUnitModule = new UnitModule( this._animatedGraphicService );
+			var unitModule:IUnitModule = new UnitModule( this._dragonBonesGraphicService );
 			this._units.push( unitModule );
 
 			unitModule.setPosition( x, y );
@@ -104,13 +108,16 @@ package starlingtowerdefense.game
 			{
 				for ( var i:int = 0; i < this._units.length; i++ )
 				{
-					switch ( Math.floor( Math.random() * 2 ) )
+					switch ( Math.floor( Math.random() * 3 ) )
 					{
 						case 0:
 							this._units[ i ].moveTo( stage.stageWidth * Math.random(), stage.stageHeight * Math.random() );
 							break;
 						case 1:
 							this._units[ i ].attack();
+							break;
+						case 2:
+							this._units[ i ].changeSkin();
 							break;
 					}
 				}
@@ -121,8 +128,8 @@ package starlingtowerdefense.game
 		{
 			this._backgroundModule.dispose();
 
-			this._animatedGraphicService.dispose();
-			this._animatedGraphicService = null;
+			this._dragonBonesGraphicService.dispose();
+			this._dragonBonesGraphicService = null;
 		}
 	}
 }

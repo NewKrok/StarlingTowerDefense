@@ -22,7 +22,7 @@ package
 
 	import starling.core.Starling;
 
-	[SWF(width="480", height="320", frameRate="60", backgroundColor="#CCCCCC")]
+	[SWF(width="480", height="320", frameRate="60", backgroundColor="#000000")]
 	public class Main extends Sprite
 	{
 		private var _starlingObject:*;
@@ -123,6 +123,8 @@ package
 			this._starlingObject.simulateMultitouch = false;
 			this._starlingObject.enableErrorChecking = false;
 			this._starlingObject.antiAliasing = 3;
+
+			Starling.current.showStats = true;
 
 			this._starlingObject.addEventListener( starling.events.Event.ROOT_CREATED, this.starlingRootCreated );
 		}

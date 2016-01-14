@@ -8,7 +8,7 @@ package starlingtowerdefense.game.module.unit
 	import caurina.transitions.Tweener
 
 	import starlingtowerdefense.game.module.unit.view.UnitView;
-	import starlingtowerdefense.game.service.animatedgraphic.AnimatedGraphicService;
+	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 
 	public class UnitModule extends AModule implements IUnitModule
 	{
@@ -16,9 +16,9 @@ package starlingtowerdefense.game.module.unit
 
 		private var _unitView:UnitView;
 
-		public function UnitModule( animatedGraphicService:AnimatedGraphicService ):void
+		public function UnitModule( dragonBonesGraphicService:DragonBonesGraphicService ):void
 		{
-			this._view = new UnitView( animatedGraphicService );
+			this._view = new UnitView( dragonBonesGraphicService );
 			this._unitView = this._view as UnitView;
 		}
 
@@ -75,6 +75,11 @@ package starlingtowerdefense.game.module.unit
 			Tweener.removeTweens( this._unitView );
 
 			this._unitView.attack();
+		}
+
+		public function changeSkin():void
+		{
+			this._unitView.changeSkin();
 		}
 	}
 }

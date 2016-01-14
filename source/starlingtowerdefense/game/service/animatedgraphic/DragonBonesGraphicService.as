@@ -13,14 +13,14 @@ package starlingtowerdefense.game.service.animatedgraphic
 	import starling.events.EventDispatcher;
 
 	import starlingtowerdefense.assets.UnitAssets;
-	import starlingtowerdefense.game.service.animatedgraphic.events.AnimatedGraphicServiceEvent;
+	import starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
 
-	public class AnimatedGraphicService extends EventDispatcher
+	public class DragonBonesGraphicService extends EventDispatcher
 	{
 		private var _unitAssets:ByteArray;
 		private var _dragonBonesFactory:StarlingFactory;
 
-		public function AnimatedGraphicService()
+		public function DragonBonesGraphicService()
 		{
 			this.loadUnitAssets( new UnitAssets().getResourcesDataObject() );
 		}
@@ -38,14 +38,17 @@ package starlingtowerdefense.game.service.animatedgraphic
 		{
 			this._dragonBonesFactory.removeEventListener( Event.COMPLETE, this.onCompleteHandler );
 
-			this.dispatchEvent( new AnimatedGraphicServiceEvent( AnimatedGraphicServiceEvent.COMPLETE ) );
+			this.dispatchEvent( new DragonBonesGraphicServiceEvent( DragonBonesGraphicServiceEvent.COMPLETE ) );
 		}
 
 		public function buildArmature( name:String ):Armature
 		{
-			var armature:Armature = this._dragonBonesFactory.buildArmature( name );
+			return this._dragonBonesFactory.buildArmature( name );
+		}
 
-			return armature;
+		public function getTextureDisplay( name:String ):Object
+		{
+			return this._dragonBonesFactory.getTextureDisplay( name );
 		}
 
 		public function dispose():void
