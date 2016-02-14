@@ -8,32 +8,38 @@ package starlingtowerdefense.game
 	import net.fpp.starling.StaticAssetManager;
 
 	import starling.display.Quad;
-
+	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 
+	import starlingtowerdefense.assets.GameAssets;
 	import starlingtowerdefense.game.module.background.BackgroundModule;
+	import starlingtowerdefense.game.module.background.IBackgroundModule;
 	import starlingtowerdefense.game.module.unit.IUnitModule;
 	import starlingtowerdefense.game.module.unit.UnitModule;
-
-	import starling.display.Sprite;
-
-	import starlingtowerdefense.assets.GameAssets;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 	import starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
+	import starlingtowerdefense.vo.LevelDataVO;
 
 	public class GameMain extends Sprite
 	{
 		private var _dragonBonesGraphicService:DragonBonesGraphicService;
 
-		private var _backgroundModule:BackgroundModule;
+		private var _backgroundModule:IBackgroundModule;
 
 		private var _units:Vector.<IUnitModule> = new <IUnitModule>[];
+
+		private var _levelDataVO:LevelDataVO;
 
 		public function GameMain()
 		{
 			this.loadDragonBonesGraphicAssets();
+		}
+
+		public function setLevelDataVO( value:LevelDataVO ):void
+		{
+			this._levelDataVO = value;
 		}
 
 		private function loadDragonBonesGraphicAssets():void
@@ -60,7 +66,12 @@ package starlingtowerdefense.game
 		{
 			this.addChild( new Quad( stage.stageWidth, stage.stageHeight, 0, false ) );
 
-			for ( var i:int = 0; i < 25; i++ )
+			this._backgroundModule = new BackgroundModule();
+			this.addChild( this._backgroundModule.getView() );
+
+			this._backgroundModule.setPolygons( this._levelDataVO.polygons );
+
+			for ( var i:int = 0; i < 10; i++ )
 			{
 				this.createUnit( stage.stageWidth * Math.random(), stage.stageHeight * Math.random() );
 			}

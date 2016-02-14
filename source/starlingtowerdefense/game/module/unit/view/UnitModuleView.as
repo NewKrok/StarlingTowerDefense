@@ -8,7 +8,7 @@ package starlingtowerdefense.game.module.unit.view
 	import dragonBones.animation.WorldClock;
 	import dragonBones.events.AnimationEvent;
 
-	import net.fpp.starling.module.AView;
+	import net.fpp.starling.module.AModuleView;
 
 	import starling.display.Image;
 
@@ -20,14 +20,18 @@ package starlingtowerdefense.game.module.unit.view
 
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 
-	public class UnitView extends AView
+	public class UnitModuleView extends AModuleView
 	{
 		private var _dragonBonesGraphicService:DragonBonesGraphicService;
 
 		private var armature:Armature;
 		private var armatureClip:Sprite;
 
-		public function UnitView( dragonBonesGraphicService:DragonBonesGraphicService )
+		public function UnitModuleView()
+		{
+		}
+
+		public function setDragonBonesGraphicService( dragonBonesGraphicService:DragonBonesGraphicService ):void
 		{
 			this._dragonBonesGraphicService = dragonBonesGraphicService;
 		}
@@ -79,7 +83,9 @@ package starlingtowerdefense.game.module.unit.view
 
 			WorldClock.clock.add( this.armature );
 
-			this.addChild( armatureClip );
+			this.addChild( this.armatureClip );
+			this.armatureClip.scaleX = this.armatureClip.scaleY = .5;
+
 			this.idle();
 		}
 

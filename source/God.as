@@ -4,6 +4,7 @@
 package
 {
 	import starlingtowerdefense.game.GameMain;
+	import starlingtowerdefense.game.service.level.LevelDataService;
 	import starlingtowerdefense.menu.MenuMain;
 
 	import starling.display.Sprite;
@@ -13,9 +14,18 @@ package
 		private var _menuMain:MenuMain;
 		private var _gameMain:GameMain;
 
+		private var _levelDataService:LevelDataService;
+
 		public function start():void
 		{
+			this.createServices();
 			this.createGame();
+		}
+
+		private function createServices():void
+		{
+			this._levelDataService = new LevelDataService();
+			this._levelDataService.loadAreaData( 0 );
 		}
 
 		private function createMenu():void
@@ -27,6 +37,8 @@ package
 		private function createGame():void
 		{
 			this._gameMain = new GameMain();
+			this._gameMain.setLevelDataVO( this._levelDataService.getLevelData( 0, 0 ) );
+
 			this.addChild( this._gameMain );
 		}
 	}

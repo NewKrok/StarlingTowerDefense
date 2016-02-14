@@ -7,19 +7,20 @@ package starlingtowerdefense.game.module.unit
 
 	import caurina.transitions.Tweener
 
-	import starlingtowerdefense.game.module.unit.view.UnitView;
+	import starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 
 	public class UnitModule extends AModule implements IUnitModule
 	{
-		private var _speed:Number = 200; // pixel / sec
-
-		private var _unitView:UnitView;
+		private var _unitView:UnitModuleView;
+		private var _unitModel:UnitModel;
 
 		public function UnitModule( dragonBonesGraphicService:DragonBonesGraphicService ):void
 		{
-			this._view = new UnitView( dragonBonesGraphicService );
-			this._unitView = this._view as UnitView;
+			this._unitModel = this.createModel( UnitModel ) as UnitModel;
+
+			this._unitView = this.createView( UnitModuleView ) as UnitModuleView;
+			this._unitView.setDragonBonesGraphicService( dragonBonesGraphicService );
 		}
 
 		public function moveTo( x:Number, y:Number ):void
@@ -56,7 +57,7 @@ package starlingtowerdefense.game.module.unit
 
 			var distance:Number = Math.sqrt( Math.pow( distanceX, 2 ) + Math.pow( distanceY, 2 ) );
 
-			return distance / _speed;
+			return distance / this._unitModel.getMovementSpeed();
 		}
 
 		private function onMoveEnd():void
