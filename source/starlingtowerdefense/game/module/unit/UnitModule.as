@@ -47,7 +47,7 @@ package starlingtowerdefense.game.module.unit
 
 		private function calculateScaleByEndX( x:Number ):Number
 		{
-			return this._view.x > x ? 1 : -1;
+			return this._view.x > x ? -1 : 1;
 		}
 
 		private function calculateMoveTimeByEndPosition( x:Number, y:Number ):Number

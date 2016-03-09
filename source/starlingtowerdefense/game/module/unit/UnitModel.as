@@ -7,7 +7,7 @@ package starlingtowerdefense.game.module.unit
 
 	public class UnitModel extends AModel
 	{
-		private var _movementSpeed:Number = 200; // pixel / sec
+		private var _movementSpeed:Number = 100; // pixel / sec
 
 		public function getMovementSpeed():Number
 		{

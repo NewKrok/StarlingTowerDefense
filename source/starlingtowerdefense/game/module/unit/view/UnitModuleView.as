@@ -84,7 +84,7 @@ package starlingtowerdefense.game.module.unit.view
 			WorldClock.clock.add( this.armature );
 
 			this.addChild( this.armatureClip );
-			this.armatureClip.scaleX = this.armatureClip.scaleY = .5;
+			this.armatureClip.scaleX = this.armatureClip.scaleY = .75;
 
 			this.idle();
 		}
