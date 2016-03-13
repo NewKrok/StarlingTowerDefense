@@ -11,13 +11,11 @@ package starlingtowerdefense.game.module.unit.view
 	import net.fpp.starling.module.AModuleView;
 
 	import starling.display.Image;
-
 	import starling.display.Sprite;
 
 	import starlingtowerdefense.game.module.unit.view.constant.CUnitAnimation;
 	import starlingtowerdefense.game.module.unit.view.constant.CUnitBones;
 	import starlingtowerdefense.game.module.unit.view.constant.CUnitSkins;
-
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 
 	public class UnitModuleView extends AModuleView
