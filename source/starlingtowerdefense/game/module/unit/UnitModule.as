@@ -3,10 +3,12 @@
  */
 package starlingtowerdefense.game.module.unit
 {
+	import caurina.transitions.Tweener;
+
 	import net.fpp.geom.SimplePoint;
 	import net.fpp.starling.module.AModule;
 
-	import caurina.transitions.Tweener
+	import starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 
 	import starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
@@ -42,19 +44,19 @@ package starlingtowerdefense.game.module.unit
 
 		private function runNextRouteData():void
 		{
-			this.move( this._routeVO.route[this._routeIndex] );
+			this.move( this._routeVO.route[ this._routeIndex ] );
 
 			this._routeIndex++;
 		}
 
 		private function move( position:SimplePoint ):void
 		{
-			if ( position.x == this._unitView.x && position.y == this._unitView.y )
+			if( position.x == this._unitView.x && position.y == this._unitView.y )
 			{
 				return;
 			}
 
-			if ( this._unitView.x != position.x )
+			if( this._unitView.x != position.x )
 			{
 				this._unitView.scaleX = this.calculateScaleByEndX( position.x );
 			}
@@ -72,7 +74,7 @@ package starlingtowerdefense.game.module.unit
 
 		private function calculateScaleByEndX( x:Number ):Number
 		{
-			return this._view.x > x ? -1 : 1;
+			return this._unitView.x > x ? -1 : 1;
 		}
 
 		private function calculateMoveTimeByEndPosition( x:Number, y:Number ):Number
@@ -87,25 +89,37 @@ package starlingtowerdefense.game.module.unit
 
 		private function onMoveEnd():void
 		{
-			if ( this._routeIndex == this._routeVO.route.length )
+			if( this._routeVO && this._routeVO.route )
 			{
-				this.clearRouteData();
-				this._isMoving = false;
-				this._unitView.idle();
+				if ( this._routeIndex == this._routeVO.route.length )
+				{
+					this.clearRouteData();
+					this._isMoving = false;
+					this._unitView.idle();
+				}
+				else if( !this._unitModel.getTarget() )
+				{
+					this.runNextRouteData();
+				}
 			}
-			else
+			else if( this._unitModel.getTarget() )
 			{
-				this.runNextRouteData();
+				this._unitView.idle();
+
+				this._unitView.scaleX = this.calculateScaleByEndX( this._unitModel.getTarget().getView().x );
 			}
 		}
 
 		private function clearRouteData():void
 		{
-			this._routeVO.route.length = 0;
-			this._routeVO.route = null;
-			this._routeVO = null;
+			if ( this._routeVO && this._routeVO.route )
+			{
+				this._routeVO.route.length = 0;
+				this._routeVO.route = null;
+				this._routeVO = null;
 
-			this._routeIndex = 0;
+				this._routeIndex = 0;
+			}
 		}
 
 		public function setPosition( x:Number, y:Number ):void
@@ -113,7 +127,7 @@ package starlingtowerdefense.game.module.unit
 			this._unitView.x = x;
 			this._unitView.y = y;
 
-			if ( this._isMoving )
+			if( this._isMoving && !this._unitModel.getTarget() )
 			{
 				Tweener.removeTweens( this._unitView );
 
@@ -122,6 +136,7 @@ package starlingtowerdefense.game.module.unit
 					this._routeIndex--;
 				}
 
+				this._unitView.run();
 				this.runNextRouteData();
 			}
 		}
@@ -130,12 +145,65 @@ package starlingtowerdefense.game.module.unit
 		{
 			Tweener.removeTweens( this._unitView );
 
-			this._unitView.attack();
+			var now:Number = new Date().time;
+			if( new Date().time - this._unitModel.getLastAttackTime() > this._unitModel.getAttackSpeed() * 1000 )
+			{
+				this._unitModel.setLastAttackTime( now );
+
+				this._unitView.scaleX = this.calculateScaleByEndX( this._unitModel.getTarget().getView().x );
+
+				this._unitView.attack();
+
+				Tweener.addTween( this, {time: this._unitModel.getDamageDelay(), onComplete: damageTarget} );
+			}
 		}
 
-		public function changeSkin():void
+		private function damageTarget():void
 		{
-			this._unitView.changeSkin();
+			if( this._unitModel.getTarget() )
+			{
+				this._unitModel.getTarget().damage( this._unitModel.getDamage() );
+
+				if( this._unitModel.getTarget().getIsDead() )
+				{
+					this.removeTarget();
+				}
+			}
+		}
+
+		public function damage( value:Number ):void
+		{
+			this._unitModel.setLife( Math.max( this._unitModel.getLife() - value, 0 ) );
+
+			if( this._unitModel.getLife() == 0 )
+			{
+				this.die();
+			}
+		}
+
+		private function die():void
+		{
+			Tweener.removeTweens( this );
+
+			Tweener.addTween( this._unitView, {time: 1, alpha: 0, onComplete: onDiedHandler} );
+
+			this.clearRouteData();
+			this.removeTarget();
+		}
+
+		private function onDiedHandler():void
+		{
+			this.dispatchEvent( new UnitModuleEvent( UnitModuleEvent.UNIT_DIED ) );
+		}
+
+		public function getIsDead():Boolean
+		{
+			return this._unitModel.getLife() == 0;
+		}
+
+		public function changeSkin( type:int ):void
+		{
+			this._unitView.changeSkin( type );
 		}
 
 		public function getSizeRadius():Number
@@ -143,9 +211,47 @@ package starlingtowerdefense.game.module.unit
 			return this._unitModel.getSizeRadius();
 		}
 
-		public function asd():void
+		public function getTarget():IUnitModule
 		{
-			this._unitModel.setSizeRadius(150);
+			return this._unitModel.getTarget();
+		}
+
+		public function setTarget( value:IUnitModule ):void
+		{
+			this._unitModel.setTarget( value );
+
+			this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
+		}
+
+		public function removeTarget():void
+		{
+			this._unitModel.setTarget( null );
+
+			if( this._routeVO && this._routeVO.route && this._routeVO.route.length > 0 && this._routeIndex != this._routeVO.route.length )
+			{
+				if( this._routeIndex > 0 )
+				{
+					this._routeIndex--;
+				}
+
+				this._unitView.run();
+				this.runNextRouteData();
+			}
+		}
+
+		public function getPlayerGroup():String
+		{
+			return this._unitModel.getPlayerGroup();
+		}
+
+		public function setPlayerGroup( value:String ):void
+		{
+			this._unitModel.setPlayerGroup( value );
+		}
+
+		public function getIsMoving():Boolean
+		{
+			return this._isMoving;
 		}
 	}
 }

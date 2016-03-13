@@ -24,6 +24,7 @@ package starlingtowerdefense.game
 	import starlingtowerdefense.game.module.map.vo.MapNodeVO;
 	import starlingtowerdefense.game.module.unit.IUnitModule;
 	import starlingtowerdefense.game.module.unit.UnitModule;
+	import starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 	import starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 	import starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
@@ -86,67 +87,16 @@ package starlingtowerdefense.game
 
 			this._backgroundModule.setPolygons( this._levelDataVO.polygons );
 
-			/*for ( var i:int = 0; i < 1; i++ )
+			for( var i:int = 0; i < 6; i++ )
 			{
-				this.createUnit( 50, i * 50 + 200 );
-				this._units[0].asd();
+				this.createUnit( 100, i * 50 + 250 );
+				this._units[ this._units.length - 1 ].changeSkin( 0 );
+				this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 
-				this.createUnit( stage.stageWidth - 50, i * 50 + 200 );
-			}*/
-
-			this.createUnit( stage.stageWidth - 100, 250 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 100, 300 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 100, 400 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 100, 450 );
-			this._units[this._units.length - 1].changeSkin();
-
-			this.createUnit( stage.stageWidth - 150, 250 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 150, 300 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 150, 400 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 150, 450 );
-			this._units[this._units.length - 1].changeSkin();
-
-			this.createUnit( stage.stageWidth - 200, 250 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 200, 300 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 200, 400 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( stage.stageWidth - 200, 450 );
-			this._units[this._units.length - 1].changeSkin();
-
-			this.createUnit( 100, 250 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 100, 300 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 100, 400 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 100, 450 );
-			this._units[this._units.length - 1].changeSkin();
-
-			this.createUnit( 150, 250 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 150, 300 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 150, 400 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 150, 450 );
-			this._units[this._units.length - 1].changeSkin();
-
-			this.createUnit( 100, 250 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 100, 300 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 100, 400 );
-			this._units[this._units.length - 1].changeSkin();
-			this.createUnit( 100, 450 );
-			this._units[this._units.length - 1].changeSkin();
+				this.createUnit( stage.stageWidth - 100, i * 50 + 250 );
+				this._units[ this._units.length - 1 ].changeSkin( 1 );
+				this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			}
 
 			this.addEventListener( EnterFrameEvent.ENTER_FRAME, this.onEnterFrameHandler );
 			this.stage.addEventListener( TouchEvent.TOUCH, this.onTouchHandler );
@@ -159,11 +109,11 @@ package starlingtowerdefense.game
 			var debugLayer:Sprite = this.addChild( new Sprite() ) as Sprite;
 			var map:Vector.<Vector.<MapNodeVO>> = this._mapModule.getMapNodes();
 
-			for ( var i:int = 0; i < map.length; i++ )
+			for( var i:int = 0; i < map.length; i++ )
 			{
-				for ( var j:int = 0; j < map[i].length; j++ )
+				for( var j:int = 0; j < map[ i ].length; j++ )
 				{
-					var nodeColor:uint = map[i][j].isWalkable ? 0x00FF00 : 0xFF0000;
+					var nodeColor:uint = map[ i ][ j ].isWalkable ? 0x00FF00 : 0xFF0000;
 
 					var debugNodeView:Quad = new Quad( CMapSize.NODE_SIZE, CMapSize.NODE_SIZE, nodeColor );
 					debugNodeView.alpha = .2;
@@ -177,11 +127,39 @@ package starlingtowerdefense.game
 
 		private function createUnit( x:Number, y:Number ):void
 		{
-			var unitModule:IUnitModule = new UnitModule( this._dragonBonesGraphicService );
+			var unitModule:UnitModule = new UnitModule( this._dragonBonesGraphicService );
+
+			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, removeUnit );
+
 			this._units.push( unitModule );
 
 			unitModule.setPosition( x, y );
 			this.addChild( unitModule.getView() );
+		}
+
+		private function removeUnit( e:UnitModuleEvent ):void
+		{
+			var length:int = this._units.length;
+
+			for( var i:int = 0; i < length; i++ )
+			{
+				if ( this._units[i] != e.target && this._units[i].getTarget() == e.target )
+				{
+					this._units[i].removeTarget();
+				}
+			}
+
+			for( i = 0; i < length; i++ )
+			{
+				if ( this._units[i] == e.target )
+				{
+					this._units[i].dispose();
+					this._units[i] = null;
+					this._units.splice( i, 1 );
+
+					break;
+				}
+			}
 		}
 
 		private function onEnterFrameHandler( e:EnterFrameEvent ):void
@@ -197,14 +175,14 @@ package starlingtowerdefense.game
 		{
 			var unitPositionInfos:Array = [];
 
-			for ( var i:int = 0; i < this._units.length; i++ )
+			for( var i:int = 0; i < this._units.length; i++ )
 			{
 				unitPositionInfos.push( {y: _units[ i ].getView().y, content: _units[ i ]} );
 			}
 
-			unitPositionInfos.sortOn ( "y", Array.NUMERIC );
+			unitPositionInfos.sortOn( "y", Array.NUMERIC );
 
-			for ( i = 0; i < unitPositionInfos.length; i++ )
+			for( i = 0; i < unitPositionInfos.length; i++ )
 			{
 				this.addChild( unitPositionInfos[ i ].content.getView() );
 			}
@@ -213,14 +191,19 @@ package starlingtowerdefense.game
 		private function runUnitDistanceHandler():void
 		{
 			var length:int = this._units.length;
-			for ( var i:int = 0; i < length; i++ )
+			for( var i:int = 0; i < length; i++ )
 			{
 				for( var j:int = 0; j < length; j++ )
 				{
-					if ( i != j )
+					if( i != j )
 					{
-						var unitAModule:IUnitModule = this._units[i] as IUnitModule;
-						var unitBModule:IUnitModule = this._units[j] as IUnitModule;
+						var unitAModule:IUnitModule = this._units[ i ] as IUnitModule;
+						var unitBModule:IUnitModule = this._units[ j ] as IUnitModule;
+
+						if ( unitAModule.getIsDead() || unitBModule.getIsDead() )
+						{
+							break;
+						}
 
 						var unitAView:UnitModuleView = unitAModule.getView() as UnitModuleView;
 						var unitBView:UnitModuleView = unitBModule.getView() as UnitModuleView;
@@ -230,24 +213,24 @@ package starlingtowerdefense.game
 						var unitARadius:Number = unitAModule.getSizeRadius();
 						var unitBRadius:Number = unitBModule.getSizeRadius();
 
-						if ( distance < unitARadius / 2 + unitBRadius / 2 )
+						if( distance < unitARadius / 2 + unitBRadius / 2 )
 						{
 							var unitAOffset:Number;
 							var unitBOffset:Number;
 
-							if ( unitARadius == unitBRadius )
+							if( unitARadius == unitBRadius )
 							{
 								unitAOffset = unitBOffset = .5;
 							}
-							else if ( unitARadius > unitBRadius )
+							else if( unitARadius > unitBRadius )
 							{
-								unitAOffset = 0;//unitBRadius / unitARadius / 2;
+								unitAOffset = 0;
 								unitBOffset = 5;
 							}
 							else
 							{
 								unitAOffset = 5;
-								unitBOffset = 0;//unitBRadius / unitARadius / 2;
+								unitBOffset = 0;
 							}
 
 							var angle:Number = Math.atan2( unitAView.y - unitBView.y, unitAView.x - unitBView.x );
@@ -255,24 +238,47 @@ package starlingtowerdefense.game
 							unitAModule.setPosition( unitAView.x + unitAOffset * Math.cos( angle ), unitAView.y + unitAOffset * Math.sin( angle ) );
 							unitBModule.setPosition( unitBView.x - unitBOffset * Math.cos( angle ), unitBView.y - unitBOffset * Math.sin( angle ) );
 						}
+
+						if ( distance < 150 && unitAModule.getPlayerGroup() != unitBModule.getPlayerGroup() && unitAModule.getTarget() == null )
+						{
+							unitAModule.setTarget( unitBModule );
+						}
+
+						if ( unitAModule.getTarget() == unitBModule )
+						{
+							if ( distance < 90 )
+							{
+								unitAModule.attack();
+
+								if( Math.abs( unitAView.y - unitBView.y ) > 10 )
+								{
+									unitAModule.setPosition( unitAView.x, unitAView.y + ( unitAView.y > unitBView.y ? -1 : 1 ) );
+									unitBModule.setPosition( unitBView.x, unitBView.y + ( unitBView.y > unitAView.y ? -1 : 1 ) );
+								}
+							}
+							else if ( !unitAModule.getIsMoving() )
+							{
+								unitAModule.removeTarget();
+							}
+						}
 					}
 				}
 			}
 		}
 
-		private function onTouchHandler(e:TouchEvent):void
+		private function onTouchHandler( e:TouchEvent ):void
 		{
-			if ( e.touches[0].phase == TouchPhase.ENDED )
+			if( e.touches[ 0 ].phase == TouchPhase.ENDED )
 			{
-				for ( var i:int = 0; i < this._units.length; i++ )
+				for( var i:int = 0; i < this._units.length; i++ )
 				{
-					if ( this._units[ i ].getView().x < 250 )
+					if( this._units[ i ].getView().x < 250 )
 					{
-						this.unitMoveTo( this._units[ i ], new SimplePoint( stage.stageWidth - 100, stage.stageHeight * Math.random() ) );
+						this.unitMoveTo( this._units[ i ], new SimplePoint( stage.stageWidth - 100, stage.stageHeight / 2 - 100 + Math.random() * 200 ) );
 					}
 					else
 					{
-						this.unitMoveTo( this._units[ i ], new SimplePoint( 100, stage.stageHeight / 2 ) );
+						this.unitMoveTo( this._units[ i ], new SimplePoint( 100, stage.stageHeight / 2 - 100 + Math.random() * 200 ) );
 					}
 				}
 			}

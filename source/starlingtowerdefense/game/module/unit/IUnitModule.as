@@ -15,10 +15,24 @@ package starlingtowerdefense.game.module.unit
 
 		function attack():void;
 
-		function changeSkin():void;
+		function damage( value:Number ):void;
+
+		function changeSkin( type:int ):void;
 
 		function getSizeRadius():Number;
 
-		function asd():void;
+		function getPlayerGroup():String;
+
+		function setPlayerGroup( value:String ):void;
+
+		function getTarget():IUnitModule
+
+		function removeTarget():void
+
+		function setTarget( value:IUnitModule ):void;
+
+		function getIsMoving():Boolean;
+
+		function getIsDead():Boolean
 	}
 }

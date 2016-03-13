@@ -50,10 +50,10 @@ package starlingtowerdefense.game.module.unit.view
 			this.armature.animation.gotoAndPlay( CUnitAnimation.IDLE, 0, 0 );
 		}
 
-		public function changeSkin():void
+		public function changeSkin( type:int ):void
 		{
-			this.setHairSkin( CUnitSkins.WARRIOR_HAIRS[ Math.floor( Math.random() * CUnitSkins.WARRIOR_HAIRS.length ) ] );
-			this.setWeaponSkin( CUnitSkins.WARRIOR_WEAPONS[ Math.floor( Math.random() * CUnitSkins.WARRIOR_WEAPONS.length ) ] );
+			this.setHairSkin( CUnitSkins.WARRIOR_HAIRS[type] );
+			this.setWeaponSkin( CUnitSkins.WARRIOR_WEAPONS[type] );
 		}
 
 		private function setHairSkin( name:String ):void
