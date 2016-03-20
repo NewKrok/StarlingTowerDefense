@@ -23,14 +23,6 @@ package starlingtowerdefense.game.module.map
 					this._mapModel.mapNodes[i].push( new MapNodeVO( i, j ) );
 				}
 			}
-
-			/*this._mapModel.mapNodes[9][0].isWalkable = false;
-			this._mapModel.mapNodes[7][1].isWalkable = false;
-			this._mapModel.mapNodes[7][2].isWalkable = false;
-			this._mapModel.mapNodes[7][3].isWalkable = false;
-			this._mapModel.mapNodes[8][5].isWalkable = false;
-			this._mapModel.mapNodes[6][5].isWalkable = false;
-			this._mapModel.mapNodes[5][6].isWalkable = false;*/
 		}
 
 		public function getMapNodes():Vector.<Vector.<MapNodeVO>>

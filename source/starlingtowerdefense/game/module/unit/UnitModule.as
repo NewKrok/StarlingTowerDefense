@@ -167,7 +167,6 @@ package starlingtowerdefense.game.module.unit
 					this._routeIndex--;
 				}
 
-				this._unitView.run();
 				this.runNextRouteData();
 			}
 		}
@@ -266,7 +265,16 @@ package starlingtowerdefense.game.module.unit
 		{
 			this._unitModel.setTarget( value );
 
-			this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
+			var distance:Number = Math.sqrt(
+					Math.pow( this._view.x - value.getView().x, 2 ) +
+					Math.pow( this._view.y - value.getView().y, 2 )
+			);
+
+			if ( distance > this._unitModel.getAttackRadius() )
+			{
+				this._unitView.run();
+				this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
+			}
 		}
 
 		public function removeTarget():void

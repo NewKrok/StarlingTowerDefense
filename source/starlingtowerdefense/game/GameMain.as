@@ -12,10 +12,9 @@ package starlingtowerdefense.game
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
-	import starling.events.TouchEvent;
-	import starling.events.TouchPhase;
 
 	import starlingtowerdefense.assets.GameAssets;
+	import starlingtowerdefense.game.config.unit.TestEnemyUitConfigVO;
 	import starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import starlingtowerdefense.game.module.background.BackgroundModule;
 	import starlingtowerdefense.game.module.background.IBackgroundModule;
@@ -29,6 +28,11 @@ package starlingtowerdefense.game
 	import starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 	import starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
+	import starlingtowerdefense.game.module.unitcontroller.IUnitControllerModule;
+	import starlingtowerdefense.game.module.unitcontroller.UnitControllerModule;
+	import starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
+	import starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
+	import starlingtowerdefense.game.module.unitcontroller.request.UnitMoveToRequest;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 	import starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
 	import starlingtowerdefense.game.service.pathfinder.PathFinderService;
@@ -44,6 +48,7 @@ package starlingtowerdefense.game
 
 		private var _backgroundModule:IBackgroundModule;
 		private var _mapModule:IMapModule;
+		private var _unitControllerModule:IUnitControllerModule;
 
 		private var _units:Vector.<IUnitModule> = new <IUnitModule>[];
 
@@ -91,9 +96,13 @@ package starlingtowerdefense.game
 
 			this._backgroundModule = new BackgroundModule();
 			this.addChild( this._backgroundModule.getView() );
-
 			this._backgroundModule.setPolygons( this._levelDataVO.polygons );
 
+			this._unitControllerModule = new UnitControllerModule();
+			this._unitControllerModule.setGameContainer( this );
+			this._unitControllerModule.addEventListener( UnitControllerModuleEvent.UNIT_MOVE_TO_REQUEST, this.unitMoveToRequest );
+			this.addChild( this._unitControllerModule.getView() );
+/*
 			for( var i:int = 0; i < 6; i++ )
 			{
 				this.createUnit( 100, i * 50 + 250, new WarriorUnitConfigVO() );
@@ -104,11 +113,31 @@ package starlingtowerdefense.game
 				this._units[ this._units.length - 1 ].changeSkin( 1 );
 				this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 			}
+*/
+
+			this.createUnit( 100, 200, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			this._unitControllerModule.setTarget( this._units[0] );
+
+			for( var i:int = 0; i < 6; i++ )
+			{
+				this.createUnit( 300 + i * 50, 350, new WarriorUnitConfigVO() );
+				this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+
+				this.createUnit( 300 + i * 50, 300, new WarriorUnitConfigVO() );
+				this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+
+				this.createUnit( 300 + i * 50, 250, new WarriorUnitConfigVO() );
+				this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			}
+
+			this.createUnit( 800, 600, new TestEnemyUitConfigVO() );
+			this._units[ this._units.length - 1 ].changeSkin( 2 );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 
 			this.addEventListener( EnterFrameEvent.ENTER_FRAME, this.onEnterFrameHandler );
-			this.stage.addEventListener( TouchEvent.TOUCH, this.onTouchHandler );
 
-			this.drawDebugDatas();
+			//this.drawDebugDatas();
 		}
 
 		private function drawDebugDatas():void
@@ -167,6 +196,8 @@ package starlingtowerdefense.game
 					break;
 				}
 			}
+
+			this._unitControllerModule.setTarget( this._units[0] );
 		}
 
 		private function onEnterFrameHandler( e:EnterFrameEvent ):void
@@ -176,6 +207,8 @@ package starlingtowerdefense.game
 			this.zOrder();
 
 			this.runUnitDistanceHandler();
+
+			this._unitControllerModule.update();
 		}
 
 		private function zOrder():void
@@ -220,14 +253,14 @@ package starlingtowerdefense.game
 						var unitARadius:Number = unitAModule.getSizeRadius();
 						var unitBRadius:Number = unitBModule.getSizeRadius();
 
-						if( distance < unitARadius / 2 + unitBRadius / 2 )
+						if( distance < unitARadius / 2 + unitBRadius / 2 && unitAModule.getTarget() == null && unitBModule.getTarget() == null )
 						{
 							var unitAOffset:Number;
 							var unitBOffset:Number;
 
 							if( unitARadius == unitBRadius )
 							{
-								unitAOffset = unitBOffset = .5;
+								unitAOffset = unitBOffset = .8;
 							}
 							else if( unitARadius > unitBRadius )
 							{
@@ -273,29 +306,16 @@ package starlingtowerdefense.game
 			}
 		}
 
-		private function onTouchHandler( e:TouchEvent ):void
+		private function unitMoveToRequest( e:UnitControllerModuleEvent, request:UnitMoveToRequest ):void
 		{
-			if( e.touches[ 0 ].phase == TouchPhase.ENDED )
-			{
-				for( var i:int = 0; i < this._units.length; i++ )
-				{
-					if( this._units[ i ].getView().x < 250 )
-					{
-						this.unitMoveTo( this._units[ i ], new SimplePoint( stage.stageWidth - 100, stage.stageHeight / 2 - 100 + Math.random() * 200 ) );
-					}
-					else
-					{
-						this.unitMoveTo( this._units[ i ], new SimplePoint( 100, stage.stageHeight / 2 - 100 + Math.random() * 200 ) );
-					}
-				}
-			}
+			this.unitMoveTo( request.unit, request.position );
 		}
 
-		private function unitMoveTo( unit:IUnitModule, endPosition:SimplePoint ):void
+		private function unitMoveTo( unit:IUnitModule, position:SimplePoint ):void
 		{
 			var routeRequestVO = new RouteRequestVO();
 			routeRequestVO.startPosition = new SimplePoint( unit.getView().x, unit.getView().y );
-			routeRequestVO.endPosition = endPosition;
+			routeRequestVO.endPosition = position;
 			routeRequestVO.mapNodes = this._mapModule.getMapNodes();
 
 			unit.moveTo( this._pathFinderService.getRoute( routeRequestVO ) );

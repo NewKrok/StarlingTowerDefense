@@ -7,18 +7,18 @@ package starlingtowerdefense.game.config.unit
 	import starlingtowerdefense.game.module.unit.constant.CAttackType;
 	import starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 
-	public class WarriorUnitConfigVO extends UnitConfigVO
+	public class TestEnemyUitConfigVO extends UnitConfigVO
 	{
-		public function WarriorUnitConfigVO()
+		public function TestEnemyUitConfigVO()
 		{
-			this.name = 'Warrior';
+			this.name = 'tst enemy';
 
 			this.sizeRadius = 30;
 			this.attackRadius = 90;
 			this.unitDetectionRadius = 150;
 
 			this.armor = 0;
-			this.armorType = CArmorType.HEAVY;
+			this.armorType = CArmorType.NORMAL;
 
 			this.blockChance = 2;
 
@@ -36,7 +36,7 @@ package starlingtowerdefense.game.config.unit
 
 			this.damageDelay = .5;
 
-			this.maxLife = 30;
+			this.maxLife = 5000;
 			this.lifeRegeneration = 2;
 
 			this.movementSpeed = 100;
