@@ -8,9 +8,12 @@ package starlingtowerdefense.game.module.unit
 	import net.fpp.geom.SimplePoint;
 	import net.fpp.starling.module.AModule;
 
+	import starlingtowerdefense.game.module.helper.DamageCalculator;
+
 	import starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 
 	import starlingtowerdefense.game.module.unit.view.UnitModuleView;
+	import starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 	import starlingtowerdefense.game.service.pathfinder.vo.RouteVO;
 
@@ -19,16 +22,44 @@ package starlingtowerdefense.game.module.unit
 		private var _unitView:UnitModuleView;
 		private var _unitModel:UnitModel;
 
+		private var _damageCalculator:DamageCalculator;
+
 		private var _routeVO:RouteVO;
 		private var _routeIndex:int;
 		private var _isMoving:Boolean;
 
-		public function UnitModule( dragonBonesGraphicService:DragonBonesGraphicService ):void
+		public function UnitModule( unitConfigVO:UnitConfigVO, damageCalculator:DamageCalculator, dragonBonesGraphicService:DragonBonesGraphicService ):void
 		{
 			this._unitModel = this.createModel( UnitModel ) as UnitModel;
 
+			this.processUnitConfigVO( unitConfigVO );
+			this._damageCalculator = damageCalculator;
+
 			this._unitView = this.createView( UnitModuleView ) as UnitModuleView;
 			this._unitView.setDragonBonesGraphicService( dragonBonesGraphicService );
+		}
+
+		private function processUnitConfigVO( unitConfigVO:UnitConfigVO ):void
+		{
+			this._unitModel.setAttackSpeed( unitConfigVO.attackSpeed );
+			this._unitModel.setDamageDelay( unitConfigVO.damageDelay );
+			this._unitModel.setMaxDamage( unitConfigVO.maxDamage );
+			this._unitModel.setMaxLife( unitConfigVO.maxLife );
+			this._unitModel.setLife( unitConfigVO.maxLife );
+			this._unitModel.setMinDamage( unitConfigVO.minDamage );
+			this._unitModel.setMovementSpeed( unitConfigVO.movementSpeed );
+			this._unitModel.setSizeRadius( unitConfigVO.sizeRadius );
+			this._unitModel.setAreaDamage( unitConfigVO.areaDamage );
+			this._unitModel.setAreaDamageSize( unitConfigVO.areaDamageSize );
+			this._unitModel.setArmor( unitConfigVO.armor );
+			this._unitModel.setArmorType( unitConfigVO.armorType );
+			this._unitModel.setAttackRadius( unitConfigVO.attackRadius );
+			this._unitModel.setAttackType( unitConfigVO.attackType );
+			this._unitModel.setBlockChance( unitConfigVO.blockChance );
+			this._unitModel.setCriticalHitChance( unitConfigVO.criticalHitChance );
+			this._unitModel.setCriticalHitDamageMultiple( unitConfigVO.criticalHitDamageMultiple );
+			this._unitModel.setLifeRegeneration( unitConfigVO.lifeRegeneration );
+			this._unitModel.setUnitDetectionRadius( unitConfigVO.unitDetectionRadius );
 		}
 
 		public function moveTo( routeVO:RouteVO ):void
@@ -146,6 +177,7 @@ package starlingtowerdefense.game.module.unit
 			Tweener.removeTweens( this._unitView );
 
 			var now:Number = new Date().time;
+
 			if( new Date().time - this._unitModel.getLastAttackTime() > this._unitModel.getAttackSpeed() * 1000 )
 			{
 				this._unitModel.setLastAttackTime( now );
@@ -162,13 +194,27 @@ package starlingtowerdefense.game.module.unit
 		{
 			if( this._unitModel.getTarget() )
 			{
-				this._unitModel.getTarget().damage( this._unitModel.getDamage() );
+				this._unitModel.getTarget().damage( this.calculateDamage() );
 
 				if( this._unitModel.getTarget().getIsDead() )
 				{
 					this.removeTarget();
 				}
 			}
+		}
+
+		private function calculateDamage():Number
+		{
+			var damageValue:Number = this._damageCalculator.getAttackByMinAndMax( this._unitModel.getMinDamage(), this._unitModel.getMaxDamage() );
+
+			if ( this._unitModel.getCriticalHitChance() > Math.random() )
+			{
+				damageValue *= this._unitModel.getCriticalHitDamageMultiple();
+			}
+
+			damageValue = this._damageCalculator.calculateDamageByAttackAndArmorType( damageValue, this._unitModel.getAttackType(), this._unitModel.getTarget().getArmorType() );
+
+			return damageValue;
 		}
 
 		public function damage( value:Number ):void
@@ -252,6 +298,21 @@ package starlingtowerdefense.game.module.unit
 		public function getIsMoving():Boolean
 		{
 			return this._isMoving;
+		}
+
+		public function getArmorType():String
+		{
+			return this._unitModel.getArmorType();
+		}
+
+		public function getAttackRadius():Number
+		{
+			return this._unitModel.getAttackRadius();
+		}
+
+		public function getUnitDetectionRadius():Number
+		{
+			return this._unitModel.getUnitDetectionRadius();
 		}
 	}
 }

@@ -33,6 +33,12 @@ package starlingtowerdefense.game.module.unit
 
 		function getIsMoving():Boolean;
 
-		function getIsDead():Boolean
+		function getIsDead():Boolean;
+
+		function getArmorType():String;
+
+		function getAttackRadius():Number;
+
+		function getUnitDetectionRadius():Number;
 	}
 }

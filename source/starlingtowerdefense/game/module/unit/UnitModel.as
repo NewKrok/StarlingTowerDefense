@@ -7,16 +7,29 @@ package starlingtowerdefense.game.module.unit
 
 	public class UnitModel extends AModel
 	{
-		private var _movementSpeed:Number = 100; // pixel / sec
-		private var _sizeRadius:Number = 25;
-		private var _damage:Number = 1;
-		private var _damageDelay:Number = .2;
-		private var _lastAttackTime:Number = 0;
-		private var _attackSpeed:Number = 1;
-		private var _maxLife:Number = 5;
-		private var _life:Number = _maxLife;
-		private var _target:IUnitModule;
 		private var _playerGroup:String;
+		private var _target:IUnitModule;
+		private var _lastAttackTime:Number = 0;
+		private var _life:Number;
+
+		private var _movementSpeed:Number;
+		private var _sizeRadius:Number;
+		private var _minDamage:Number;
+		private var _maxDamage:Number;
+		private var _damageDelay:Number;
+		private var _attackSpeed:Number;
+		private var _maxLife:Number;
+		private var _areaDamage:Number;
+		private var _areaDamageSize:Number;
+		private var _armor:Number;
+		private var _armorType:String;
+		private var _attackRadius:Number;
+		private var _attackType:String;
+		private var _blockChance:Number;
+		private var _criticalHitChance:Number;
+		private var _criticalHitDamageMultiple:Number;
+		private var _lifeRegeneration:Number;
+		private var _unitDetectionRadius:Number;
 
 		public function getMovementSpeed():Number
 		{
@@ -58,14 +71,24 @@ package starlingtowerdefense.game.module.unit
 			this._life = value;
 		}
 
-		public function getDamage():Number
+		public function getMinDamage():Number
 		{
-			return this._damage;
+			return this._minDamage;
 		}
 
-		public function setDamage( value:Number ):void
+		public function setMinDamage( value:Number ):void
 		{
-			this._damage = value;
+			this._minDamage = value;
+		}
+
+		public function getMaxDamage():Number
+		{
+			return this._maxDamage;
+		}
+
+		public function setMaxDamage( value:Number ):void
+		{
+			this._maxDamage = value;
 		}
 
 		public function getDamageDelay():Number
@@ -116,6 +139,116 @@ package starlingtowerdefense.game.module.unit
 		public function setPlayerGroup( value:String ):void
 		{
 			this._playerGroup = value;
+		}
+
+		public function getAreaDamage():Number
+		{
+			return this._areaDamage;
+		}
+
+		public function setAreaDamage( value:Number ):void
+		{
+			this._areaDamage = value;
+		}
+
+		public function getAreaDamageSize():Number
+		{
+			return this._areaDamageSize;
+		}
+
+		public function setAreaDamageSize( value:Number ):void
+		{
+			this._areaDamageSize = value;
+		}
+
+		public function getArmor():Number
+		{
+			return this._armor;
+		}
+
+		public function setArmor( value:Number ):void
+		{
+			this._armor = value;
+		}
+
+		public function getArmorType():String
+		{
+			return this._armorType;
+		}
+
+		public function setArmorType( value:String ):void
+		{
+			this._armorType = value;
+		}
+
+		public function getAttackRadius():Number
+		{
+			return this._attackRadius;
+		}
+
+		public function setAttackRadius( value:Number ):void
+		{
+			this._attackRadius = value;
+		}
+
+		public function getAttackType():String
+		{
+			return this._attackType;
+		}
+
+		public function setAttackType( value:String ):void
+		{
+			this._attackType = value;
+		}
+
+		public function getBlockChance():Number
+		{
+			return this._blockChance;
+		}
+
+		public function setBlockChance( value:Number ):void
+		{
+			this._blockChance = value;
+		}
+
+		public function getCriticalHitChance():Number
+		{
+			return this._criticalHitChance;
+		}
+
+		public function setCriticalHitChance( value:Number ):void
+		{
+			this._criticalHitChance = value;
+		}
+
+		public function getCriticalHitDamageMultiple():Number
+		{
+			return this._criticalHitDamageMultiple;
+		}
+
+		public function setCriticalHitDamageMultiple( value:Number ):void
+		{
+			this._criticalHitDamageMultiple = value;
+		}
+
+		public function getLifeRegeneration():Number
+		{
+			return this._lifeRegeneration;
+		}
+
+		public function setLifeRegeneration( value:Number ):void
+		{
+			this._lifeRegeneration = value;
+		}
+
+		public function getUnitDetectionRadius():Number
+		{
+			return this._unitDetectionRadius;
+		}
+
+		public function setUnitDetectionRadius( value:Number ):void
+		{
+			this._unitDetectionRadius = value;
 		}
 	}
 }
