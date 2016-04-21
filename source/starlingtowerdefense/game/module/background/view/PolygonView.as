@@ -11,15 +11,20 @@ package starlingtowerdefense.game.module.background.view
 	import starling.display.Image;
 
 	import starling.display.Sprite;
+	import starling.textures.Texture;
+
+	import starlingtowerdefense.game.module.background.constant.CTerrainType;
+
+	import starlingtowerdefense.game.service.terraintexture.TerrainTextureService;
 
 	import starlingtowerdefense.utils.BrushPattern;
 
 	public class PolygonView extends Sprite
 	{
-		public function PolygonView( polygon:Vector.<Point> )
+		public function PolygonView( terrainTextureService:TerrainTextureService, polygon:Vector.<Point> )
 		{
-			var terrainGroundTexture:BitmapData = new terrain_1;
-			var terrainFillTexture:BitmapData = new terrain_0_content;
+			var terrainGroundTexture:BitmapData = terrainTextureService.get( CTerrainType.TERRAIN_0_BORDER );
+			var terrainFillTexture:BitmapData = terrainTextureService.get( CTerrainType.TERRAIN_0_CONTENT );
 
 			var generatedTerrain:BrushPattern = new BrushPattern( polygon, terrainGroundTexture, terrainFillTexture, 30, 40 );
 			var maxBlockSize:uint = 2048;
@@ -32,7 +37,7 @@ package starlingtowerdefense.game.module.background.view
 				offsetMatrix.tx = -i * maxBlockSize;
 				tmpBitmapData.draw( generatedTerrain, offsetMatrix );
 
-				var piece:Image = Image.fromBitmap( new Bitmap( tmpBitmapData ), false, 2 );
+				var piece:Image = new Image( Texture.fromBitmap( new Bitmap( tmpBitmapData ) ) );
 				piece.x = i * maxBlockSize / 2;
 				piece.touchable = false;
 				this.addChild( piece );
@@ -40,8 +45,6 @@ package starlingtowerdefense.game.module.background.view
 				tmpBitmapData.dispose();
 				tmpBitmapData = null;
 			}
-
-			this.flatten();
 
 			terrainGroundTexture.dispose();
 			terrainGroundTexture = null;

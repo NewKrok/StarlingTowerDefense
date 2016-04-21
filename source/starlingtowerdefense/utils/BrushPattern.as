@@ -137,7 +137,7 @@
 					linePoints.push ( lp );
 				}
 			}
-			var count = 0;
+			var count:int = 0;
 			var uvStep:Number = .5;
 			var currentUV:Number = 0
 			for ( i = 0; i < linePoints.length - 1; i += 2 ) {

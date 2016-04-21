@@ -28,7 +28,7 @@ package starlingtowerdefense.game.config.unit
 			this.areaDamage = 0;
 			this.areaDamageSize = 0;
 
-			this.attackSpeed = 2;
+			this.attackSpeed = 1;
 			this.attackType = CAttackType.NORMAL;
 
 			this.criticalHitChance = .01;

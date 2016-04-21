@@ -3,7 +3,8 @@
  */
 package starlingtowerdefense.game.module.unit
 {
-	import caurina.transitions.Tweener;
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Linear;
 
 	import net.fpp.geom.SimplePoint;
 	import net.fpp.starling.module.AModule;
@@ -92,13 +93,12 @@ package starlingtowerdefense.game.module.unit
 				this._unitView.scaleX = this.calculateScaleByEndX( position.x );
 			}
 
-			Tweener.removeTweens( this._unitView );
+			TweenLite.killTweensOf( this._unitView );
 
-			Tweener.addTween( this._unitView, {
+			TweenLite.to( this._unitView, this.calculateMoveTimeByEndPosition( position.x, position.y ), {
 				x: position.x,
 				y: position.y,
-				time: this.calculateMoveTimeByEndPosition( position.x, position.y ),
-				transition: 'linear',
+				ease: Linear.easeNone,
 				onComplete: this.onMoveEnd
 			} );
 		}
@@ -122,7 +122,7 @@ package starlingtowerdefense.game.module.unit
 		{
 			if( this._routeVO && this._routeVO.route )
 			{
-				if ( this._routeIndex == this._routeVO.route.length )
+				if( this._routeIndex == this._routeVO.route.length )
 				{
 					this.clearRouteData();
 					this._isMoving = false;
@@ -143,7 +143,7 @@ package starlingtowerdefense.game.module.unit
 
 		private function clearRouteData():void
 		{
-			if ( this._routeVO && this._routeVO.route )
+			if( this._routeVO && this._routeVO.route )
 			{
 				this._routeVO.route.length = 0;
 				this._routeVO.route = null;
@@ -160,7 +160,7 @@ package starlingtowerdefense.game.module.unit
 
 			if( this._isMoving && !this._unitModel.getTarget() )
 			{
-				Tweener.removeTweens( this._unitView );
+				TweenLite.killTweensOf( this._unitView );
 
 				if( this._routeIndex > 0 )
 				{
@@ -173,7 +173,7 @@ package starlingtowerdefense.game.module.unit
 
 		public function attack():void
 		{
-			Tweener.removeTweens( this._unitView );
+			TweenLite.killTweensOf( this._unitView );
 
 			var now:Number = new Date().time;
 
@@ -185,7 +185,7 @@ package starlingtowerdefense.game.module.unit
 
 				this._unitView.attack();
 
-				Tweener.addTween( this, {time: this._unitModel.getDamageDelay(), onComplete: damageTarget} );
+				TweenLite.delayedCall( this._unitModel.getDamageDelay(), damageTarget )
 			}
 		}
 
@@ -206,7 +206,7 @@ package starlingtowerdefense.game.module.unit
 		{
 			var damageValue:Number = this._damageCalculator.getAttackByMinAndMax( this._unitModel.getMinDamage(), this._unitModel.getMaxDamage() );
 
-			if ( this._unitModel.getCriticalHitChance() > Math.random() )
+			if( this._unitModel.getCriticalHitChance() > Math.random() )
 			{
 				damageValue *= this._unitModel.getCriticalHitDamageMultiple();
 			}
@@ -228,9 +228,9 @@ package starlingtowerdefense.game.module.unit
 
 		private function die():void
 		{
-			Tweener.removeTweens( this );
+			TweenLite.killTweensOf( this );
 
-			Tweener.addTween( this._unitView, {time: 1, alpha: 0, onComplete: onDiedHandler} );
+			TweenLite.to( this._unitView, 1, {alpha: 0, onComplete: onDiedHandler} );
 
 			this.clearRouteData();
 			this.removeTarget();
@@ -270,7 +270,7 @@ package starlingtowerdefense.game.module.unit
 					Math.pow( this._view.y - value.getView().y, 2 )
 			);
 
-			if ( distance > this._unitModel.getAttackRadius() )
+			if( distance > this._unitModel.getAttackRadius() )
 			{
 				this._unitView.run();
 				this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );

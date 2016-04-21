@@ -14,10 +14,13 @@ package starlingtowerdefense.game
 	import starling.events.EnterFrameEvent;
 
 	import starlingtowerdefense.assets.GameAssets;
+	import starlingtowerdefense.assets.TerrainTextures;
 	import starlingtowerdefense.game.config.unit.TestEnemyUitConfigVO;
 	import starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import starlingtowerdefense.game.module.background.BackgroundModule;
 	import starlingtowerdefense.game.module.background.IBackgroundModule;
+	import starlingtowerdefense.game.module.distancechecker.DistanceCheckerModule;
+	import starlingtowerdefense.game.module.distancechecker.IDistanceCheckerModule;
 	import starlingtowerdefense.game.module.helper.DamageCalculator;
 	import starlingtowerdefense.game.module.map.IMapModule;
 	import starlingtowerdefense.game.module.map.MapModule;
@@ -31,12 +34,12 @@ package starlingtowerdefense.game
 	import starlingtowerdefense.game.module.unitcontroller.IUnitControllerModule;
 	import starlingtowerdefense.game.module.unitcontroller.UnitControllerModule;
 	import starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
-	import starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
 	import starlingtowerdefense.game.module.unitcontroller.request.UnitMoveToRequest;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 	import starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
 	import starlingtowerdefense.game.service.pathfinder.PathFinderService;
 	import starlingtowerdefense.game.service.pathfinder.vo.RouteRequestVO;
+	import starlingtowerdefense.game.service.terraintexture.TerrainTextureService;
 	import starlingtowerdefense.vo.LevelDataVO;
 
 	public class GameMain extends Sprite
@@ -49,6 +52,7 @@ package starlingtowerdefense.game
 		private var _backgroundModule:IBackgroundModule;
 		private var _mapModule:IMapModule;
 		private var _unitControllerModule:IUnitControllerModule;
+		private var _distanceCheckerModule:IDistanceCheckerModule;
 
 		private var _units:Vector.<IUnitModule> = new <IUnitModule>[];
 
@@ -90,11 +94,15 @@ package starlingtowerdefense.game
 
 		private function build():void
 		{
-			this.addChild( new Quad( stage.stageWidth, stage.stageHeight, 0, false ) );
+			this.addChild( new Quad( stage.stageWidth, stage.stageHeight, 0 ) );
 
 			this._mapModule = new MapModule();
 
+			var terrainTextureService:TerrainTextureService = new TerrainTextureService();
+			terrainTextureService.processAtlas( new TerrainTextures.AtlasImage, new TerrainTextures.AtlasDescription );
+
 			this._backgroundModule = new BackgroundModule();
+			this._backgroundModule.registerService( terrainTextureService );
 			this.addChild( this._backgroundModule.getView() );
 			this._backgroundModule.setPolygons( this._levelDataVO.polygons );
 
@@ -102,18 +110,8 @@ package starlingtowerdefense.game
 			this._unitControllerModule.setGameContainer( this );
 			this._unitControllerModule.addEventListener( UnitControllerModuleEvent.UNIT_MOVE_TO_REQUEST, this.unitMoveToRequest );
 			this.addChild( this._unitControllerModule.getView() );
-/*
-			for( var i:int = 0; i < 6; i++ )
-			{
-				this.createUnit( 100, i * 50 + 250, new WarriorUnitConfigVO() );
-				this._units[ this._units.length - 1 ].changeSkin( 0 );
-				this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 
-				this.createUnit( stage.stageWidth - 100, i * 50 + 250, new WarriorUnitConfigVO() );
-				this._units[ this._units.length - 1 ].changeSkin( 1 );
-				this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
-			}
-*/
+			this._distanceCheckerModule = new DistanceCheckerModule();
 
 			this.createUnit( 100, 200, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
@@ -168,6 +166,7 @@ package starlingtowerdefense.game
 			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, removeUnit );
 
 			this._units.push( unitModule );
+			this._distanceCheckerModule.registerUnit( unitModule );
 
 			unitModule.setPosition( x, y );
 			this.addChild( unitModule.getView() );
@@ -209,6 +208,7 @@ package starlingtowerdefense.game
 			this.runUnitDistanceHandler();
 
 			this._unitControllerModule.update();
+			this._distanceCheckerModule.update();
 		}
 
 		private function zOrder():void
@@ -290,6 +290,13 @@ package starlingtowerdefense.game
 							{
 								unitAModule.attack();
 
+
+								if( Math.abs( unitAView.x - unitBView.x ) < 40 )
+								{
+									unitAModule.setPosition( unitAView.x + ( unitAView.x > unitBView.x ? 1 : -1 ), unitAView.y );
+									unitBModule.setPosition( unitBView.x + ( unitBView.x > unitBView.x ? 1 : -1 ), unitBView.y );
+								}
+
 								if( Math.abs( unitAView.y - unitBView.y ) > 10 )
 								{
 									unitAModule.setPosition( unitAView.x, unitAView.y + ( unitAView.y > unitBView.y ? -1 : 1 ) );
@@ -313,7 +320,7 @@ package starlingtowerdefense.game
 
 		private function unitMoveTo( unit:IUnitModule, position:SimplePoint ):void
 		{
-			var routeRequestVO = new RouteRequestVO();
+			var routeRequestVO:RouteRequestVO = new RouteRequestVO();
 			routeRequestVO.startPosition = new SimplePoint( unit.getView().x, unit.getView().y );
 			routeRequestVO.endPosition = position;
 			routeRequestVO.mapNodes = this._mapModule.getMapNodes();

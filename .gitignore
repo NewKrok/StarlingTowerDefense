@@ -4,5 +4,7 @@
 *.swf
 *.dbproj
 *.ipa
+/out
 
 img source/library/
+out/html-template/history/history.css

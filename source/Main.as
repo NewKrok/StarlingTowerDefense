@@ -49,7 +49,6 @@ package
 			var isIOS:Boolean = Capabilities.manufacturer.indexOf( "iOS" ) != -1;
 
 			Starling.multitouchEnabled = true;
-			Starling.handleLostContext = !isIOS;
 
 			if( isIOS )
 			{
@@ -117,7 +116,7 @@ package
 
 		private function initStarling( viewPort:Rectangle ):void
 		{
-			this._starlingObject = new Starling( God, stage, viewPort );
+			this._starlingObject = new Starling( God, stage, viewPort, null, "auto", "auto" );
 			this._starlingObject.stage.stageWidth = this.stage.stageWidth;
 			this._starlingObject.stage.stageHeight = this.stage.stageHeight;
 			this._starlingObject.simulateMultitouch = false;
