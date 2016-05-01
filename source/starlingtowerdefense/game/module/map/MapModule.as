@@ -4,8 +4,7 @@
 package starlingtowerdefense.game.module.map
 {
 	import net.fpp.starling.module.AModule;
-
-	import starlingtowerdefense.game.module.map.vo.MapNodeVO;
+	import net.fpp.util.pathfinding.vo.PathNodeVO;
 
 	public class MapModule extends AModule implements IMapModule
 	{
@@ -17,15 +16,15 @@ package starlingtowerdefense.game.module.map
 
 			for ( var i:int = 0; i < 15; i++ )
 			{
-				this._mapModel.mapNodes.push( new <MapNodeVO>[] );
+				this._mapModel.mapNodes.push( new <PathNodeVO>[] );
 				for ( var j:int = 0; j < 10; j++ )
 				{
-					this._mapModel.mapNodes[i].push( new MapNodeVO( i, j ) );
+					this._mapModel.mapNodes[i].push( new PathNodeVO( i, j ) );
 				}
 			}
 		}
 
-		public function getMapNodes():Vector.<Vector.<MapNodeVO>>
+		public function getMapNodes():Vector.<Vector.<PathNodeVO>>
 		{
 			return this._mapModel.mapNodes;
 		}

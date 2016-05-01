@@ -3,15 +3,17 @@
  */
 package starlingtowerdefense.game.module.unit
 {
+	import net.fpp.geom.SimplePoint;
 	import net.fpp.starling.module.IModule;
-
-	import starlingtowerdefense.game.service.pathfinder.vo.RouteVO;
+	import net.fpp.util.pathfinding.vo.PathVO;
 
 	public interface IUnitModule extends IModule
 	{
 		function setPosition( x:Number, y:Number ):void;
 
-		function moveTo( routeVO:RouteVO ):void;
+		function getPosition():SimplePoint;
+
+		function moveTo( pathVO:PathVO ):void;
 
 		function attack():void;
 

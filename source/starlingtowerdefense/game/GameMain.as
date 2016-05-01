@@ -6,11 +6,14 @@ package starlingtowerdefense.game
 	import dragonBones.animation.WorldClock;
 
 	import net.fpp.geom.SimplePoint;
-
 	import net.fpp.starling.StaticAssetManager;
+	import net.fpp.starling.module.AApplicationContext;
+	import net.fpp.util.jsonbitmapatlas.JSONBitmapAtlas;
+	import net.fpp.util.pathfinding.PathfFindingUtil;
+	import net.fpp.util.pathfinding.vo.PathRequestVO;
+	import net.fpp.util.pathfinding.vo.PathVO;
 
 	import starling.display.Quad;
-	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 
 	import starlingtowerdefense.assets.GameAssets;
@@ -24,8 +27,6 @@ package starlingtowerdefense.game
 	import starlingtowerdefense.game.module.helper.DamageCalculator;
 	import starlingtowerdefense.game.module.map.IMapModule;
 	import starlingtowerdefense.game.module.map.MapModule;
-	import starlingtowerdefense.game.module.map.constant.CMapSize;
-	import starlingtowerdefense.game.module.map.vo.MapNodeVO;
 	import starlingtowerdefense.game.module.unit.IUnitModule;
 	import starlingtowerdefense.game.module.unit.UnitModule;
 	import starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
@@ -37,14 +38,11 @@ package starlingtowerdefense.game
 	import starlingtowerdefense.game.module.unitcontroller.request.UnitMoveToRequest;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 	import starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
-	import starlingtowerdefense.game.service.pathfinder.PathFinderService;
-	import starlingtowerdefense.game.service.pathfinder.vo.RouteRequestVO;
-	import starlingtowerdefense.game.service.terraintexture.TerrainTextureService;
+	import starlingtowerdefense.game.util.MapPositionUtil;
 	import starlingtowerdefense.vo.LevelDataVO;
 
-	public class GameMain extends Sprite
+	public class GameMain extends AApplicationContext
 	{
-		private var _pathFinderService:PathFinderService;
 		private var _dragonBonesGraphicService:DragonBonesGraphicService;
 
 		private var _damageCalculator:DamageCalculator;
@@ -60,12 +58,19 @@ package starlingtowerdefense.game
 
 		public function GameMain()
 		{
-			this._pathFinderService = new PathFinderService();
+			this.configureInjector();
+
 			this._dragonBonesGraphicService = new DragonBonesGraphicService();
 
 			this._damageCalculator = new DamageCalculator();
 
 			this.loadDragonBonesGraphicAssets();
+		}
+
+		private function configureInjector():void
+		{
+			this._mapModule = new MapModule();
+			this.injector.mapValue( IMapModule, this._mapModule );
 		}
 
 		public function setLevelDataVO( value:LevelDataVO ):void
@@ -96,13 +101,10 @@ package starlingtowerdefense.game
 		{
 			this.addChild( new Quad( stage.stageWidth, stage.stageHeight, 0 ) );
 
-			this._mapModule = new MapModule();
+			var terrainTextureService:JSONBitmapAtlas = new JSONBitmapAtlas();
+			terrainTextureService.getBitmapDataVOs( new TerrainTextures.AtlasImage, new TerrainTextures.AtlasDescription );
 
-			var terrainTextureService:TerrainTextureService = new TerrainTextureService();
-			terrainTextureService.processAtlas( new TerrainTextures.AtlasImage, new TerrainTextures.AtlasDescription );
-
-			this._backgroundModule = new BackgroundModule();
-			this._backgroundModule.registerService( terrainTextureService );
+			this._backgroundModule = this.createModule( BackgroundModule ) as BackgroundModule;
 			this.addChild( this._backgroundModule.getView() );
 			this._backgroundModule.setPolygons( this._levelDataVO.polygons );
 
@@ -115,7 +117,7 @@ package starlingtowerdefense.game
 
 			this.createUnit( 100, 200, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
-			this._unitControllerModule.setTarget( this._units[0] );
+			this._unitControllerModule.setTarget( this._units[ 0 ] );
 
 			for( var i:int = 0; i < 6; i++ )
 			{
@@ -140,23 +142,23 @@ package starlingtowerdefense.game
 
 		private function drawDebugDatas():void
 		{
-			var debugLayer:Sprite = this.addChild( new Sprite() ) as Sprite;
-			var map:Vector.<Vector.<MapNodeVO>> = this._mapModule.getMapNodes();
+			/*			var debugLayer:Sprite = this.addChild( new Sprite() ) as Sprite;
+			 var map:Vector.<Vector.<PathNodeVO>> = this._mapModule.getMapNodes();
 
-			for( var i:int = 0; i < map.length; i++ )
-			{
-				for( var j:int = 0; j < map[ i ].length; j++ )
-				{
-					var nodeColor:uint = map[ i ][ j ].isWalkable ? 0x00FF00 : 0xFF0000;
+			 for( var i:int = 0; i < map.length; i++ )
+			 {
+			 for( var j:int = 0; j < map[ i ].length; j++ )
+			 {
+			 var nodeColor:uint = map[ i ][ j ].isWalkable ? 0x00FF00 : 0xFF0000;
 
-					var debugNodeView:Quad = new Quad( CMapSize.NODE_SIZE, CMapSize.NODE_SIZE, nodeColor );
-					debugNodeView.alpha = .2;
-					debugNodeView.x = i * CMapSize.NODE_SIZE;
-					debugNodeView.y = j * CMapSize.NODE_SIZE;
+			 var debugNodeView:Quad = new Quad( CMapSize.NODE_SIZE, CMapSize.NODE_SIZE, nodeColor );
+			 debugNodeView.alpha = .2;
+			 debugNodeView.x = i * CMapSize.NODE_SIZE;
+			 debugNodeView.y = j * CMapSize.NODE_SIZE;
 
-					debugLayer.addChild( debugNodeView );
-				}
-			}
+			 debugLayer.addChild( debugNodeView );
+			 }
+			 }*/
 		}
 
 		private function createUnit( x:Number, y:Number, unitConfigVO:UnitConfigVO ):void
@@ -164,6 +166,8 @@ package starlingtowerdefense.game
 			var unitModule:UnitModule = new UnitModule( unitConfigVO, this._damageCalculator, this._dragonBonesGraphicService );
 
 			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, removeUnit );
+
+			this.injector.injectInto( unitModule );
 
 			this._units.push( unitModule );
 			this._distanceCheckerModule.registerUnit( unitModule );
@@ -178,25 +182,25 @@ package starlingtowerdefense.game
 
 			for( var i:int = 0; i < length; i++ )
 			{
-				if ( this._units[i] != e.target && this._units[i].getTarget() == e.target )
+				if( this._units[ i ] != e.target && this._units[ i ].getTarget() == e.target )
 				{
-					this._units[i].removeTarget();
+					this._units[ i ].removeTarget();
 				}
 			}
 
 			for( i = 0; i < length; i++ )
 			{
-				if ( this._units[i] == e.target )
+				if( this._units[ i ] == e.target )
 				{
-					this._units[i].dispose();
-					this._units[i] = null;
+					this._units[ i ].dispose();
+					this._units[ i ] = null;
 					this._units.splice( i, 1 );
 
 					break;
 				}
 			}
 
-			this._unitControllerModule.setTarget( this._units[0] );
+			this._unitControllerModule.setTarget( this._units[ 0 ] );
 		}
 
 		private function onEnterFrameHandler( e:EnterFrameEvent ):void
@@ -240,7 +244,7 @@ package starlingtowerdefense.game
 						var unitAModule:IUnitModule = this._units[ i ] as IUnitModule;
 						var unitBModule:IUnitModule = this._units[ j ] as IUnitModule;
 
-						if ( unitAModule.getIsDead() || unitBModule.getIsDead() )
+						if( unitAModule.getIsDead() || unitBModule.getIsDead() )
 						{
 							break;
 						}
@@ -279,17 +283,16 @@ package starlingtowerdefense.game
 							unitBModule.setPosition( unitBView.x - unitBOffset * Math.cos( angle ), unitBView.y - unitBOffset * Math.sin( angle ) );
 						}
 
-						if ( distance < unitAModule.getUnitDetectionRadius() && unitAModule.getPlayerGroup() != unitBModule.getPlayerGroup() && unitAModule.getTarget() == null )
+						if( distance < unitAModule.getUnitDetectionRadius() && unitAModule.getPlayerGroup() != unitBModule.getPlayerGroup() && unitAModule.getTarget() == null )
 						{
 							unitAModule.setTarget( unitBModule );
 						}
 
-						if ( unitAModule.getTarget() == unitBModule )
+						if( unitAModule.getTarget() == unitBModule )
 						{
-							if ( distance < unitAModule.getAttackRadius() )
+							if( distance < unitAModule.getAttackRadius() )
 							{
 								unitAModule.attack();
-
 
 								if( Math.abs( unitAView.x - unitBView.x ) < 40 )
 								{
@@ -303,7 +306,7 @@ package starlingtowerdefense.game
 									unitBModule.setPosition( unitBView.x, unitBView.y + ( unitBView.y > unitAView.y ? -1 : 1 ) );
 								}
 							}
-							else if ( !unitAModule.getIsMoving() )
+							else if( !unitAModule.getIsMoving() )
 							{
 								unitAModule.removeTarget();
 							}
@@ -320,12 +323,15 @@ package starlingtowerdefense.game
 
 		private function unitMoveTo( unit:IUnitModule, position:SimplePoint ):void
 		{
-			var routeRequestVO:RouteRequestVO = new RouteRequestVO();
-			routeRequestVO.startPosition = new SimplePoint( unit.getView().x, unit.getView().y );
-			routeRequestVO.endPosition = position;
-			routeRequestVO.mapNodes = this._mapModule.getMapNodes();
+			var pathRequestVO:PathRequestVO = new PathRequestVO();
+			pathRequestVO.startPosition = MapPositionUtil.changePositionToMapNodePoint( unit.getPosition() );
+			pathRequestVO.endPosition = MapPositionUtil.changePositionToMapNodePoint( position );
+			pathRequestVO.mapNodes = this._mapModule.getMapNodes();
 
-			unit.moveTo( this._pathFinderService.getRoute( routeRequestVO ) );
+			var pathVO:PathVO = PathfFindingUtil.getPath( pathRequestVO );
+			pathVO.path = MapPositionUtil.changeMapNodePointVectorToPositionVector( pathVO.path );
+
+			unit.moveTo( pathVO );
 		}
 
 		override public function dispose():void

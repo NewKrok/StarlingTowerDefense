@@ -11,11 +11,11 @@ package starlingtowerdefense.game.module.background.view
 	import starling.display.Sprite;
 
 	import starlingtowerdefense.game.module.background.BackgroundModel;
-	import starlingtowerdefense.game.service.terraintexture.TerrainTextureService;
+	import net.fpp.util.jsonbitmapatlas.JSONBitmapAtlas;
 
 	public class BackgroundModuleView extends AModuleView
 	{
-		private var _terrainTextureService:TerrainTextureService;
+		private var _terrainTextureService:JSONBitmapAtlas;
 
 		private var _backgroundModel:BackgroundModel;
 
@@ -34,7 +34,7 @@ package starlingtowerdefense.game.module.background.view
 
 		override protected function onInit():void
 		{
-			this._terrainTextureService = this._model.getService( TerrainTextureService ) as TerrainTextureService;
+		//	this._terrainTextureService = this._model.getService( JSONBitmapAtlas ) as JSONBitmapAtlas;
 
 			this._polygonLayer = new Sprite();
 			this.addChild( this._polygonLayer );
@@ -46,7 +46,7 @@ package starlingtowerdefense.game.module.background.view
 
 			for( var i:int = 0; i < polygons.length; i++ )
 			{
-				this._polygonLayer.addChild( new PolygonView( this._terrainTextureService,  polygons[ i ] ) );
+				//this._polygonLayer.addChild( new PolygonView( this._terrainTextureService,  polygons[ i ] ) );
 			}
 		}
 

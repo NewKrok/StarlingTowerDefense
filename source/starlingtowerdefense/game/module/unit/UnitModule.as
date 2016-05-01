@@ -8,15 +8,13 @@ package starlingtowerdefense.game.module.unit
 
 	import net.fpp.geom.SimplePoint;
 	import net.fpp.starling.module.AModule;
+	import net.fpp.util.pathfinding.vo.PathVO;
 
 	import starlingtowerdefense.game.module.helper.DamageCalculator;
-
 	import starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
-
 	import starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 	import starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
-	import starlingtowerdefense.game.service.pathfinder.vo.RouteVO;
 
 	public class UnitModule extends AModule implements IUnitModule
 	{
@@ -25,8 +23,8 @@ package starlingtowerdefense.game.module.unit
 
 		private var _damageCalculator:DamageCalculator;
 
-		private var _routeVO:RouteVO;
-		private var _routeIndex:int;
+		private var _pathVO:PathVO;
+		private var _pathIndex:int;
 		private var _isMoving:Boolean;
 
 		public function UnitModule( unitConfigVO:UnitConfigVO, damageCalculator:DamageCalculator, dragonBonesGraphicService:DragonBonesGraphicService ):void
@@ -63,22 +61,23 @@ package starlingtowerdefense.game.module.unit
 			this._unitModel.setUnitDetectionRadius( unitConfigVO.unitDetectionRadius );
 		}
 
-		public function moveTo( routeVO:RouteVO ):void
+		public function moveTo( pathVO:PathVO ):void
 		{
+			this._pathVO = pathVO;
+
 			this._isMoving = true;
 
-			this._routeIndex = 0;
-			this._routeVO = routeVO;
+			this._pathIndex = 0;
 
-			this.runNextRouteData();
+			this.runNextPathData();
 			this._unitView.run();
 		}
 
-		private function runNextRouteData():void
+		private function runNextPathData():void
 		{
-			this.move( this._routeVO.route[ this._routeIndex ] );
+			this.move( this._pathVO.path[ this._pathIndex ] );
 
-			this._routeIndex++;
+			this._pathIndex++;
 		}
 
 		private function move( position:SimplePoint ):void
@@ -120,9 +119,9 @@ package starlingtowerdefense.game.module.unit
 
 		private function onMoveEnd():void
 		{
-			if( this._routeVO && this._routeVO.route )
+			if( this._pathVO && this._pathVO.path )
 			{
-				if( this._routeIndex == this._routeVO.route.length )
+				if( this._pathIndex == this._pathVO.path.length )
 				{
 					this.clearRouteData();
 					this._isMoving = false;
@@ -130,7 +129,7 @@ package starlingtowerdefense.game.module.unit
 				}
 				else if( !this._unitModel.getTarget() )
 				{
-					this.runNextRouteData();
+					this.runNextPathData();
 				}
 			}
 			else if( this._unitModel.getTarget() )
@@ -143,13 +142,13 @@ package starlingtowerdefense.game.module.unit
 
 		private function clearRouteData():void
 		{
-			if( this._routeVO && this._routeVO.route )
+			if( this._pathVO && this._pathVO.path )
 			{
-				this._routeVO.route.length = 0;
-				this._routeVO.route = null;
-				this._routeVO = null;
+				this._pathVO.path.length = 0;
+				this._pathVO.path = null;
+				this._pathVO = null;
 
-				this._routeIndex = 0;
+				this._pathIndex = 0;
 			}
 		}
 
@@ -162,13 +161,18 @@ package starlingtowerdefense.game.module.unit
 			{
 				TweenLite.killTweensOf( this._unitView );
 
-				if( this._routeIndex > 0 )
+				if( this._pathIndex > 0 )
 				{
-					this._routeIndex--;
+					this._pathIndex--;
 				}
 
-				this.runNextRouteData();
+				this.runNextPathData();
 			}
+		}
+
+		public function getPosition():SimplePoint
+		{
+			return new SimplePoint( this._unitView.x, this._unitView.y );
 		}
 
 		public function attack():void
@@ -281,15 +285,15 @@ package starlingtowerdefense.game.module.unit
 		{
 			this._unitModel.setTarget( null );
 
-			if( this._routeVO && this._routeVO.route && this._routeVO.route.length > 0 && this._routeIndex != this._routeVO.route.length )
+			if( this._pathVO && this._pathVO.path && this._pathVO.path.length > 0 && this._pathIndex != this._pathVO.path.length )
 			{
-				if( this._routeIndex > 0 )
+				if( this._pathIndex > 0 )
 				{
-					this._routeIndex--;
+					this._pathIndex--;
 				}
 
 				this._unitView.run();
-				this.runNextRouteData();
+				this.runNextPathData();
 			}
 		}
 

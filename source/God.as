@@ -3,11 +3,11 @@
  */
 package
 {
+	import starling.display.Sprite;
+
 	import starlingtowerdefense.game.GameMain;
 	import starlingtowerdefense.game.service.level.LevelDataService;
 	import starlingtowerdefense.menu.MenuMain;
-
-	import starling.display.Sprite;
 
 	public class God extends Sprite
 	{

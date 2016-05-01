@@ -15,13 +15,13 @@ package starlingtowerdefense.game.module.background.view
 
 	import starlingtowerdefense.game.module.background.constant.CTerrainType;
 
-	import starlingtowerdefense.game.service.terraintexture.TerrainTextureService;
+	import net.fpp.util.jsonbitmapatlas.JSONBitmapAtlas;
 
 	import starlingtowerdefense.utils.BrushPattern;
 
 	public class PolygonView extends Sprite
 	{
-		public function PolygonView( terrainTextureService:TerrainTextureService, polygon:Vector.<Point> )
+		public function PolygonView( terrainTextureService:JSONBitmapAtlas, polygon:Vector.<Point> )
 		{
 			var terrainGroundTexture:BitmapData = terrainTextureService.get( CTerrainType.TERRAIN_0_BORDER );
 			var terrainFillTexture:BitmapData = terrainTextureService.get( CTerrainType.TERRAIN_0_CONTENT );
