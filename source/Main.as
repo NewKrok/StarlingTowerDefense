@@ -18,7 +18,7 @@ package
 		import flash.media.AudioPlaybackMode;
 	}
 
-	import net.fpp.starling.StaticAssetManager;
+	import net.fpp.common.starling.StaticAssetManager;
 
 	import starling.core.Starling;
 

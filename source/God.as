@@ -5,9 +5,9 @@ package
 {
 	import starling.display.Sprite;
 
-	import starlingtowerdefense.game.GameMain;
-	import starlingtowerdefense.game.service.level.LevelDataService;
-	import starlingtowerdefense.menu.MenuMain;
+	import net.fpp.starlingtowerdefense.game.GameMain;
+	import net.fpp.starlingtowerdefense.game.service.level.LevelDataService;
+	import net.fpp.starlingtowerdefense.menu.MenuMain;
 
 	public class God extends Sprite
 	{
