@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<application xmlns="http://ns.adobe.com/air/application/21.0">
-    <id>starling-tower-defense</id>
+<application xmlns="http://ns.adobe.com/air/application/19.0">
+    <id>net.flashplusplus.std</id>
     <versionNumber>1.0</versionNumber>
     <filename>starling_tower_defense</filename>
     <description></description>
@@ -25,8 +25,8 @@
         <systemChrome>standard</systemChrome>
         <transparent>false</transparent>
         <visible>true</visible>
-        <fullScreen>false</fullScreen>
-        <autoOrients>false</autoOrients>
+        <fullScreen>true</fullScreen>
+        <autoOrients>true</autoOrients>
         <aspectRatio>portrait</aspectRatio>
         <renderMode>direct</renderMode>
         <maximizable>true</maximizable>
@@ -36,5 +36,12 @@
     <customUpdateUI>false</customUpdateUI>
     <allowBrowserInvocation>false</allowBrowserInvocation>
     <icon></icon>
+    <iPhone>
+        <requestedDisplayResolution>high</requestedDisplayResolution>
+        <InfoAdditions><![CDATA[
+    <key>UIDeviceFamily</key>
+    <array><string>1</string><string>2</string></array>
+]]></InfoAdditions>
+    </iPhone>
     <version>1.0</version>
 </application>

@@ -39,7 +39,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.maxLife = 30;
 			this.lifeRegeneration = 2;
 
-			this.movementSpeed = 100;
+			this.movementSpeed = 300;
 		}
 	}
 }

@@ -40,5 +40,6 @@
     <array><string>1</string><string>2</string></array>
 ]]></InfoAdditions>
     </iPhone>
-    <version>1.0</version>
+    <supportedLanguages>en</supportedLanguages>
+    
 </application>

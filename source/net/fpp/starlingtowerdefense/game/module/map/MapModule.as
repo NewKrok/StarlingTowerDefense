@@ -14,12 +14,16 @@ package net.fpp.starlingtowerdefense.game.module.map
 		{
 			this._mapModel = this.createModel( MapModel ) as MapModel;
 
-			for ( var i:int = 0; i < 15; i++ )
+			for ( var i:int = 0; i < 40; i++ )
 			{
 				this._mapModel.mapNodes.push( new <PathNodeVO>[] );
-				for ( var j:int = 0; j < 10; j++ )
+				for ( var j:int = 0; j < 40; j++ )
 				{
 					this._mapModel.mapNodes[i].push( new PathNodeVO( i, j ) );
+					if ( Math.random() > .8 )
+					{
+						this._mapModel.mapNodes[i][j].isWalkable = false;
+					}
 				}
 			}
 		}

@@ -3,6 +3,8 @@
  */
 package net.fpp.starlingtowerdefense.game.module.unitcontroller
 {
+	import flash.geom.Point;
+
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModule;
 
@@ -31,7 +33,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 		{
 			this._unitControllerModel.setGameContainer( value );
 
-			value.stage.addEventListener( TouchEvent.TOUCH, this.onTouchHandler );
+			this._unitControllerModel.getGameContainer().addEventListener( TouchEvent.TOUCH, this.onTouchHandler );
 		}
 
 		private function onTouchHandler( e:TouchEvent ):void
@@ -40,7 +42,9 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 			{
 				var unitMoveToRequest:UnitMoveToRequest = new UnitMoveToRequest();
 				unitMoveToRequest.unit = this._unitControllerModel.getTarget();
-				unitMoveToRequest.position = new SimplePoint( e.touches[0].globalX, e.touches[0].globalY );
+
+				var touchPoint:Point = e.touches[0].getLocation( this._unitControllerModuleView );
+				unitMoveToRequest.position = new SimplePoint( touchPoint.x, touchPoint.y );
 
 				this.dispatchEvent( new UnitControllerModuleEvent( UnitControllerModuleEvent.UNIT_MOVE_TO_REQUEST, unitMoveToRequest ) );
 			}

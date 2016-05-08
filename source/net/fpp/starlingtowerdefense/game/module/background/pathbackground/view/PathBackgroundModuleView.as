@@ -12,6 +12,7 @@ package net.fpp.starlingtowerdefense.game.module.background.pathbackground.view
 	import net.fpp.common.starling.module.AModuleView;
 
 	import starling.display.Image;
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 
@@ -50,6 +51,8 @@ package net.fpp.starlingtowerdefense.game.module.background.pathbackground.view
 			{
 				this._polygonLayer.addChild( this.createPathPolygon( polygons[ i ] ) );
 			}
+
+			this.addChildAt( new Quad( this.width, this.height, 0 ), 0 );
 		}
 
 		public function createPathPolygon( polygon:Vector.<Point> ):Sprite
