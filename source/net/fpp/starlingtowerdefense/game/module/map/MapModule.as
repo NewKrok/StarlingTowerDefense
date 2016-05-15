@@ -26,6 +26,14 @@ package net.fpp.starlingtowerdefense.game.module.map
 					}
 				}
 			}
+
+			/*this._mapModel.mapNodes[2][1].isWalkable = false;
+			this._mapModel.mapNodes[2][2].isWalkable = false;
+			this._mapModel.mapNodes[2][3].isWalkable = false;
+
+			this._mapModel.mapNodes[3][2].isWalkable = false;
+			this._mapModel.mapNodes[4][2].isWalkable = false;
+			this._mapModel.mapNodes[5][2].isWalkable = false;*/
 		}
 
 		public function getMapNodes():Vector.<Vector.<PathNodeVO>>

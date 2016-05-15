@@ -7,5 +7,6 @@ package net.fpp.starlingtowerdefense.game.module.unit.view.constant
 	{
 		public static const HAIR:String = 'hair';
 		public static const WEAPON:String = 'weapon';
+		public static const HEAD:String = 'head';
 	}
 }

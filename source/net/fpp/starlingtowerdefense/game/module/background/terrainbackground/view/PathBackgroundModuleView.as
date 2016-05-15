@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 14/02/16.
  */
-package net.fpp.starlingtowerdefense.game.module.background.pathbackground.view
+package net.fpp.starlingtowerdefense.game.module.background.terrainbackground.view
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -10,14 +10,16 @@ package net.fpp.starlingtowerdefense.game.module.background.pathbackground.view
 
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.common.starling.module.AModuleView;
+	import net.fpp.starlingtowerdefense.game.config.terraintexture.TerrainTextureConfig;
+	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.vo.TerrainTextureVO;
 
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 
-	import net.fpp.starlingtowerdefense.game.module.background.pathbackground.PathBackgroundModel;
-	import net.fpp.starlingtowerdefense.game.module.background.pathbackground.constant.CTerrainType;
+	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.PathBackgroundModel;
+	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.constant.CTerrainTextureId;
 	import net.fpp.starlingtowerdefense.utils.BrushPattern;
 
 	public class PathBackgroundModuleView extends AModuleView
@@ -59,8 +61,10 @@ package net.fpp.starlingtowerdefense.game.module.background.pathbackground.view
 		{
 			var pathPolygon:Sprite = new Sprite();
 
-			var terrainGroundTexture:BitmapData = this._backgroundModel.getTerrainById( CTerrainType.TERRAIN_0_BORDER ).bitmapData;
-			var terrainFillTexture:BitmapData = this._backgroundModel.getTerrainById( CTerrainType.TERRAIN_0_CONTENT ).bitmapData;
+			var terrainTextureVO:TerrainTextureVO = TerrainTextureConfig.instance.getTerrainTextureVO( CTerrainTextureId.TERRAIN_0 );
+
+			var terrainGroundTexture:BitmapData = this._backgroundModel.getTerrainById( terrainTextureVO.borderTextureId ).bitmapData;
+			var terrainFillTexture:BitmapData = this._backgroundModel.getTerrainById( terrainTextureVO.contentTextureId ).bitmapData;
 
 			var generatedTerrain:BrushPattern = new BrushPattern( polygon, terrainGroundTexture, terrainFillTexture, 30, 40 );
 			var maxBlockSize:uint = 2048;

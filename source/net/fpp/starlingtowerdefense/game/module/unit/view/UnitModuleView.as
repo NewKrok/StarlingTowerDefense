@@ -54,6 +54,16 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		{
 			this.setHairSkin( CUnitSkins.WARRIOR_HAIRS[type] );
 			this.setWeaponSkin( CUnitSkins.WARRIOR_WEAPONS[type] );
+			this.setHeadSkin( CUnitSkins.WARRIOR_HEADS[type] );
+		}
+
+		private function setHeadSkin( name:String ):void
+		{
+			var newHead:Image = this._dragonBonesGraphicService.getTextureDisplay( name ) as Image;
+
+			var bone:Bone = this.armature.getBone( CUnitBones.HEAD );
+			bone.display.dispose();
+			bone.display = newHead;
 		}
 
 		private function setHairSkin( name:String ):void
@@ -85,6 +95,9 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 			this.armatureClip.scaleX = this.armatureClip.scaleY = .75;
 
 			this.idle();
+
+			this.setHeadSkin( CUnitSkins.WARRIOR_HEAD_2 );
+			this.setHairSkin( '' );
 		}
 
 		private function aramtureEventHandler( e:AnimationEvent ):void

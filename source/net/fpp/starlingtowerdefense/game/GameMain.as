@@ -17,8 +17,8 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
-	import net.fpp.starlingtowerdefense.game.module.background.pathbackground.IPathBackgroundModule;
-	import net.fpp.starlingtowerdefense.game.module.background.pathbackground.PathBackgroundModule;
+	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.IPathBackgroundModule;
+	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.PathBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.distancechecker.DistanceCheckerModule;
 	import net.fpp.starlingtowerdefense.game.module.distancechecker.IDistanceCheckerModule;
 	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
@@ -128,7 +128,7 @@ package net.fpp.starlingtowerdefense.game
 
 			this._distanceCheckerModule = this.createModule( DistanceCheckerModule ) as DistanceCheckerModule;
 
-			this.createUnit( 100, 200, new WarriorUnitConfigVO() );
+			this.createUnit( 300, 300, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 
@@ -347,9 +347,12 @@ package net.fpp.starlingtowerdefense.game
 			}
 
 			var pathVO:PathVO = PathfFindingUtil.getPath( pathRequestVO );
-			pathVO.path = MapPositionUtil.changeMapNodePointVectorToPositionVector( pathVO.path );
+			if ( pathVO && pathVO.path && pathVO.path.length > 0 )
+			{
+				pathVO.path = MapPositionUtil.changeMapNodePointVectorToPositionVector( pathVO.path );
 
-			unit.moveTo( pathVO );
+				unit.moveTo( pathVO );
+			}
 		}
 
 		override public function dispose():void

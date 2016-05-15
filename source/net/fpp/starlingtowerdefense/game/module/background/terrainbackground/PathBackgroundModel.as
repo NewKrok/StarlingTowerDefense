@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 14/02/16.
  */
-package net.fpp.starlingtowerdefense.game.module.background.pathbackground
+package net.fpp.starlingtowerdefense.game.module.background.terrainbackground
 {
 	import flash.geom.Point;
 

@@ -1,14 +1,14 @@
 /**
  * Created by newkrok on 07/01/16.
  */
-package net.fpp.starlingtowerdefense.game.module.background.pathbackground
+package net.fpp.starlingtowerdefense.game.module.background.terrainbackground
 {
 	import flash.geom.Point;
 
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
 
-	import net.fpp.starlingtowerdefense.game.module.background.pathbackground.view.PathBackgroundModuleView;
+	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.view.PathBackgroundModuleView;
 
 	public class PathBackgroundModule extends AModule implements IPathBackgroundModule
 	{
