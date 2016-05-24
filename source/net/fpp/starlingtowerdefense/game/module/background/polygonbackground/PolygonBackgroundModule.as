@@ -1,25 +1,25 @@
 /**
  * Created by newkrok on 07/01/16.
  */
-package net.fpp.starlingtowerdefense.game.module.background.terrainbackground
+package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
 {
 	import flash.geom.Point;
 
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
 
-	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.view.PathBackgroundModuleView;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.view.PathBackgroundModuleView;
 
-	public class PathBackgroundModule extends AModule implements IPathBackgroundModule
+	public class PolygonBackgroundModule extends AModule implements IPolygonBackgroundModule
 	{
 		private var _backgroundModuleView:PathBackgroundModuleView;
-		private var _backgroundModel:PathBackgroundModel;
+		private var _backgroundModel:PolygonBackgroundModel;
 
-		public function PathBackgroundModule():void
+		public function PolygonBackgroundModule():void
 		{
 			this._backgroundModuleView = this.createView( PathBackgroundModuleView ) as PathBackgroundModuleView;
 
-			this._backgroundModel = this.createModel( PathBackgroundModel ) as PathBackgroundModel;
+			this._backgroundModel = this.createModel( PolygonBackgroundModel ) as PolygonBackgroundModel;
 		}
 
 		public function setTerrainInformations( terrains:Vector.<BitmapDataVO> ):void

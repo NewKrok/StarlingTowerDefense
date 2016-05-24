@@ -17,8 +17,8 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
-	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.IPathBackgroundModule;
-	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.PathBackgroundModule;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.distancechecker.DistanceCheckerModule;
 	import net.fpp.starlingtowerdefense.game.module.distancechecker.IDistanceCheckerModule;
 	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
@@ -56,7 +56,7 @@ package net.fpp.starlingtowerdefense.game
 
 		private var _damageCalculator:DamageCalculator;
 
-		private var _pathBackgroundModule:IPathBackgroundModule;
+		private var _pathBackgroundModule:IPolygonBackgroundModule;
 		private var _mapModule:IMapModule;
 		private var _unitControllerModule:IUnitControllerModule;
 		private var _distanceCheckerModule:IDistanceCheckerModule;
@@ -116,7 +116,7 @@ package net.fpp.starlingtowerdefense.game
 			this._viewContainer = new Sprite();
 			this.addChild( this._viewContainer );
 
-			this._pathBackgroundModule = this.createModule( PathBackgroundModule ) as PathBackgroundModule;
+			this._pathBackgroundModule = this.createModule( PolygonBackgroundModule ) as PolygonBackgroundModule;
 			this._viewContainer.addChild( this._pathBackgroundModule.getView() );
 			this._pathBackgroundModule.setTerrainInformations( JSONBitmapAtlas.getBitmapDataVOs( new TerrainTextures.AtlasImage, new TerrainTextures.AtlasDescription ) );
 			this._pathBackgroundModule.setPathPolygons( this._levelDataVO.polygons );

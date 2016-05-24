@@ -1,14 +1,14 @@
 /**
  * Created by newkrok on 14/02/16.
  */
-package net.fpp.starlingtowerdefense.game.module.background.terrainbackground
+package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
 {
 	import flash.geom.Point;
 
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
 
-	public class PathBackgroundModel extends AModel
+	public class PolygonBackgroundModel extends AModel
 	{
 		public var pathPolygons:Vector.<Vector.<Point>>;
 

@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 14/02/16.
  */
-package net.fpp.starlingtowerdefense.game.module.background.terrainbackground.view
+package net.fpp.starlingtowerdefense.game.module.background.polygonbackground.view
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -10,21 +10,21 @@ package net.fpp.starlingtowerdefense.game.module.background.terrainbackground.vi
 
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.common.starling.module.AModuleView;
-	import net.fpp.starlingtowerdefense.game.config.terraintexture.TerrainTextureConfig;
-	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.vo.TerrainTextureVO;
+	import net.fpp.starlingtowerdefense.game.config.terraintexture.PolygonBackgroundTerrainTextureConfig;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vo.PolygonTerrainTextureVO;
 
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 
-	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.PathBackgroundModel;
-	import net.fpp.starlingtowerdefense.game.module.background.terrainbackground.constant.CTerrainTextureId;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModel;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.constant.CPolygonBackgroundTerrainTextureId;
 	import net.fpp.starlingtowerdefense.utils.BrushPattern;
 
 	public class PathBackgroundModuleView extends AModuleView
 	{
-		private var _backgroundModel:PathBackgroundModel;
+		private var _backgroundModel:PolygonBackgroundModel;
 
 		private var _polygonLayer:Sprite;
 
@@ -34,7 +34,7 @@ package net.fpp.starlingtowerdefense.game.module.background.terrainbackground.vi
 
 		override public function setModel( model:AModel ):void
 		{
-			this._backgroundModel = model as PathBackgroundModel;
+			this._backgroundModel = model as PolygonBackgroundModel;
 
 			super.setModel( model );
 		}
@@ -61,7 +61,7 @@ package net.fpp.starlingtowerdefense.game.module.background.terrainbackground.vi
 		{
 			var pathPolygon:Sprite = new Sprite();
 
-			var terrainTextureVO:TerrainTextureVO = TerrainTextureConfig.instance.getTerrainTextureVO( CTerrainTextureId.TERRAIN_0 );
+			var terrainTextureVO:PolygonTerrainTextureVO = PolygonBackgroundTerrainTextureConfig.instance.getTerrainTextureVO( CPolygonBackgroundTerrainTextureId.TERRAIN_0 );
 
 			var terrainGroundTexture:BitmapData = this._backgroundModel.getTerrainById( terrainTextureVO.borderTextureId ).bitmapData;
 			var terrainFillTexture:BitmapData = this._backgroundModel.getTerrainById( terrainTextureVO.contentTextureId ).bitmapData;
