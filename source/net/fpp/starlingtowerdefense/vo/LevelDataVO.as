@@ -7,12 +7,14 @@ package net.fpp.starlingtowerdefense.vo
 	{
 		public var polygonBackgroundData:Vector.<PolygonBackgroundVO>;
 		public var rectangleBackgroundData:Vector.<RectangleBackgroundVO>;
+		public var enemyPathData:Vector.<EnemyPathDataVO>;
 		public var libraryElements:Array;
 
 		public function createEmptyDatas():void
 		{
 			this.polygonBackgroundData = new <PolygonBackgroundVO>[];
 			this.rectangleBackgroundData = new <RectangleBackgroundVO>[];
+			this.enemyPathData = new <EnemyPathDataVO>[];
 			this.libraryElements = [];
 		}
 	}
