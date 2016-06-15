@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by newkrok on 24/05/16.
  */
 package net.fpp.starlingtowerdefense.game.config.terraintexture
@@ -16,9 +16,9 @@ package net.fpp.starlingtowerdefense.game.config.terraintexture
 		{
 			this._configs = new <RectangleBackgroundTerrainTextureVO>[
 				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_0, 'terrain_4_content' ),
-				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_1, 'terrain_3_content' ),
-				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_2, 'terrain_2_content' ),
-				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_3, 'terrain_1_content' )
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_1, 'terrain_5_content' ),
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_2, 'terrain_6_content' ),
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_3, 'terrain_7_content' )
 			];
 		}
 
