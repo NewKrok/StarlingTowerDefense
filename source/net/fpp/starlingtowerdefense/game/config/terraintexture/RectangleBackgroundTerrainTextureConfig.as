@@ -15,10 +15,12 @@ package net.fpp.starlingtowerdefense.game.config.terraintexture
 		public function RectangleBackgroundTerrainTextureConfig()
 		{
 			this._configs = new <RectangleBackgroundTerrainTextureVO>[
-				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_0, 'terrain_4_content' ),
-				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_1, 'terrain_5_content' ),
-				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_2, 'terrain_6_content' ),
-				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_3, 'terrain_7_content' )
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_0, 'rectangle_terrain_textures_0' ),
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_1, 'rectangle_terrain_textures_1' ),
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_2, 'rectangle_terrain_textures_2' ),
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_3, 'rectangle_terrain_textures_3' ),
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_4, 'rectangle_terrain_textures_4' ),
+				new RectangleBackgroundTerrainTextureVO( CRectangleBackgroundTerrainTextureId.TERRAIN_5, 'rectangle_terrain_textures_5' )
 			];
 		}
 
