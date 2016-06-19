@@ -5,7 +5,7 @@ package net.fpp.starlingtowerdefense.vo
 {
 	import net.fpp.common.geom.SimplePoint;
 
-	public class StaticElementDataVO
+	public class LibraryElementDataVO
 	{
 		public var elementId:String;
 		public var position:SimplePoint;
@@ -13,7 +13,7 @@ package net.fpp.starlingtowerdefense.vo
 		public var scaleX:Number;
 		public var scaleY:Number;
 
-		public function StaticElementDataVO( elementId:String = '', position:SimplePoint = null, rotation:Number = 0, scaleX:Number = 0, scaleY:Number = 0 )
+		public function LibraryElementDataVO( elementId:String = '', position:SimplePoint = null, rotation:Number = 0, scaleX:Number = 0, scaleY:Number = 0 )
 		{
 			this.elementId = elementId;
 			this.position = position;
