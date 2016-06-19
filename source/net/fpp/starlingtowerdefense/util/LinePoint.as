@@ -1,4 +1,4 @@
-﻿package net.fpp.starlingtowerdefense.utils {
+﻿package net.fpp.starlingtowerdefense.util {
 	
 	import flash.geom.Point;
 

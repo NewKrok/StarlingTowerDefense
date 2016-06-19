@@ -3,14 +3,13 @@
  */
 package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
 {
-	import flash.geom.Point;
-
 	import net.fpp.common.starling.module.IModule;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
+	import net.fpp.starlingtowerdefense.vo.PolygonBackgroundVO;
 
 	public interface IPolygonBackgroundModule extends IModule
 	{
-		function setPathPolygons( polygons:Vector.<Vector.<Point>> ):void
+		function setPolygonBackgroundVO( polygonBackroundVOs:Vector.<PolygonBackgroundVO> ):void
 
 		function setTerrainInformations( terrains:Vector.<BitmapDataVO> ):void
 	}

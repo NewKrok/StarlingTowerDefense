@@ -6,21 +6,18 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vi
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
 
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.common.starling.module.AModuleView;
 	import net.fpp.starlingtowerdefense.game.config.terraintexture.PolygonBackgroundTerrainTextureConfig;
-	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vo.PolygonTerrainTextureVO;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModel;
+	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vo.PolygonBackgroundTerrainTextureVO;
+	import net.fpp.starlingtowerdefense.util.BrushPattern;
+	import net.fpp.starlingtowerdefense.vo.PolygonBackgroundVO;
 
 	import starling.display.Image;
-	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
-
-	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModel;
-	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.constant.CPolygonBackgroundTerrainTextureId;
-	import net.fpp.starlingtowerdefense.utils.BrushPattern;
 
 	public class PathBackgroundModuleView extends AModuleView
 	{
@@ -47,26 +44,24 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vi
 
 		public function drawPathPolygons():void
 		{
-			var polygons:Vector.<Vector.<Point>> = this._backgroundModel.pathPolygons;
+			var polygons:Vector.<PolygonBackgroundVO> = this._backgroundModel.polygonBackroundVOs;
 
 			for( var i:int = 0; i < polygons.length; i++ )
 			{
 				this._polygonLayer.addChild( this.createPathPolygon( polygons[ i ] ) );
 			}
-
-			this.addChildAt( new Quad( this.width, this.height, 0 ), 0 );
 		}
 
-		public function createPathPolygon( polygon:Vector.<Point> ):Sprite
+		public function createPathPolygon( polygonBackgroundVO:PolygonBackgroundVO ):Sprite
 		{
 			var pathPolygon:Sprite = new Sprite();
 
-			var terrainTextureVO:PolygonTerrainTextureVO = PolygonBackgroundTerrainTextureConfig.instance.getTerrainTextureVO( CPolygonBackgroundTerrainTextureId.TERRAIN_0 );
+			var terrainTextureVO:PolygonBackgroundTerrainTextureVO = PolygonBackgroundTerrainTextureConfig.instance.getTerrainTextureVO( polygonBackgroundVO.terrainTextureId );
 
 			var terrainGroundTexture:BitmapData = this._backgroundModel.getTerrainById( terrainTextureVO.borderTextureId ).bitmapData;
 			var terrainFillTexture:BitmapData = this._backgroundModel.getTerrainById( terrainTextureVO.contentTextureId ).bitmapData;
 
-			var generatedTerrain:BrushPattern = new BrushPattern( polygon, terrainGroundTexture, terrainFillTexture, 30, 40 );
+			var generatedTerrain:BrushPattern = new BrushPattern( polygonBackgroundVO.polygon, terrainGroundTexture, terrainFillTexture, 30, 40 );
 			var maxBlockSize:uint = 2048;
 			var pieces:uint = Math.ceil( generatedTerrain.width / maxBlockSize );
 

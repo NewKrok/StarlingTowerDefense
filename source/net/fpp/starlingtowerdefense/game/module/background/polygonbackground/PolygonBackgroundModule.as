@@ -3,12 +3,10 @@
  */
 package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
 {
-	import flash.geom.Point;
-
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
-
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.view.PathBackgroundModuleView;
+	import net.fpp.starlingtowerdefense.vo.PolygonBackgroundVO;
 
 	public class PolygonBackgroundModule extends AModule implements IPolygonBackgroundModule
 	{
@@ -27,9 +25,9 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
 			this._backgroundModel.setTerrains( terrains );
 		}
 
-		public function setPathPolygons( pathPolygons:Vector.<Vector.<Point>> ):void
+		public function setPolygonBackgroundVO( polygonBackroundVOs:Vector.<PolygonBackgroundVO> ):void
 		{
-			this._backgroundModel.pathPolygons = pathPolygons;
+			this._backgroundModel.polygonBackroundVOs = polygonBackroundVOs;
 
 			this._backgroundModuleView.drawPathPolygons();
 		}

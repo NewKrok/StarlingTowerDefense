@@ -95,9 +95,6 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 			this.armatureClip.scaleX = this.armatureClip.scaleY = .75;
 
 			this.idle();
-
-			this.setHeadSkin( CUnitSkins.WARRIOR_HEAD_2 );
-			this.setHairSkin( '' );
 		}
 
 		private function aramtureEventHandler( e:AnimationEvent ):void

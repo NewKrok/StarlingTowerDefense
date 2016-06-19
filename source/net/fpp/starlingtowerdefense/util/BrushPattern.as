@@ -1,10 +1,12 @@
-﻿package net.fpp.starlingtowerdefense.utils
+﻿package net.fpp.starlingtowerdefense.util
 {
 
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Point;
+
+	import net.fpp.common.geom.SimplePoint;
 
 	public class BrushPattern extends Sprite
 	{
@@ -22,7 +24,7 @@
 		private var _terrainTexture:BitmapData;
 		private var _terrainContentTexture:BitmapData;
 
-		public function BrushPattern( groundPoints:Vector.<Point>, texture:BitmapData, $terrainContentTexture:BitmapData, textureMaxWidth:Number, textureHeight:Number )
+		public function BrushPattern( groundPoints:Vector.<SimplePoint>, texture:BitmapData, $terrainContentTexture:BitmapData, textureMaxWidth:Number, textureHeight:Number )
 		{
 
 			var map:String = '';

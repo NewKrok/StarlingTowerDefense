@@ -1,15 +1,15 @@
 /**
- * Created by newkrok on 14/02/16.
+ * Created by newkrok on 19/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
+package net.fpp.starlingtowerdefense.game.module.background.rectanglebackground
 {
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
-	import net.fpp.starlingtowerdefense.vo.PolygonBackgroundVO;
+	import net.fpp.starlingtowerdefense.vo.RectangleBackgroundVO;
 
-	public class PolygonBackgroundModel extends AModel
+	public class RectangleBackgroundModel extends AModel
 	{
-		public var polygonBackroundVOs:Vector.<PolygonBackgroundVO>;
+		public var rectangleBackgroundVOs:Vector.<RectangleBackgroundVO>;
 
 		private var _terrains:Vector.<BitmapDataVO>;
 
@@ -20,7 +20,7 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
 
 		public function getTerrainById( terrainId:String ):BitmapDataVO
 		{
-			for( var i:int = 0; this._terrains.length; i++ )
+			for( var i:int = 0; i < this._terrains.length; i++ )
 			{
 				if( this._terrains[ i ].id == terrainId )
 				{

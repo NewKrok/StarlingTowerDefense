@@ -12,6 +12,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.starling.StaticAssetManager;
 	import net.fpp.common.starling.module.AApplicationContext;
 	import net.fpp.common.util.jsonbitmapatlas.JSONBitmapAtlas;
+	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
 	import net.fpp.common.util.pathfinding.PathfFindingUtil;
 	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
@@ -19,6 +20,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
+	import net.fpp.starlingtowerdefense.game.module.background.rectanglebackground.RectangleBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.distancechecker.DistanceCheckerModule;
 	import net.fpp.starlingtowerdefense.game.module.distancechecker.IDistanceCheckerModule;
 	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
@@ -56,7 +58,9 @@ package net.fpp.starlingtowerdefense.game
 
 		private var _damageCalculator:DamageCalculator;
 
+		private var _rectangleBackgroundModule:RectangleBackgroundModule;
 		private var _pathBackgroundModule:IPolygonBackgroundModule;
+
 		private var _mapModule:IMapModule;
 		private var _unitControllerModule:IUnitControllerModule;
 		private var _distanceCheckerModule:IDistanceCheckerModule;
@@ -116,10 +120,7 @@ package net.fpp.starlingtowerdefense.game
 			this._viewContainer = new Sprite();
 			this.addChild( this._viewContainer );
 
-			this._pathBackgroundModule = this.createModule( PolygonBackgroundModule ) as PolygonBackgroundModule;
-			this._viewContainer.addChild( this._pathBackgroundModule.getView() );
-			this._pathBackgroundModule.setTerrainInformations( JSONBitmapAtlas.getBitmapDataVOs( new TerrainTextures.AtlasImage, new TerrainTextures.AtlasDescription ) );
-			this._pathBackgroundModule.setPathPolygons( this._levelDataVO.polygons );
+			this.createBackgroundModules();
 
 			this._unitControllerModule = this.createModule( UnitControllerModule ) as UnitControllerModule;
 			this._unitControllerModule.setGameContainer( this._viewContainer );
@@ -143,6 +144,21 @@ package net.fpp.starlingtowerdefense.game
 			this.addEventListener( EnterFrameEvent.ENTER_FRAME, this.onEnterFrameHandler );
 
 			this.drawDebugDatas();
+		}
+
+		private function createBackgroundModules():void
+		{
+			var bitmapTextures:Vector.<BitmapDataVO> = JSONBitmapAtlas.getBitmapDataVOs( new TerrainTextures.AtlasImage, new TerrainTextures.AtlasDescription );
+
+			this._rectangleBackgroundModule = this.createModule( RectangleBackgroundModule ) as RectangleBackgroundModule;
+			this._viewContainer.addChild( this._rectangleBackgroundModule.getView() );
+			this._rectangleBackgroundModule.setTerrainInformations( bitmapTextures );
+			this._rectangleBackgroundModule.setRectangleBackgroundVO( this._levelDataVO.rectangleBackgroundData );
+
+			this._pathBackgroundModule = this.createModule( PolygonBackgroundModule ) as PolygonBackgroundModule;
+			this._viewContainer.addChild( this._pathBackgroundModule.getView() );
+			this._pathBackgroundModule.setTerrainInformations( bitmapTextures );
+			this._pathBackgroundModule.setPolygonBackgroundVO( this._levelDataVO.polygonBackgroundData );
 		}
 
 		private function drawDebugDatas():void
