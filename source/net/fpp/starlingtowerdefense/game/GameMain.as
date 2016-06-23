@@ -17,6 +17,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
+	import net.fpp.starlingtowerdefense.game.config.unit.TestEnemyUitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
@@ -132,6 +133,15 @@ package net.fpp.starlingtowerdefense.game
 			this.createUnit( 300, 300, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
+
+			this.createUnit( 550, 300, new TestEnemyUitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+
+			this.createUnit( 650, 500, new TestEnemyUitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+
+			this.createUnit( 1050, 700, new TestEnemyUitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 
 			this._waveHandlerModule = this.createModule( WaveHandlerModule ) as WaveHandlerModule;
 

@@ -21,6 +21,8 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vi
 
 	public class PathBackgroundModuleView extends AModuleView
 	{
+		private const MAXIMUM_TEXTURE_SIZE:uint = 2048;
+
 		private var _backgroundModel:PolygonBackgroundModel;
 
 		private var _polygonLayer:Sprite;
@@ -62,23 +64,28 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vi
 			var terrainFillTexture:BitmapData = this._backgroundModel.getTerrainById( terrainTextureVO.contentTextureId ).bitmapData;
 
 			var generatedTerrain:BrushPattern = new BrushPattern( polygonBackgroundVO.polygon, terrainGroundTexture, terrainFillTexture, 30, 40 );
-			var maxBlockSize:uint = 2048;
-			var pieces:uint = Math.ceil( generatedTerrain.width / maxBlockSize );
+			var xPieceCount:uint = Math.ceil( generatedTerrain.width / MAXIMUM_TEXTURE_SIZE );
+			var yPieceCount:uint = Math.ceil( generatedTerrain.height / MAXIMUM_TEXTURE_SIZE );
 
-			for( var i:int = 0; i < pieces; i++ )
+			for( var i:int = 0; i < xPieceCount; i++ )
 			{
-				var tmpBitmapData:BitmapData = new BitmapData( maxBlockSize, maxBlockSize, true, 0x60 );
-				var offsetMatrix:Matrix = new Matrix;
-				offsetMatrix.tx = -i * maxBlockSize;
-				tmpBitmapData.draw( generatedTerrain, offsetMatrix );
+				for( var j:int = 0; j < yPieceCount; j++ )
+				{
+					var tmpBitmapData:BitmapData = new BitmapData( MAXIMUM_TEXTURE_SIZE, MAXIMUM_TEXTURE_SIZE, true, 0x60 );
+					var offsetMatrix:Matrix = new Matrix;
+					offsetMatrix.tx = -i * MAXIMUM_TEXTURE_SIZE;
+					offsetMatrix.ty = -j * MAXIMUM_TEXTURE_SIZE;
+					tmpBitmapData.draw( generatedTerrain, offsetMatrix );
 
-				var piece:Image = new Image( Texture.fromBitmap( new Bitmap( tmpBitmapData ) ) );
-				piece.x = i * maxBlockSize / 2;
-				piece.touchable = false;
-				pathPolygon.addChild( piece );
+					var piece:Image = new Image( Texture.fromBitmap( new Bitmap( tmpBitmapData ) ) );
+					piece.x = i * MAXIMUM_TEXTURE_SIZE;
+					piece.y = j * MAXIMUM_TEXTURE_SIZE;
+					piece.touchable = false;
+					pathPolygon.addChild( piece );
 
-				tmpBitmapData.dispose();
-				tmpBitmapData = null;
+					tmpBitmapData.dispose();
+					tmpBitmapData = null;
+				}
 			}
 
 			terrainGroundTexture.dispose();

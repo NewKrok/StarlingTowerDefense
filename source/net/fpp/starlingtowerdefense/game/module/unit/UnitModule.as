@@ -40,25 +40,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function processUnitConfigVO( unitConfigVO:UnitConfigVO ):void
 		{
-			this._unitModel.setAttackSpeed( unitConfigVO.attackSpeed );
-			this._unitModel.setDamageDelay( unitConfigVO.damageDelay );
-			this._unitModel.setMaxDamage( unitConfigVO.maxDamage );
-			this._unitModel.setMaxLife( unitConfigVO.maxLife );
-			this._unitModel.setLife( unitConfigVO.maxLife );
-			this._unitModel.setMinDamage( unitConfigVO.minDamage );
-			this._unitModel.setMovementSpeed( unitConfigVO.movementSpeed );
-			this._unitModel.setSizeRadius( unitConfigVO.sizeRadius );
-			this._unitModel.setAreaDamage( unitConfigVO.areaDamage );
-			this._unitModel.setAreaDamageSize( unitConfigVO.areaDamageSize );
-			this._unitModel.setArmor( unitConfigVO.armor );
-			this._unitModel.setArmorType( unitConfigVO.armorType );
-			this._unitModel.setAttackRadius( unitConfigVO.attackRadius );
-			this._unitModel.setAttackType( unitConfigVO.attackType );
-			this._unitModel.setBlockChance( unitConfigVO.blockChance );
-			this._unitModel.setCriticalHitChance( unitConfigVO.criticalHitChance );
-			this._unitModel.setCriticalHitDamageMultiple( unitConfigVO.criticalHitDamageMultiple );
-			this._unitModel.setLifeRegeneration( unitConfigVO.lifeRegeneration );
-			this._unitModel.setUnitDetectionRadius( unitConfigVO.unitDetectionRadius );
+			this._unitModel.setUnitConfigVO( unitConfigVO );
 		}
 
 		public function moveTo( pathVO:PathVO ):void
@@ -114,7 +96,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 			var distance:Number = Math.sqrt( Math.pow( distanceX, 2 ) + Math.pow( distanceY, 2 ) );
 
-			return distance / this._unitModel.getMovementSpeed();
+			return distance / this._unitModel.getUnitConfigVO().movementSpeed;
 		}
 
 		private function onMoveEnd():void
@@ -181,7 +163,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 			var now:Number = new Date().time;
 
-			if( new Date().time - this._unitModel.getLastAttackTime() > this._unitModel.getAttackSpeed() * 1000 )
+			if( new Date().time - this._unitModel.getLastAttackTime() > this._unitModel.getUnitConfigVO().attackSpeed * 1000 )
 			{
 				this._unitModel.setLastAttackTime( now );
 
@@ -189,7 +171,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 				this._unitView.attack();
 
-				TweenLite.delayedCall( this._unitModel.getDamageDelay(), damageTarget )
+				TweenLite.delayedCall( this._unitModel.getUnitConfigVO().damageDelay, damageTarget )
 			}
 		}
 
@@ -208,14 +190,14 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function calculateDamage():Number
 		{
-			var damageValue:Number = this._damageCalculator.getAttackByMinAndMax( this._unitModel.getMinDamage(), this._unitModel.getMaxDamage() );
+			var damageValue:Number = this._damageCalculator.getAttackByMinAndMax( this._unitModel.getUnitConfigVO().minDamage, this._unitModel.getUnitConfigVO().maxDamage );
 
-			if( this._unitModel.getCriticalHitChance() > Math.random() )
+			if( this._unitModel.getUnitConfigVO().criticalHitChance > Math.random() )
 			{
-				damageValue *= this._unitModel.getCriticalHitDamageMultiple();
+				damageValue *= this._unitModel.getUnitConfigVO().criticalHitDamageMultiple
 			}
 
-			damageValue = this._damageCalculator.calculateDamageByAttackAndArmorType( damageValue, this._unitModel.getAttackType(), this._unitModel.getTarget().getArmorType() );
+			damageValue = this._damageCalculator.calculateDamageByAttackAndArmorType( damageValue, this._unitModel.getUnitConfigVO().attackType, this._unitModel.getTarget().getArmorType() );
 
 			return damageValue;
 		}
@@ -257,7 +239,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function getSizeRadius():Number
 		{
-			return this._unitModel.getSizeRadius();
+			return this._unitModel.getUnitConfigVO().sizeRadius
 		}
 
 		public function getTarget():IUnitModule
@@ -274,7 +256,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 					Math.pow( this._view.y - value.getView().y, 2 )
 			);
 
-			if( distance > this._unitModel.getAttackRadius() )
+			if( distance > this._unitModel.getUnitConfigVO().attackRadius )
 			{
 				this._unitView.run();
 				this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
@@ -314,17 +296,17 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function getArmorType():String
 		{
-			return this._unitModel.getArmorType();
+			return this._unitModel.getUnitConfigVO().armorType
 		}
 
 		public function getAttackRadius():Number
 		{
-			return this._unitModel.getAttackRadius();
+			return this._unitModel.getUnitConfigVO().attackRadius;
 		}
 
 		public function getUnitDetectionRadius():Number
 		{
-			return this._unitModel.getUnitDetectionRadius();
+			return this._unitModel.getUnitConfigVO().unitDetectionRadius;
 		}
 	}
 }

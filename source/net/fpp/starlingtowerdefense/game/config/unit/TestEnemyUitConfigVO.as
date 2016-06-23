@@ -22,11 +22,11 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.blockChance = 2;
 
-			this.minDamage = 10;
-			this.maxDamage = 15;
+			this.minDamage = 5;
+			this.maxDamage = 7;
 
 			this.areaDamage = 0;
-			this.areaDamageSize = 0;
+			this.areaDamageRadius = 0;
 
 			this.attackSpeed = 1;
 			this.attackType = CAttackType.NORMAL;
@@ -36,8 +36,8 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.damageDelay = .5;
 
-			this.maxLife = 5000;
-			this.lifeRegeneration = 2;
+			this.maxLife = 20;
+			this.lifeRegeneration = 0;
 
 			this.movementSpeed = 100;
 		}
