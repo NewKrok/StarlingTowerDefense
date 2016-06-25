@@ -7,16 +7,14 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModule;
+	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
+	import net.fpp.starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
+	import net.fpp.starlingtowerdefense.game.module.unitcontroller.request.UnitMoveToRequest;
+	import net.fpp.starlingtowerdefense.game.module.unitcontroller.view.UnitControllerModuleView;
 
 	import starling.display.DisplayObjectContainer;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
-
-	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
-	import net.fpp.starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
-	import net.fpp.starlingtowerdefense.game.module.unitcontroller.request.UnitMoveToRequest;
-
-	import net.fpp.starlingtowerdefense.game.module.unitcontroller.view.UnitControllerModuleView;
 
 	public class UnitControllerModule extends AModule implements IUnitControllerModule
 	{
@@ -43,7 +41,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 				var unitMoveToRequest:UnitMoveToRequest = new UnitMoveToRequest();
 				unitMoveToRequest.unit = this._unitControllerModel.getTarget();
 
-				var touchPoint:Point = e.touches[0].getLocation( this._unitControllerModuleView );
+				var touchPoint:Point = e.touches[ 0 ].getLocation( this._unitControllerModuleView );
 				unitMoveToRequest.position = new SimplePoint( touchPoint.x, touchPoint.y );
 
 				this.dispatchEvent( new UnitControllerModuleEvent( UnitControllerModuleEvent.UNIT_MOVE_TO_REQUEST, unitMoveToRequest ) );
@@ -54,7 +52,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 		{
 			this._unitControllerModel.setTarget( value );
 
-			if ( value )
+			if( value )
 			{
 				this._unitControllerModuleView.updateSelectionMarkerVisibility();
 			}
@@ -62,7 +60,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 
 		public function update():void
 		{
-			if ( this._unitControllerModel.getTarget() )
+			if( this._unitControllerModel.getTarget() )
 			{
 				this._unitControllerModuleView.updateSelectionMarkerPosition();
 			}

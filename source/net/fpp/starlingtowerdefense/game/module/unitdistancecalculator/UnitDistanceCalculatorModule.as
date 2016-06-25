@@ -39,7 +39,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 
 		override public function dispose():void
 		{
-			this._unitDistanceCalculatorModel.dispose();
+			this._unitDistanceCalculatorModel = null;
 
 			super.dispose();
 		}

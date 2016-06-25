@@ -39,7 +39,6 @@ package net.fpp.starlingtowerdefense.game.module.zorder
 
 		override public function dispose():void
 		{
-			this._zOrderModel.dispose();
 			this._zOrderModel = null;
 
 			super.dispose();

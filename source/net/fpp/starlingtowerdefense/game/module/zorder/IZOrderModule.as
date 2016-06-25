@@ -3,15 +3,13 @@
  */
 package net.fpp.starlingtowerdefense.game.module.zorder
 {
-	import net.fpp.common.starling.module.IModule;
+	import net.fpp.common.starling.module.IUpdatableModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 
 	import starling.display.DisplayObjectContainer;
 
-	public interface IZOrderModule extends IModule
+	public interface IZOrderModule extends IUpdatableModule
 	{
-		function update():void;
-
 		function addUnit( value:IUnitModule ):void;
 
 		function removeUnit( value:IUnitModule ):void;

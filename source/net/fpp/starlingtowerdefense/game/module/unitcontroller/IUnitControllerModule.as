@@ -3,18 +3,15 @@
  */
 package net.fpp.starlingtowerdefense.game.module.unitcontroller
 {
-	import net.fpp.common.starling.module.IModule;
+	import net.fpp.common.starling.module.IUpdatableModule;
+	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 
 	import starling.display.DisplayObjectContainer;
 
-	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
-
-	public interface IUnitControllerModule extends IModule
+	public interface IUnitControllerModule extends IUpdatableModule
 	{
 		function setGameContainer( value:DisplayObjectContainer ):void
 
 		function setTarget( value:IUnitModule ):void;
-
-		function update():void;
 	}
 }

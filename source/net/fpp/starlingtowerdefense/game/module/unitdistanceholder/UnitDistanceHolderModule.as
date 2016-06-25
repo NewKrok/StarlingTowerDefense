@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 23/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.unitpushing
+package net.fpp.starlingtowerdefense.game.module.unitdistanceholder
 {
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.IUnitDistanceCalculatorModule;
@@ -27,7 +27,7 @@ package net.fpp.starlingtowerdefense.game.module.unitpushing
 
 		override public function dispose():void
 		{
-			this._unitDistanceHolderModel.dispose();
+			this._unitDistanceHolderModel = null;
 
 			super.dispose();
 		}

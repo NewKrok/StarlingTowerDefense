@@ -22,8 +22,6 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.rectanglebackground.RectangleBackgroundModule;
-	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.UnitDistanceCalculatorModule;
-	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.IUnitDistanceCalculatorModule;
 	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
 	import net.fpp.starlingtowerdefense.game.module.map.IMapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.MapModule;
@@ -41,8 +39,10 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.unitcontroller.UnitControllerModule;
 	import net.fpp.starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
 	import net.fpp.starlingtowerdefense.game.module.unitcontroller.request.UnitMoveToRequest;
-	import net.fpp.starlingtowerdefense.game.module.unitpushing.IUnitDistanceHolderModule;
-	import net.fpp.starlingtowerdefense.game.module.unitpushing.UnitDistanceHolderModule;
+	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.IUnitDistanceCalculatorModule;
+	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.UnitDistanceCalculatorModule;
+	import net.fpp.starlingtowerdefense.game.module.unitdistanceholder.IUnitDistanceHolderModule;
+	import net.fpp.starlingtowerdefense.game.module.unitdistanceholder.UnitDistanceHolderModule;
 	import net.fpp.starlingtowerdefense.game.module.wavehandler.IWaveHandlerModule;
 	import net.fpp.starlingtowerdefense.game.module.wavehandler.WaveHandlerModule;
 	import net.fpp.starlingtowerdefense.game.module.zorder.IZOrderModule;
@@ -53,9 +53,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.vo.LevelDataVO;
 
 	import starling.display.Quad;
-
 	import starling.display.Sprite;
-	import starling.events.EnterFrameEvent;
 
 	public class GameMain extends AApplicationContext
 	{
@@ -167,7 +165,7 @@ package net.fpp.starlingtowerdefense.game
 			this._touchDragModule = this.createModule( TouchDragModule ) as ITouchDragModule;
 			this._touchDragModule.setGameContainer( this._viewContainer );
 
-			this.addEventListener( EnterFrameEvent.ENTER_FRAME, this.onEnterFrameHandler );
+			this.startUpdateHandling();
 
 			this.drawDebugDatas();
 		}
@@ -197,7 +195,7 @@ package net.fpp.starlingtowerdefense.game
 			{
 				for( var j:int = 0; j < map[ i ].length; j++ )
 				{
-					if ( !map[ i ][ j ].isWalkable )
+					if( !map[ i ][ j ].isWalkable )
 					{
 						var nodeColor:uint = map[ i ][ j ].isWalkable ? 0x00FF00 : 0xFF0000;
 
@@ -261,17 +259,11 @@ package net.fpp.starlingtowerdefense.game
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 		}
 
-		private function onEnterFrameHandler( e:EnterFrameEvent ):void
+		override protected function onUpdate():void
 		{
 			WorldClock.clock.advanceTime( -1 );
 
 			this.runUnitDistanceHandler();
-
-			this._unitControllerModule.update();
-			this._zOrderModule.update();
-			this._unitDistanceCalculatorModule.update();
-			this._unitDistanceHolderModule.update();
-			this._touchDragModule.update();
 		}
 
 		private function runUnitDistanceHandler():void
@@ -344,13 +336,13 @@ package net.fpp.starlingtowerdefense.game
 			pathRequestVO.endPosition = MapPositionUtil.changePositionToMapNodePoint( position );
 			pathRequestVO.mapNodes = this._mapModule.getMapNodes();
 
-			if ( !pathRequestVO.mapNodes[pathRequestVO.endPosition.x][pathRequestVO.endPosition.y].isWalkable )
+			if( !pathRequestVO.mapNodes[ pathRequestVO.endPosition.x ][ pathRequestVO.endPosition.y ].isWalkable )
 			{
 				return;
 			}
 
 			var pathVO:PathVO = PathfFindingUtil.getPath( pathRequestVO );
-			if ( pathVO && pathVO.path && pathVO.path.length > 0 )
+			if( pathVO && pathVO.path && pathVO.path.length > 0 )
 			{
 				pathVO.path = MapPositionUtil.changeMapNodePointVectorToPositionVector( pathVO.path );
 

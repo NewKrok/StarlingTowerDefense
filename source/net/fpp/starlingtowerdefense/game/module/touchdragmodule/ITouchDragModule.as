@@ -3,15 +3,13 @@
  */
 package net.fpp.starlingtowerdefense.game.module.touchdragmodule
 {
-	import net.fpp.common.starling.module.IModule;
+	import net.fpp.common.starling.module.IUpdatableModule;
 
 	import starling.display.DisplayObjectContainer;
 
-	public interface ITouchDragModule extends IModule
+	public interface ITouchDragModule extends IUpdatableModule
 	{
 		function setGameContainer( value:DisplayObjectContainer ):void;
-
-		function update():void;
 
 		function getIsTouchDragged():Boolean
 	}

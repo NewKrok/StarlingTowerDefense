@@ -3,14 +3,12 @@
  */
 package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 {
-	import net.fpp.common.starling.module.IModule;
+	import net.fpp.common.starling.module.IUpdatableModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo.UnitDistanceVO;
 
-	public interface IUnitDistanceCalculatorModule extends IModule
+	public interface IUnitDistanceCalculatorModule extends IUpdatableModule
 	{
-		function update():void;
-
 		function addUnit( value:IUnitModule ):void;
 
 		function removeUnit( value:IUnitModule ):void;
