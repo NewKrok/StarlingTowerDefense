@@ -17,6 +17,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
+	import net.fpp.starlingtowerdefense.game.config.unit.MageUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.TestEnemyUitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
@@ -26,6 +27,8 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.map.IMapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.MapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.constant.CMapSize;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.IProjectileManagerModule;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.ProjectileManagerModule;
 	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.IUnitTargetManagerModule;
 	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.UnitTargetManagerModule;
 	import net.fpp.starlingtowerdefense.game.module.touchdrag.ITouchDragModule;
@@ -71,6 +74,7 @@ package net.fpp.starlingtowerdefense.game
 		private var _unitDistanceCalculatorModule:IUnitDistanceCalculatorModule;
 		private var _unitDistanceHolderModule:IUnitDistanceHolderModule;
 		private var _unitTargetManagerModule:IUnitTargetManagerModule;
+		private var _projectileManagerModule:IProjectileManagerModule;
 		private var _waveHandlerModule:IWaveHandlerModule;
 		private var _touchZoomModule:ITouchZoomModule;
 		private var _touchDragModule:ITouchDragModule;
@@ -144,11 +148,15 @@ package net.fpp.starlingtowerdefense.game
 			this._unitTargetManagerModule = this.createModule( UnitTargetManagerModule ) as IUnitTargetManagerModule;
 			this._unitTargetManagerModule.setUnitDistanceCalculator( this._unitDistanceCalculatorModule );
 
-			this.createUnit( 300, 300, new WarriorUnitConfigVO() );
+			this._projectileManagerModule = this.createModule( ProjectileManagerModule ) as IProjectileManagerModule;
+			this._viewContainer.addChild( this._projectileManagerModule.getView() );
+			this.injector.mapValue( IProjectileManagerModule, this._projectileManagerModule );
+
+			this.createUnit( 300, 300, new MageUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 
-			this.createUnit( 300, 280, new WarriorUnitConfigVO() );
+			this.createUnit( 250, 280, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 

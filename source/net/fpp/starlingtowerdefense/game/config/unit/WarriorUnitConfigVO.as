@@ -34,7 +34,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.criticalHitChance = .01;
 			this.criticalHitDamageMultiple = 1.5;
 
-			this.damageDelay = .7;
+			this.attackActionDelay = .7;
 
 			this.maxLife = 200;
 			this.lifeRegeneration = 2;

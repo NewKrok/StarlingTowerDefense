@@ -10,6 +10,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.IProjectileManagerModule;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileSettingVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 	import net.fpp.starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
@@ -17,6 +19,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 	public class UnitModule extends AModule implements IUnitModule
 	{
+		[Inject]
+		public var projectileManagerModule:IProjectileManagerModule;
+
 		private var _unitView:UnitModuleView;
 		private var _unitModel:UnitModel;
 
@@ -132,9 +137,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 				this._unitView.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) );
 			}
-			else if ( this._unitModel.getLastPositionBeforeFight() )
+			else if( this._unitModel.getLastPositionBeforeFight() )
 			{
-				if ( this._unitModel.getLastPositionBeforeFight().x == this._view.x && this._unitModel.getLastPositionBeforeFight().y == this._view.y )
+				if( this._unitModel.getLastPositionBeforeFight().x == this._view.x && this._unitModel.getLastPositionBeforeFight().y == this._view.y )
 				{
 					this._unitView.idle();
 				}
@@ -198,20 +203,37 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 				this._unitView.attack();
 
-				this._unitModel.damageDelayTween = TweenLite.delayedCall( this._unitModel.getUnitConfigVO().damageDelay, damageTarget )
+				this._unitModel.damageDelayTween = TweenLite.delayedCall( this._unitModel.getUnitConfigVO().attackActionDelay, runAttackAction )
 			}
 		}
 
-		private function damageTarget():void
+		private function runAttackAction():void
 		{
 			if( this._unitModel.getTarget() )
 			{
-				this._unitModel.getTarget().damage( this.calculateDamage() );
-
-				if( this._unitModel.getTarget().getIsDead() )
+				if( this._unitModel.getUnitConfigVO().projectileConfigVO )
 				{
-					this.removeTarget();
+					this.projectileAttackRutin();
 				}
+				else
+				{
+					this.meleeAttackRutin();
+				}
+			}
+		}
+
+		private function projectileAttackRutin():void
+		{
+			this.projectileManagerModule.addProjectile( this._unitModel.getUnitConfigVO().projectileConfigVO, this._unitModel.getTarget() );
+		}
+
+		private function meleeAttackRutin():void
+		{
+			this._unitModel.getTarget().damage( this.calculateDamage() );
+
+			if( this._unitModel.getTarget().getIsDead() )
+			{
+				this.removeTarget();
 			}
 		}
 
@@ -315,7 +337,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 				this._unitView.run();
 				this.runNextPathData();
-			} else if ( this._unitModel.getTarget() )
+			}
+			else if( this._unitModel.getTarget() )
 			{
 				this.moveLastPositionAfterFight();
 			}

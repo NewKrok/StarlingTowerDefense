@@ -6,5 +6,6 @@ package net.fpp.starlingtowerdefense.constant
 	public class CSkin
 	{
 		public static const UNIT_SELECTION_MARKER:String = 'unit_selection_marker';
+		public static const MAGE_PROJECTILE:String = 'mage_projectile';
 	}
 }
