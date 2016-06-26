@@ -48,7 +48,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 
 			for( var i:int = 0; i < length; i++ )
 			{
-				for( var j:int = i; j < length; j++ )
+				for( var j:int = 0; j < length; j++ )
 				{
 					if( i != j )
 					{
