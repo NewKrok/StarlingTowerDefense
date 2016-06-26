@@ -48,6 +48,8 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		private var armature:Armature;
 		private var armatureClip:Sprite;
 
+		private var _currentAnimation:String;
+
 		public function UnitModuleView()
 		{
 		}
@@ -145,17 +147,38 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function attack():void
 		{
+			if ( this._currentAnimation == CUnitAnimation.ATTACK )
+			{
+				return;
+			}
+
+			this._currentAnimation = CUnitAnimation.ATTACK;
+
 			this.armature.animation.gotoAndPlay( CUnitAnimation.ATTACK, 0, 0 );
 			this.armature.addEventListener( AnimationEvent.COMPLETE, this.aramtureEventHandler );
 		}
 
 		public function run():void
 		{
+			if ( this._currentAnimation == CUnitAnimation.RUN )
+			{
+				return;
+			}
+
+			this._currentAnimation = CUnitAnimation.RUN;
+
 			this.armature.animation.gotoAndPlay( CUnitAnimation.RUN, 0, 0 );
 		}
 
 		public function idle():void
 		{
+			if ( this._currentAnimation == CUnitAnimation.IDLE )
+			{
+				return;
+			}
+
+			this._currentAnimation = CUnitAnimation.IDLE;
+
 			this.armature.animation.gotoAndPlay( CUnitAnimation.IDLE, 0, 0 );
 		}
 
@@ -195,6 +218,8 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		private function aramtureEventHandler( e:AnimationEvent ):void
 		{
+			this._currentAnimation = '';
+
 			this.armature.removeEventListener( AnimationEvent.COMPLETE, aramtureEventHandler );
 
 			this.idle();

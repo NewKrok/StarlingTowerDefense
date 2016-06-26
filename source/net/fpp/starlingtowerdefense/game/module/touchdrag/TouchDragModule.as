@@ -1,10 +1,10 @@
 /**
  * Created by newkrok on 08/05/16.
  */
-package net.fpp.starlingtowerdefense.game.module.touchdragmodule
+package net.fpp.starlingtowerdefense.game.module.touchdrag
 {
 	import net.fpp.common.starling.module.AModule;
-	import net.fpp.starlingtowerdefense.game.module.touchdragmodule.constant.CTouchDrag;
+	import net.fpp.starlingtowerdefense.game.module.touchdrag.constant.CTouchDrag;
 
 	import starling.display.DisplayObjectContainer;
 	import starling.events.Touch;

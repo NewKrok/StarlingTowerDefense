@@ -26,10 +26,10 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.map.IMapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.MapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.constant.CMapSize;
-	import net.fpp.starlingtowerdefense.game.module.targetmanager.ITargetManagerModule;
-	import net.fpp.starlingtowerdefense.game.module.targetmanager.TargetManagerModule;
-	import net.fpp.starlingtowerdefense.game.module.touchdragmodule.ITouchDragModule;
-	import net.fpp.starlingtowerdefense.game.module.touchdragmodule.TouchDragModule;
+	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.IUnitTargetManagerModule;
+	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.UnitTargetManagerModule;
+	import net.fpp.starlingtowerdefense.game.module.touchdrag.ITouchDragModule;
+	import net.fpp.starlingtowerdefense.game.module.touchdrag.TouchDragModule;
 	import net.fpp.starlingtowerdefense.game.module.touchzoom.ITouchZoomModule;
 	import net.fpp.starlingtowerdefense.game.module.touchzoom.TouchZoomModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
@@ -70,7 +70,7 @@ package net.fpp.starlingtowerdefense.game
 		private var _zOrderModule:IZOrderModule;
 		private var _unitDistanceCalculatorModule:IUnitDistanceCalculatorModule;
 		private var _unitDistanceHolderModule:IUnitDistanceHolderModule;
-		private var _targetManagerModule:ITargetManagerModule;
+		private var _unitTargetManagerModule:IUnitTargetManagerModule;
 		private var _waveHandlerModule:IWaveHandlerModule;
 		private var _touchZoomModule:ITouchZoomModule;
 		private var _touchDragModule:ITouchDragModule;
@@ -141,8 +141,8 @@ package net.fpp.starlingtowerdefense.game
 			this._unitDistanceHolderModule = this.createModule( UnitDistanceHolderModule ) as IUnitDistanceHolderModule;
 			this._unitDistanceHolderModule.setUnitDistanceCalculator( this._unitDistanceCalculatorModule );
 
-			this._targetManagerModule = this.createModule( TargetManagerModule ) as ITargetManagerModule;
-			this._targetManagerModule.setUnitDistanceCalculator( this._unitDistanceCalculatorModule );
+			this._unitTargetManagerModule = this.createModule( UnitTargetManagerModule ) as IUnitTargetManagerModule;
+			this._unitTargetManagerModule.setUnitDistanceCalculator( this._unitDistanceCalculatorModule );
 
 			this.createUnit( 300, 300, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
@@ -313,8 +313,8 @@ package net.fpp.starlingtowerdefense.game
 			this._unitDistanceHolderModule.dispose();
 			this._unitDistanceHolderModule = null;
 
-			this._targetManagerModule.dispose();
-			this._targetManagerModule = null;
+			this._unitTargetManagerModule.dispose();
+			this._unitTargetManagerModule = null;
 
 			this._touchZoomModule.dispose();
 			this._touchZoomModule = null;

@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 08/05/16.
  */
-package net.fpp.starlingtowerdefense.game.module.touchdragmodule.constant
+package net.fpp.starlingtowerdefense.game.module.touchdrag.constant
 {
 	public class CTouchDrag
 	{

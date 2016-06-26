@@ -15,7 +15,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.sizeRadius = 30;
 			this.attackRadius = 90;
-			this.unitDetectionRadius = 150;
+			this.unitDetectionRadius = 200;
 
 			this.armor = 0;
 			this.armorType = CArmorType.NORMAL;

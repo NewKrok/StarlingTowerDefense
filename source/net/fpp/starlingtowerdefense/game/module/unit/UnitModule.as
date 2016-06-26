@@ -39,7 +39,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function onUpdate():void
 		{
-			if ( !this.getIsDead() )
+			if( !this.getIsDead() )
 			{
 				this._unitModel.regenerateLifeAndMana();
 			}
@@ -55,6 +55,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function moveTo( pathVO:PathVO ):void
 		{
+			this.removeTarget();
+
 			this._pathVO = pathVO;
 
 			this._isMoving = true;
@@ -130,6 +132,21 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 				this._unitView.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) );
 			}
+			else if ( this._unitModel.getLastPositionBeforeFight() )
+			{
+				if ( this._unitModel.getLastPositionBeforeFight().x == this._view.x && this._unitModel.getLastPositionBeforeFight().y == this._view.y )
+				{
+					this._unitView.idle();
+				}
+				else
+				{
+					this.moveLastPositionAfterFight();
+				}
+			}
+			else
+			{
+				this._unitView.idle();
+			}
 		}
 
 		private function clearRouteData():void
@@ -181,7 +198,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 				this._unitView.attack();
 
-				TweenLite.delayedCall( this._unitModel.getUnitConfigVO().damageDelay, damageTarget )
+				this._unitModel.damageDelayTween = TweenLite.delayedCall( this._unitModel.getUnitConfigVO().damageDelay, damageTarget )
 			}
 		}
 
@@ -268,6 +285,13 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 			if( distance > this._unitModel.getUnitConfigVO().attackRadius )
 			{
+				if( this._unitModel.damageDelayTween )
+				{
+					this._unitModel.damageDelayTween.kill();
+				}
+
+				this._unitModel.setLastPositionBeforeFight( new SimplePoint( this._view.x, this._view.y ) );
+
 				this._unitView.run();
 				this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
 			}
@@ -275,6 +299,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function removeTarget():void
 		{
+			if( this._unitModel.damageDelayTween )
+			{
+				this._unitModel.damageDelayTween.kill();
+			}
+
 			this._unitModel.setTarget( null );
 
 			if( this._pathVO && this._pathVO.path && this._pathVO.path.length > 0 && this._pathIndex != this._pathVO.path.length )
@@ -286,7 +315,18 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 				this._unitView.run();
 				this.runNextPathData();
+			} else if ( this._unitModel.getTarget() )
+			{
+				this.moveLastPositionAfterFight();
 			}
+
+			this._unitModel.setTarget( null );
+		}
+
+		private function moveLastPositionAfterFight():void
+		{
+			this._unitView.run();
+			this.move( this._unitModel.getLastPositionBeforeFight() );
 		}
 
 		public function getPlayerGroup():String

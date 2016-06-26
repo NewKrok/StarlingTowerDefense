@@ -3,6 +3,10 @@
  */
 package net.fpp.starlingtowerdefense.game.module.unit
 {
+	import com.greensock.TweenLite;
+
+	import net.fpp.common.geom.SimplePoint;
+
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModelEvent;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
@@ -15,8 +19,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		private var _life:Number
 		private var _mana:Number;
 		private var _unitConfigVO:UnitConfigVO;
-
+		public var damageDelayTween:TweenLite;
 		private var _lastRegenerateTime:Number = new Date().time;
+		private var _lastPositionBeforeFight:SimplePoint;
 
 		public function getLife():Number
 		{
@@ -54,12 +59,12 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function regenerateLifeAndMana():void
 		{
-			if ( this._life < this._unitConfigVO.maxLife )
+			if( this._life < this._unitConfigVO.maxLife )
 			{
 				this.regenerateLife();
 			}
 
-			if ( this._unitConfigVO.maxMana > 0 && this._mana < this._unitConfigVO.maxMana )
+			if( this._unitConfigVO.maxMana > 0 && this._mana < this._unitConfigVO.maxMana )
 			{
 				this.regenerateMana();
 			}
@@ -127,6 +132,16 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public function getUnitConfigVO():UnitConfigVO
 		{
 			return this._unitConfigVO;
+		}
+
+		public function setLastPositionBeforeFight( value:SimplePoint ):void
+		{
+			this._lastPositionBeforeFight = value;
+		}
+
+		public function getLastPositionBeforeFight():SimplePoint
+		{
+			return this._lastPositionBeforeFight;
 		}
 	}
 }

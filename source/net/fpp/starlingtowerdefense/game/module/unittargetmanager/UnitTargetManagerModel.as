@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 26/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.targetmanager
+package net.fpp.starlingtowerdefense.game.module.unittargetmanager
 {
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
@@ -10,11 +10,11 @@ package net.fpp.starlingtowerdefense.game.module.targetmanager
 
 	import starling.display.DisplayObject;
 
-	public class TargetManagerModel extends AModel
+	public class UnitTargetManagerModel extends AModel
 	{
 		private var _unitDistanceCalculatorModule:IUnitDistanceCalculatorModule;
 
-		public function TargetManagerModel()
+		public function UnitTargetManagerModel()
 		{
 		}
 
@@ -33,6 +33,11 @@ package net.fpp.starlingtowerdefense.game.module.targetmanager
 				var unitA:IUnitModule = unitDistanceVOs[ i ].unitA;
 				var unitB:IUnitModule = unitDistanceVOs[ i ].unitB;
 
+				if ( unitA.getIsMoving() )
+				{
+					continue;
+				}
+
 				var distance:Number = unitDistanceVOs[ i ].distance;
 
 				if( distance < unitA.getUnitDetectionRadius() && unitA.getPlayerGroup() != unitB.getPlayerGroup() && unitA.getTarget() == null )
@@ -45,21 +50,6 @@ package net.fpp.starlingtowerdefense.game.module.targetmanager
 					if( distance < unitA.getAttackRadius() )
 					{
 						unitA.attack();
-
-						var unitAView:DisplayObject = unitDistanceVOs[i].unitA.getView();
-						var unitBView:DisplayObject = unitDistanceVOs[i].unitB.getView();
-
-						if( Math.abs( unitAView.x - unitBView.x ) < 40 )
-						{
-							unitA.setPosition( unitAView.x + ( unitAView.x > unitBView.x ? 1 : -1 ), unitAView.y );
-							unitB.setPosition( unitBView.x + ( unitBView.x > unitBView.x ? 1 : -1 ), unitBView.y );
-						}
-
-						if( Math.abs( unitAView.y - unitBView.y ) > 10 )
-						{
-							unitA.setPosition( unitAView.x, unitAView.y + ( unitAView.y > unitBView.y ? -1 : 1 ) );
-							unitB.setPosition( unitBView.x, unitBView.y + ( unitBView.y > unitAView.y ? -1 : 1 ) );
-						}
 					}
 					else if( !unitA.getIsMoving() )
 					{

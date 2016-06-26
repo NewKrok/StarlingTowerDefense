@@ -22,8 +22,8 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.blockChance = 2;
 
-			this.minDamage = 10;
-			this.maxDamage = 15;
+			this.minDamage = 5;
+			this.maxDamage = 10;
 
 			this.areaDamage = 0;
 			this.areaDamageRadius = 0;
@@ -36,7 +36,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.damageDelay = .7;
 
-			this.maxLife = 30;
+			this.maxLife = 200;
 			this.lifeRegeneration = 2;
 
 			this.maxMana = 15;
