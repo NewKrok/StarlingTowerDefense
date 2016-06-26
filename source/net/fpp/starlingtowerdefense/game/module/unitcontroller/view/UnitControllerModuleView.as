@@ -7,6 +7,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller.view
 
 	import net.fpp.common.starling.StaticAssetManager;
 	import net.fpp.common.starling.module.AModuleView;
+	import net.fpp.starlingtowerdefense.constant.CSkin;
 
 	import starling.display.DisplayObject;
 
@@ -20,7 +21,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller.view
 
 		override protected function onInit():void
 		{
-			this._selectionMarker = new Image( StaticAssetManager.instance.getTexture( 'selection_marker' ) );
+			this._selectionMarker = new Image( StaticAssetManager.instance.getTexture( CSkin.UNIT_SELECTION_MARKER ) );
 
 			this.addChild( this._selectionMarker );
 			this._selectionMarker.touchable = false;

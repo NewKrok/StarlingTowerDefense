@@ -20,7 +20,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistanceholder
 			this._unitDistanceHolderModel.setUnitDistanceCalculatorModule( value );
 		}
 
-		public function update():void
+		public function onUpdate():void
 		{
 			this._unitDistanceHolderModel.setUnitDistances();
 		}

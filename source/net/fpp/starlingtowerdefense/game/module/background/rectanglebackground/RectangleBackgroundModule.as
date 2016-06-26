@@ -15,7 +15,7 @@ package net.fpp.starlingtowerdefense.game.module.background.rectanglebackground
 
 		public function RectangleBackgroundModule():void
 		{
-			this._backgroundModuleView = this.createView( RectangleBackgroundModuleView ) as RectangleBackgroundModuleView;
+			this._backgroundModuleView = this.createModuleView( RectangleBackgroundModuleView ) as RectangleBackgroundModuleView;
 
 			this._backgroundModel = this.createModel( RectangleBackgroundModel ) as RectangleBackgroundModel;
 		}

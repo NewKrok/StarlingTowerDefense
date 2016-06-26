@@ -212,7 +212,7 @@ package net.fpp.starlingtowerdefense.game
 
 		private function createUnit( x:Number, y:Number, unitConfigVO:UnitConfigVO ):void
 		{
-			var unitModule:UnitModule = new UnitModule( unitConfigVO, this._damageCalculator, this._dragonBonesGraphicService );
+			var unitModule:IUnitModule = this.createModule( UnitModule, [unitConfigVO, this._damageCalculator, this._dragonBonesGraphicService] ) as IUnitModule;
 
 			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, removeUnit );
 

@@ -24,7 +24,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 		public function UnitControllerModule()
 		{
 			this._unitControllerModel = this.createModel( UnitControllerModel ) as UnitControllerModel;
-			this._unitControllerModuleView = this.createView( UnitControllerModuleView ) as UnitControllerModuleView;
+			this._unitControllerModuleView = this.createModuleView( UnitControllerModuleView ) as UnitControllerModuleView;
 		}
 
 		public function setGameContainer( value:DisplayObjectContainer ):void
@@ -58,7 +58,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 			}
 		}
 
-		public function update():void
+		public function onUpdate():void
 		{
 			if( this._unitControllerModel.getTarget() )
 			{

@@ -4,10 +4,10 @@
 package net.fpp.starlingtowerdefense.game.module.unit
 {
 	import net.fpp.common.geom.SimplePoint;
-	import net.fpp.common.starling.module.IModule;
+	import net.fpp.common.starling.module.IUpdatableModule;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 
-	public interface IUnitModule extends IModule
+	public interface IUnitModule extends IUpdatableModule
 	{
 		function setPosition( x:Number, y:Number ):void;
 

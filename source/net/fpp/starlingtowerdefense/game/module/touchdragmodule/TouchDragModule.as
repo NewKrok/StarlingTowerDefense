@@ -68,7 +68,7 @@ package net.fpp.starlingtowerdefense.game.module.touchdragmodule
 			}
 		}
 
-		public function update():void
+		public function onUpdate():void
 		{
 			if ( this._touchDragModel.swipeForce > 1 )
 			{

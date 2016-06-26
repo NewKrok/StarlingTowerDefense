@@ -15,7 +15,7 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground
 
 		public function PolygonBackgroundModule():void
 		{
-			this._backgroundModuleView = this.createView( PathBackgroundModuleView ) as PathBackgroundModuleView;
+			this._backgroundModuleView = this.createModuleView( PathBackgroundModuleView ) as PathBackgroundModuleView;
 
 			this._backgroundModel = this.createModel( PolygonBackgroundModel ) as PolygonBackgroundModel;
 		}

@@ -22,7 +22,7 @@ package net.fpp.starlingtowerdefense.game.module.zorder
 			this._zOrderModel.setUnitContainer( value );
 		}
 
-		public function update():void
+		public function onUpdate():void
 		{
 			this._zOrderModel.updateZOrder();
 		}

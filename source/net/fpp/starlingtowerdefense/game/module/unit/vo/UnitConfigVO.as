@@ -23,6 +23,8 @@ package net.fpp.starlingtowerdefense.game.module.unit.vo
 		public var isInvulnerable:Boolean;
 		public var maxLife:Number;
 		public var lifeRegeneration:Number;
+		public var maxMana:Number;
+		public var manaRegeneration:Number;
 		public var armor:Number;
 		public var armorType:String;
 	}

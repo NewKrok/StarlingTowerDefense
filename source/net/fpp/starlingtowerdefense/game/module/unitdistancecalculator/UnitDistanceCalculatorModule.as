@@ -17,7 +17,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 			this._unitDistanceCalculatorModel = this.createModel( UnitDistanceCalculatorModel ) as UnitDistanceCalculatorModel;
 		}
 
-		public function update():void
+		public function onUpdate():void
 		{
 			this._unitDistanceCalculatorModel.calculateDistances();
 		}

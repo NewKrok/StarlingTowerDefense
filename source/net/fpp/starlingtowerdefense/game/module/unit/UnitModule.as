@@ -9,7 +9,6 @@ package net.fpp.starlingtowerdefense.game.module.unit
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
-
 	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 	import net.fpp.starlingtowerdefense.game.module.unit.view.UnitModuleView;
@@ -34,13 +33,24 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			this.processUnitConfigVO( unitConfigVO );
 			this._damageCalculator = damageCalculator;
 
-			this._unitView = this.createView( UnitModuleView ) as UnitModuleView;
+			this._unitView = this.createModuleView( UnitModuleView ) as UnitModuleView;
 			this._unitView.setDragonBonesGraphicService( dragonBonesGraphicService );
+		}
+
+		public function onUpdate():void
+		{
+			if ( !this.getIsDead() )
+			{
+				this._unitModel.regenerateLifeAndMana();
+			}
 		}
 
 		private function processUnitConfigVO( unitConfigVO:UnitConfigVO ):void
 		{
 			this._unitModel.setUnitConfigVO( unitConfigVO );
+
+			this._unitModel.setLife( unitConfigVO.maxLife );
+			this._unitModel.setMana( unitConfigVO.maxMana );
 		}
 
 		public function moveTo( pathVO:PathVO ):void
@@ -71,7 +81,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 			if( this._unitView.x != position.x )
 			{
-				this._unitView.scaleX = this.calculateScaleByEndX( position.x );
+				this._unitView.setDirection( this.calculateScaleByEndX( position.x ) );
 			}
 
 			TweenLite.killTweensOf( this._unitView );
@@ -118,7 +128,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			{
 				this._unitView.idle();
 
-				this._unitView.scaleX = this.calculateScaleByEndX( this._unitModel.getTarget().getView().x );
+				this._unitView.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) );
 			}
 		}
 
@@ -167,7 +177,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			{
 				this._unitModel.setLastAttackTime( now );
 
-				this._unitView.scaleX = this.calculateScaleByEndX( this._unitModel.getTarget().getView().x );
+				this._unitView.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) );
 
 				this._unitView.attack();
 

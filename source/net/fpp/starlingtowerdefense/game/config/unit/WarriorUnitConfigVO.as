@@ -34,10 +34,13 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.criticalHitChance = .01;
 			this.criticalHitDamageMultiple = 1.5;
 
-			this.damageDelay = .5;
+			this.damageDelay = .7;
 
 			this.maxLife = 30;
 			this.lifeRegeneration = 2;
+
+			this.maxMana = 15;
+			this.manaRegeneration = 4;
 
 			this.movementSpeed = 300;
 		}
