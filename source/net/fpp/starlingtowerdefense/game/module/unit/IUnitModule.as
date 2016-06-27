@@ -6,6 +6,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.IUpdatableModule;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
+	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 
 	public interface IUnitModule extends IUpdatableModule
 	{
@@ -42,5 +43,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		function getAttackRadius():Number;
 
 		function getUnitDetectionRadius():Number;
+
+		function getDirection():Number;
+
+		function getUnitHeight():Number;
+
+		function getUnitConfigVO():UnitConfigVO;
 	}
 }

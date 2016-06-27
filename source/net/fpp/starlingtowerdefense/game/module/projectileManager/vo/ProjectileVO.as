@@ -8,12 +8,11 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.vo
 	public class ProjectileVO
 	{
 		public var projectileConfigVO:ProjectileSettingVO;
+		public var owner:IUnitModule;
 		public var target:IUnitModule;
 
-		public function ProjectileVO( projectileConfigVO:ProjectileSettingVO, target:IUnitModule )
+		public function ProjectileVO()
 		{
-			this.projectileConfigVO = projectileConfigVO;
-			this.target = target;
 		}
 	}
 }

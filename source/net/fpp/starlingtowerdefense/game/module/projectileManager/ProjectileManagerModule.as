@@ -5,8 +5,7 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager
 {
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.view.ProjectileManagerModuleView;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileSettingVO;
-	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
 
 	public class ProjectileManagerModule extends AModule implements IProjectileManagerModule
 	{
@@ -25,9 +24,9 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager
 		{
 		}
 
-		public function addProjectile( projectileConfigVO:ProjectileSettingVO, target:IUnitModule ):void
+		public function addProjectile( projectileVO:ProjectileVO ):void
 		{
-			this._projectileManagerModel.addProjectile( projectileConfigVO, target );
+			this._projectileManagerModel.addProjectile( projectileVO );
 		}
 
 		override public function dispose():void

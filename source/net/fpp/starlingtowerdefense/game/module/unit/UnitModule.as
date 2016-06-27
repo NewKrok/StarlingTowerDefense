@@ -9,13 +9,13 @@ package net.fpp.starlingtowerdefense.game.module.unit
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
-	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.IProjectileManagerModule;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileSettingVO;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 	import net.fpp.starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
+	import net.fpp.starlingtowerdefense.game.util.DamageCalculatorUtil;
 
 	public class UnitModule extends AModule implements IUnitModule
 	{
@@ -25,18 +25,15 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		private var _unitView:UnitModuleView;
 		private var _unitModel:UnitModel;
 
-		private var _damageCalculator:DamageCalculator;
-
 		private var _pathVO:PathVO;
 		private var _pathIndex:int;
 		private var _isMoving:Boolean;
 
-		public function UnitModule( unitConfigVO:UnitConfigVO, damageCalculator:DamageCalculator, dragonBonesGraphicService:DragonBonesGraphicService ):void
+		public function UnitModule( unitConfigVO:UnitConfigVO, dragonBonesGraphicService:DragonBonesGraphicService ):void
 		{
 			this._unitModel = this.createModel( UnitModel ) as UnitModel;
 
 			this.processUnitConfigVO( unitConfigVO );
-			this._damageCalculator = damageCalculator;
 
 			this._unitView = this.createModuleView( UnitModuleView ) as UnitModuleView;
 			this._unitView.setDragonBonesGraphicService( dragonBonesGraphicService );
@@ -88,7 +85,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 			if( this._unitView.x != position.x )
 			{
-				this._unitView.setDirection( this.calculateScaleByEndX( position.x ) );
+				this._unitModel.setDirection( this.calculateScaleByEndX( position.x ) )
+				this._unitView.setDirection( this._unitModel.getDirection() );
 			}
 
 			TweenLite.killTweensOf( this._unitView );
@@ -135,7 +133,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			{
 				this._unitView.idle();
 
-				this._unitView.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) );
+				this._unitModel.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) )
+				this._unitView.setDirection( this._unitModel.getDirection() );
 			}
 			else if( this._unitModel.getLastPositionBeforeFight() )
 			{
@@ -224,31 +223,22 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function projectileAttackRutin():void
 		{
-			this.projectileManagerModule.addProjectile( this._unitModel.getUnitConfigVO().projectileConfigVO, this._unitModel.getTarget() );
+			var projectileVO:ProjectileVO = new ProjectileVO();
+			projectileVO.projectileConfigVO = this._unitModel.getUnitConfigVO().projectileConfigVO;
+			projectileVO.owner = this;
+			projectileVO.target = this.getTarget();
+
+			this.projectileManagerModule.addProjectile( projectileVO );
 		}
 
 		private function meleeAttackRutin():void
 		{
-			this._unitModel.getTarget().damage( this.calculateDamage() );
+			this._unitModel.getTarget().damage( DamageCalculatorUtil.calculateDamage( this, this.getTarget() ) );
 
 			if( this._unitModel.getTarget().getIsDead() )
 			{
 				this.removeTarget();
 			}
-		}
-
-		private function calculateDamage():Number
-		{
-			var damageValue:Number = this._damageCalculator.getAttackByMinAndMax( this._unitModel.getUnitConfigVO().minDamage, this._unitModel.getUnitConfigVO().maxDamage );
-
-			if( this._unitModel.getUnitConfigVO().criticalHitChance > Math.random() )
-			{
-				damageValue *= this._unitModel.getUnitConfigVO().criticalHitDamageMultiple
-			}
-
-			damageValue = this._damageCalculator.calculateDamageByAttackAndArmorType( damageValue, this._unitModel.getUnitConfigVO().attackType, this._unitModel.getTarget().getArmorType() );
-
-			return damageValue;
 		}
 
 		public function damage( value:Number ):void
@@ -380,6 +370,21 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public function getUnitDetectionRadius():Number
 		{
 			return this._unitModel.getUnitConfigVO().unitDetectionRadius;
+		}
+
+		public function getDirection():Number
+		{
+			return this._unitModel.getDirection();
+		}
+
+		public function getUnitHeight():Number
+		{
+			return this._unitModel.getUnitConfigVO().unitHeight;
+		}
+
+		public function getUnitConfigVO():UnitConfigVO
+		{
+			return this._unitModel.getUnitConfigVO();
 		}
 	}
 }

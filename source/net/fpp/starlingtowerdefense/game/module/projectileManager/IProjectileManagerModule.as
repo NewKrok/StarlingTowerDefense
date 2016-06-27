@@ -4,11 +4,10 @@
 package net.fpp.starlingtowerdefense.game.module.projectileManager
 {
 	import net.fpp.common.starling.module.IUpdatableModule;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileSettingVO;
-	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
 
 	public interface IProjectileManagerModule extends IUpdatableModule
 	{
-		function addProjectile( projectileConfigVO:ProjectileSettingVO, target:IUnitModule ):void;
+		function addProjectile( projectileVO:ProjectileVO ):void;
 	}
 }

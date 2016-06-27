@@ -6,6 +6,9 @@ package net.fpp.starlingtowerdefense.game
 	import assets.GameAssets;
 	import assets.TerrainTextures;
 
+	import com.greensock.plugins.BezierPlugin;
+	import com.greensock.plugins.TweenPlugin;
+
 	import dragonBones.animation.WorldClock;
 
 	import net.fpp.common.geom.SimplePoint;
@@ -23,14 +26,11 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.rectanglebackground.RectangleBackgroundModule;
-	import net.fpp.starlingtowerdefense.game.module.helper.DamageCalculator;
 	import net.fpp.starlingtowerdefense.game.module.map.IMapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.MapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.constant.CMapSize;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.IProjectileManagerModule;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.ProjectileManagerModule;
-	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.IUnitTargetManagerModule;
-	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.UnitTargetManagerModule;
 	import net.fpp.starlingtowerdefense.game.module.touchdrag.ITouchDragModule;
 	import net.fpp.starlingtowerdefense.game.module.touchdrag.TouchDragModule;
 	import net.fpp.starlingtowerdefense.game.module.touchzoom.ITouchZoomModule;
@@ -47,12 +47,15 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.UnitDistanceCalculatorModule;
 	import net.fpp.starlingtowerdefense.game.module.unitdistanceholder.IUnitDistanceHolderModule;
 	import net.fpp.starlingtowerdefense.game.module.unitdistanceholder.UnitDistanceHolderModule;
+	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.IUnitTargetManagerModule;
+	import net.fpp.starlingtowerdefense.game.module.unittargetmanager.UnitTargetManagerModule;
 	import net.fpp.starlingtowerdefense.game.module.wavehandler.IWaveHandlerModule;
 	import net.fpp.starlingtowerdefense.game.module.wavehandler.WaveHandlerModule;
 	import net.fpp.starlingtowerdefense.game.module.zorder.IZOrderModule;
 	import net.fpp.starlingtowerdefense.game.module.zorder.ZOrderModule;
 	import net.fpp.starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
 	import net.fpp.starlingtowerdefense.game.service.animatedgraphic.events.DragonBonesGraphicServiceEvent;
+	import net.fpp.starlingtowerdefense.game.util.DamageCalculatorUtil;
 	import net.fpp.starlingtowerdefense.game.util.MapPositionUtil;
 	import net.fpp.starlingtowerdefense.vo.LevelDataVO;
 
@@ -62,8 +65,6 @@ package net.fpp.starlingtowerdefense.game
 	public class GameMain extends AApplicationContext
 	{
 		private var _dragonBonesGraphicService:DragonBonesGraphicService;
-
-		private var _damageCalculator:DamageCalculator;
 
 		private var _rectangleBackgroundModule:RectangleBackgroundModule;
 		private var _pathBackgroundModule:IPolygonBackgroundModule;
@@ -86,11 +87,12 @@ package net.fpp.starlingtowerdefense.game
 
 		public function GameMain()
 		{
+			TweenPlugin.activate( [ BezierPlugin ] );
+			DamageCalculatorUtil.setConfig();
+
 			this.configureInjector();
 
 			this._dragonBonesGraphicService = new DragonBonesGraphicService();
-
-			this._damageCalculator = new DamageCalculator();
 
 			this.loadDragonBonesGraphicAssets();
 		}
@@ -160,10 +162,10 @@ package net.fpp.starlingtowerdefense.game
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 
-			this.createUnit( 550, 300, new TestEnemyUitConfigVO() );
+			this.createUnit( 650, 350, new TestEnemyUitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 
-			this.createUnit( 650, 500, new TestEnemyUitConfigVO() );
+			this.createUnit( 750, 550, new TestEnemyUitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 
 			this.createUnit( 1050, 700, new TestEnemyUitConfigVO() );
@@ -224,7 +226,7 @@ package net.fpp.starlingtowerdefense.game
 
 		private function createUnit( x:Number, y:Number, unitConfigVO:UnitConfigVO ):void
 		{
-			var unitModule:IUnitModule = this.createModule( UnitModule, [ unitConfigVO, this._damageCalculator, this._dragonBonesGraphicService ] ) as IUnitModule;
+			var unitModule:IUnitModule = this.createModule( UnitModule, [ unitConfigVO, this._dragonBonesGraphicService ] ) as IUnitModule;
 
 			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, removeUnit );
 

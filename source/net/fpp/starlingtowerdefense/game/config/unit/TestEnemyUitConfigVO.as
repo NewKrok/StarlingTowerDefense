@@ -14,11 +14,13 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.name = 'tst enemy';
 
 			this.sizeRadius = 30;
+			this.unitHeight = 100;
+
 			this.attackRadius = 90;
 			this.unitDetectionRadius = 200;
 
 			this.armor = 0;
-			this.armorType = CArmorType.NORMAL;
+			this.armorType = CArmorType.HEAVY;
 
 			this.blockChance = 2;
 

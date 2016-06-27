@@ -3,6 +3,7 @@
  */
 package net.fpp.starlingtowerdefense.game.config.unit
 {
+	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.starlingtowerdefense.constant.CSkin;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileSettingVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.constant.CArmorType;
@@ -16,8 +17,10 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.name = 'Mage';
 
 			this.sizeRadius = 30;
-			this.attackRadius = 250;
-			this.unitDetectionRadius = 250;
+			this.unitHeight = 100;
+
+			this.attackRadius = 300;
+			this.unitDetectionRadius = 300;
 
 			this.armor = 0;
 			this.armorType = CArmorType.MAGIC;
@@ -25,23 +28,29 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.blockChance = 2;
 
 			this.projectileConfigVO = new ProjectileSettingVO();
-			this.projectileConfigVO.skin = CSkin.MAGE_PROJECTILE;
-			this.projectileConfigVO.speed = 50;
+			this.projectileConfigVO.skinId = CSkin.MAGE_PROJECTILE;
+			this.projectileConfigVO.minDamage = 3
+			this.projectileConfigVO.maxDamage = 6;
+			this.projectileConfigVO.attackType = CAttackType.MAGIC;
+			this.projectileConfigVO.speed = 500;
 			this.projectileConfigVO.isEnemyFollower = true;
+			this.projectileConfigVO.startPointOffset = new SimplePoint( 30, -50 );
+			this.projectileConfigVO.projectileArcHeight = 0;
 
-			this.minDamage = 3;
-			this.maxDamage = 5;
+			this.minDamage = 1;
+			this.maxDamage = 4;
 
 			this.areaDamage = 0;
 			this.areaDamageRadius = 0;
 
-			this.attackSpeed = .5;
-			this.attackType = CAttackType.MAGIC;
+			this.attackSpeed = .7;
+			this.attackAnimationSpeed = .5;
+			this.attackType = CAttackType.NORMAL;
 
 			this.criticalHitChance = .01;
 			this.criticalHitDamageMultiple = 1.5;
 
-			this.attackActionDelay = .7;
+			this.attackActionDelay = .3;
 
 			this.maxLife = 100;
 			this.lifeRegeneration = 2;

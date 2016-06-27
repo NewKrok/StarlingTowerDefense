@@ -14,6 +14,8 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.name = 'Warrior';
 
 			this.sizeRadius = 30;
+			this.unitHeight = 100;
+
 			this.attackRadius = 90;
 			this.unitDetectionRadius = 150;
 

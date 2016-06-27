@@ -22,6 +22,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public var damageDelayTween:TweenLite;
 		private var _lastRegenerateTime:Number = new Date().time;
 		private var _lastPositionBeforeFight:SimplePoint;
+		private var _direction:Number = 1;
 
 		public function getLife():Number
 		{
@@ -142,6 +143,16 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public function getLastPositionBeforeFight():SimplePoint
 		{
 			return this._lastPositionBeforeFight;
+		}
+
+		public function setDirection( value:Number ):void
+		{
+			this._direction = value;
+		}
+
+		public function getDirection():Number
+		{
+			return this._direction;
 		}
 	}
 }

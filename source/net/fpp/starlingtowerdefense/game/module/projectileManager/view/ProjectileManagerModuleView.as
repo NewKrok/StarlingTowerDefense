@@ -3,15 +3,24 @@
  */
 package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 {
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Linear;
+
+	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.common.starling.module.AModuleView;
+	import net.fpp.common.util.GeomUtil;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.ProjectileManagerModel;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.events.ProjectileManagerModelEvent;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
+	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
+	import net.fpp.starlingtowerdefense.game.util.DamageCalculatorUtil;
 
 	public class ProjectileManagerModuleView extends AModuleView
 	{
 		private var _projectileManagerModel:ProjectileManagerModel;
+
+		private var _projectileViews:Vector.<ProjectileView> = new <ProjectileView>[];
 
 		override public function setModel( model:AModel ):void
 		{
@@ -25,7 +34,82 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 		{
 			var projectileVO:ProjectileVO = e.projectileVO;
 
-			
+			var owner:IUnitModule = projectileVO.owner;
+			var ownerPoint:SimplePoint = new SimplePoint(
+					owner.getView().x + owner.getDirection() * projectileVO.projectileConfigVO.startPointOffset.x,
+					owner.getView().y + projectileVO.projectileConfigVO.startPointOffset.y
+			);
+
+			var projectileView:ProjectileView = new ProjectileView( projectileVO.projectileConfigVO.skinId );
+			projectileView.x = ownerPoint.x;
+			projectileView.y = ownerPoint.y;
+
+			var target:IUnitModule = projectileVO.target;
+			var targetPoint:SimplePoint = new SimplePoint(
+					target.getView().x + target.getSizeRadius(),
+					target.getView().y - target.getUnitHeight() / 2
+			);
+
+			var distance:Number = GeomUtil.simplePointDistance( ownerPoint, targetPoint );
+
+			if ( projectileVO.projectileConfigVO.projectileArcHeight != 0 )
+			{
+				var angle:Number = GeomUtil.simplePointAngle( ownerPoint, targetPoint );
+
+				var middlePoint:SimplePoint = new SimplePoint(
+						ownerPoint.x + distance / 2 * Math.cos( angle ),
+						ownerPoint.y + distance / 2 * Math.sin( angle ) - projectileVO.projectileConfigVO.projectileArcHeight
+				);
+
+				TweenLite.to( projectileView, distance / projectileVO.projectileConfigVO.speed, {
+					ease: Linear.easeNone,
+					bezier: {
+						values: [
+							{x: projectileView.x, y: projectileView.y},
+							{x: middlePoint.x, y: middlePoint.y},
+							{x: targetPoint.x, y: targetPoint.y}
+						]
+					},
+					onComplete: this.handleProjectileFinished,
+					onCompleteParams: [ projectileVO, projectileView ]
+				} );
+			}
+			else
+			{
+				TweenLite.to( projectileView, distance / projectileVO.projectileConfigVO.speed, {
+					ease: Linear.easeNone,
+					x: targetPoint.x,
+					y: targetPoint.y,
+					onComplete: this.handleProjectileFinished,
+					onCompleteParams: [ projectileVO, projectileView ]
+				} );
+			}
+
+			this.addChild( projectileView );
+
+			this._projectileViews.push( projectileView );
+		}
+
+		private function handleProjectileFinished( projectileVO:ProjectileVO, projectileView:ProjectileView ):void
+		{
+			var target:IUnitModule = projectileVO.target;
+			if ( target )
+			{
+				target.damage( DamageCalculatorUtil.calculateDamage( projectileVO.owner, target ) );
+			}
+
+			for ( var i:int = 0; i < this._projectileViews.length; i++ )
+			{
+				if ( this._projectileViews[i] == projectileView )
+				{
+					this._projectileViews.splice( i, 1 );
+					break;
+				}
+			}
+
+			projectileView.removeFromParent( true );
+
+			this._projectileManagerModel.removeProjectile( projectileVO );
 		}
 
 		override public function dispose():void

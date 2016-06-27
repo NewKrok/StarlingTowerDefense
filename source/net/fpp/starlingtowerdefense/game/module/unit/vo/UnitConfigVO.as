@@ -10,6 +10,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.vo
 		public var name:String;
 		public var movementSpeed:Number;
 		public var sizeRadius:Number;
+		public var unitHeight:Number;
 		public var unitDetectionRadius:Number;
 		public var minDamage:Number;
 		public var maxDamage:Number;
@@ -20,6 +21,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.vo
 		public var blockChance:Number;
 		public var attackActionDelay:Number;
 		public var attackSpeed:Number;
+		public var attackAnimationSpeed:Number = 0;
 		public var attackRadius:Number;
 		public var attackType:String;
 		public var projectileConfigVO:ProjectileSettingVO;

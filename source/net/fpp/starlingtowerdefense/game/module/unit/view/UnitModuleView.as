@@ -45,8 +45,8 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		private var _unitModel:UnitModel;
 
-		private var armature:Armature;
-		private var armatureClip:Sprite;
+		private var _armature:Armature;
+		private var _armatureClip:Sprite;
 
 		private var _currentAnimation:String;
 
@@ -63,12 +63,12 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		override protected function onInit():void
 		{
-			this.armature = this._dragonBonesGraphicService.buildArmature( 'Warrior' );
-			this.armatureClip = this.armature.display as Sprite;
+			this._armature = this._dragonBonesGraphicService.buildArmature( 'Warrior' );
+			this._armatureClip = this._armature.display as Sprite;
 
-			WorldClock.clock.add( this.armature );
+			WorldClock.clock.add( this._armature );
 
-			this.addChild( this.armatureClip );
+			this.addChild( this._armatureClip );
 
 			this.createUnitBars();
 
@@ -142,7 +142,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function setDirection( value:Number ):void
 		{
-			this.armatureClip.scaleX = value;
+			this._armatureClip.scaleX = value;
 		}
 
 		public function attack():void
@@ -154,8 +154,8 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 			this._currentAnimation = CUnitAnimation.ATTACK;
 
-			this.armature.animation.gotoAndPlay( CUnitAnimation.ATTACK, 0, 0 );
-			this.armature.addEventListener( AnimationEvent.COMPLETE, this.aramtureEventHandler );
+			this._armature.animation.gotoAndPlay( CUnitAnimation.ATTACK, 0, this._unitModel.getUnitConfigVO().attackAnimationSpeed );
+			this._armature.addEventListener( AnimationEvent.COMPLETE, this.aramtureEventHandler );
 		}
 
 		public function run():void
@@ -167,7 +167,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 			this._currentAnimation = CUnitAnimation.RUN;
 
-			this.armature.animation.gotoAndPlay( CUnitAnimation.RUN, 0, 0 );
+			this._armature.animation.gotoAndPlay( CUnitAnimation.RUN, 0, 0 );
 		}
 
 		public function idle():void
@@ -179,7 +179,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 			this._currentAnimation = CUnitAnimation.IDLE;
 
-			this.armature.animation.gotoAndPlay( CUnitAnimation.IDLE, 0, 0 );
+			this._armature.animation.gotoAndPlay( CUnitAnimation.IDLE, 0, 0 );
 		}
 
 		public function changeSkin( type:int ):void
@@ -193,7 +193,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		{
 			var newHead:Image = this._dragonBonesGraphicService.getTextureDisplay( name ) as Image;
 
-			var bone:Bone = this.armature.getBone( CUnitBones.HEAD );
+			var bone:Bone = this._armature.getBone( CUnitBones.HEAD );
 			bone.display.dispose();
 			bone.display = newHead;
 		}
@@ -202,7 +202,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		{
 			var newHair:Image = this._dragonBonesGraphicService.getTextureDisplay( name ) as Image;
 
-			var bone:Bone = this.armature.getBone( CUnitBones.HAIR );
+			var bone:Bone = this._armature.getBone( CUnitBones.HAIR );
 			bone.display.dispose();
 			bone.display = newHair;
 		}
@@ -211,7 +211,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		{
 			var newHair:Image = this._dragonBonesGraphicService.getTextureDisplay( name ) as Image;
 
-			var bone:Bone = this.armature.getBone( CUnitBones.WEAPON );
+			var bone:Bone = this._armature.getBone( CUnitBones.WEAPON );
 			bone.display.dispose();
 			bone.display = newHair;
 		}
@@ -220,7 +220,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		{
 			this._currentAnimation = '';
 
-			this.armature.removeEventListener( AnimationEvent.COMPLETE, aramtureEventHandler );
+			this._armature.removeEventListener( AnimationEvent.COMPLETE, aramtureEventHandler );
 
 			this.idle();
 		}
