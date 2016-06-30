@@ -8,6 +8,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.vo
 	public class UnitConfigVO
 	{
 		public var name:String;
+		public var skeleton:String;
 		public var movementSpeed:Number;
 		public var sizeRadius:Number;
 		public var unitHeight:Number;

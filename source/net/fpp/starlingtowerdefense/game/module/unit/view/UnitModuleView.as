@@ -9,27 +9,22 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 	import dragonBones.events.AnimationEvent;
 
 	import net.fpp.common.geom.SimplePoint;
-
+	import net.fpp.common.starling.StaticAssetManager;
 	import net.fpp.common.starling.display.VUIBox;
-
 	import net.fpp.common.starling.module.AModel;
-
 	import net.fpp.common.starling.module.AModuleView;
 	import net.fpp.starlingtowerdefense.constant.CColor;
 	import net.fpp.starlingtowerdefense.game.module.linebar.ILineBarModule;
 	import net.fpp.starlingtowerdefense.game.module.linebar.LineBarModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.UnitModel;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModelEvent;
-
-	import starling.display.DisplayObject;
-
-	import starling.display.Image;
-	import starling.display.Sprite;
-
 	import net.fpp.starlingtowerdefense.game.module.unit.view.constant.CUnitAnimation;
 	import net.fpp.starlingtowerdefense.game.module.unit.view.constant.CUnitBones;
-	import net.fpp.starlingtowerdefense.game.module.unit.view.constant.CUnitSkins;
 	import net.fpp.starlingtowerdefense.game.service.animatedgraphic.DragonBonesGraphicService;
+
+	import starling.display.DisplayObject;
+	import starling.display.Image;
+	import starling.display.Sprite;
 
 	public class UnitModuleView extends AModuleView
 	{
@@ -63,8 +58,9 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		override protected function onInit():void
 		{
-			this._armature = this._dragonBonesGraphicService.buildArmature( 'Warrior' );
+			this._armature = this._dragonBonesGraphicService.buildArmature( this._unitModel.getUnitConfigVO().skeleton );
 			this._armatureClip = this._armature.display as Sprite;
+			this.scaleX = this.scaleY = 1 / StaticAssetManager.instance.scaleFactor;
 
 			WorldClock.clock.add( this._armature );
 
@@ -83,14 +79,14 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 			this.createLifeBar();
 			this.onLifeChangedHandler();
 
-			if ( this._unitModel.getUnitConfigVO().maxMana > 0 )
+			if( this._unitModel.getUnitConfigVO().maxMana > 0 )
 			{
 				this.createManaBar();
 				this.onManaChangedHandler();
 			}
 
 			this._unitBarContainer.x = -this._unitBarContainer.width / 2;
-			this._unitBarContainer.y = -this.height;
+			this._unitBarContainer.y = -this.height * StaticAssetManager.instance.scaleFactor;
 
 			this.addChild( this._unitBarContainer );
 		}
@@ -147,7 +143,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function attack():void
 		{
-			if ( this._currentAnimation == CUnitAnimation.ATTACK )
+			if( this._currentAnimation == CUnitAnimation.ATTACK )
 			{
 				return;
 			}
@@ -160,7 +156,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function run():void
 		{
-			if ( this._currentAnimation == CUnitAnimation.RUN )
+			if( this._currentAnimation == CUnitAnimation.RUN )
 			{
 				return;
 			}
@@ -172,7 +168,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function idle():void
 		{
-			if ( this._currentAnimation == CUnitAnimation.IDLE )
+			if( this._currentAnimation == CUnitAnimation.IDLE )
 			{
 				return;
 			}
@@ -184,9 +180,9 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function changeSkin( type:int ):void
 		{
-			this.setHairSkin( CUnitSkins.WARRIOR_HAIRS[type] );
-			this.setWeaponSkin( CUnitSkins.WARRIOR_WEAPONS[type] );
-			this.setHeadSkin( CUnitSkins.WARRIOR_HEADS[type] );
+			//this.setHairSkin( CUnitSkins.WARRIOR_HAIRS[type] );
+			//this.setWeaponSkin( CUnitSkins.WARRIOR_WEAPONS[type] );
+			//this.setHeadSkin( CUnitSkins.WARRIOR_HEADS[type] );
 		}
 
 		private function setHeadSkin( name:String ):void

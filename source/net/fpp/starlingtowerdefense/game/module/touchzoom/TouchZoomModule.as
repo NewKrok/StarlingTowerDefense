@@ -64,7 +64,7 @@ package net.fpp.starlingtowerdefense.game.module.touchzoom
 				var zoomOffsetFromStart:Number = zoomOffset - this._touchZoomModel.zoomStartOffset;
 
 				var newMapZoom:Number = this._touchZoomModel.zoomValueAtStart + zoomOffsetFromStart / 250;
-				newMapZoom = Math.max( .2, newMapZoom );
+				newMapZoom = Math.max( .5, newMapZoom );
 				newMapZoom = Math.min( 2, newMapZoom );
 				this._touchZoomModel.gameContainer.scaleX = this._touchZoomModel.gameContainer.scaleY = newMapZoom;
 

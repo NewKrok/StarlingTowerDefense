@@ -20,6 +20,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
+	import net.fpp.starlingtowerdefense.game.config.unit.ArcherUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.MageUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.TestEnemyUitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
@@ -154,11 +155,15 @@ package net.fpp.starlingtowerdefense.game
 			this._viewContainer.addChild( this._projectileManagerModule.getView() );
 			this.injector.mapValue( IProjectileManagerModule, this._projectileManagerModule );
 
-			this.createUnit( 300, 300, new MageUnitConfigVO() );
+			this.createUnit( 300, 300, new ArcherUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 
-			this.createUnit( 250, 280, new WarriorUnitConfigVO() );
+			this.createUnit( 150, 280, new MageUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			this._unitControllerModule.setTarget( this._units[ 0 ] );
+
+			this.createUnit( 50, 280, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 

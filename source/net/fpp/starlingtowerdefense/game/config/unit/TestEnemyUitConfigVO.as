@@ -12,6 +12,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 		public function TestEnemyUitConfigVO()
 		{
 			this.name = 'tst enemy';
+			this.skeleton = 'Warrior';
 
 			this.sizeRadius = 30;
 			this.unitHeight = 100;

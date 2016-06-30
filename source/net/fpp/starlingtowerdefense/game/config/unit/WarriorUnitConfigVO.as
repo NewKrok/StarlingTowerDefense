@@ -12,6 +12,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 		public function WarriorUnitConfigVO()
 		{
 			this.name = 'Warrior';
+			this.skeleton = 'Warrior';
 
 			this.sizeRadius = 30;
 			this.unitHeight = 100;
@@ -44,7 +45,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.maxMana = 15;
 			this.manaRegeneration = 4;
 
-			this.movementSpeed = 300;
+			this.movementSpeed = 220;
 		}
 	}
 }

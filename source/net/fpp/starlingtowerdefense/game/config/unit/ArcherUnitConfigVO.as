@@ -10,18 +10,18 @@ package net.fpp.starlingtowerdefense.game.config.unit
 	import net.fpp.starlingtowerdefense.game.module.unit.constant.CAttackType;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 
-	public class MageUnitConfigVO extends UnitConfigVO
+	public class ArcherUnitConfigVO extends UnitConfigVO
 	{
-		public function MageUnitConfigVO()
+		public function ArcherUnitConfigVO()
 		{
-			this.name = 'Mage';
-			this.skeleton = 'Warrior';
+			this.name = 'Archer';
+			this.skeleton = 'Archer';
 
 			this.sizeRadius = 30;
 			this.unitHeight = 100;
 
-			this.attackRadius = 300;
-			this.unitDetectionRadius = 300;
+			this.attackRadius = 320;
+			this.unitDetectionRadius = 320;
 
 			this.armor = 0;
 			this.armorType = CArmorType.MAGIC;
@@ -29,37 +29,37 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.blockChance = 2;
 
 			this.projectileConfigVO = new ProjectileSettingVO();
-			this.projectileConfigVO.skinId = CSkin.MAGE_PROJECTILE;
-			this.projectileConfigVO.minDamage = 3
-			this.projectileConfigVO.maxDamage = 6;
-			this.projectileConfigVO.attackType = CAttackType.MAGIC;
-			this.projectileConfigVO.speed = 500;
-			this.projectileConfigVO.isEnemyFollower = true;
+			this.projectileConfigVO.skinId = CSkin.ARCHER_ARROW;
+			this.projectileConfigVO.minDamage = 6
+			this.projectileConfigVO.maxDamage = 12;
+			this.projectileConfigVO.attackType = CAttackType.PIERCING;
+			this.projectileConfigVO.speed = 300;
+			this.projectileConfigVO.isEnemyFollower = false;
 			this.projectileConfigVO.startPointOffset = new SimplePoint( 30, -50 );
-			this.projectileConfigVO.projectileArcHeight = 0;
+			this.projectileConfigVO.projectileArcHeight = 60;
 
-			this.minDamage = 1;
-			this.maxDamage = 4;
+			this.minDamage = 3;
+			this.maxDamage = 7;
 
 			this.areaDamage = 0;
 			this.areaDamageRadius = 0;
 
-			this.attackSpeed = .7;
-			this.attackAnimationSpeed = .5;
+			this.attackSpeed = 1.2;
+			this.attackAnimationSpeed = .6;
 			this.attackType = CAttackType.NORMAL;
 
 			this.criticalHitChance = .01;
 			this.criticalHitDamageMultiple = 1.5;
 
-			this.attackActionDelay = .3;
+			this.attackActionDelay = .4;
 
 			this.maxLife = 100;
 			this.lifeRegeneration = 2;
 
-			this.maxMana = 40;
-			this.manaRegeneration = 4;
+			this.maxMana = 10;
+			this.manaRegeneration = 2;
 
-			this.movementSpeed = 220;
+			this.movementSpeed = 250;
 		}
 	}
 }

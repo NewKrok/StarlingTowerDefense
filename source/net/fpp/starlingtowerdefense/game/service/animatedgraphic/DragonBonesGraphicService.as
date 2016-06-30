@@ -10,6 +10,8 @@ package net.fpp.starlingtowerdefense.game.service.animatedgraphic
 
 	import flash.utils.ByteArray;
 
+	import net.fpp.common.starling.StaticAssetManager;
+
 	import starling.events.EventDispatcher;
 
 	import assets.UnitAssets;

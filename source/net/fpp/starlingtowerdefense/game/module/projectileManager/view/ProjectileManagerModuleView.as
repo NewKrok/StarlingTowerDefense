@@ -52,13 +52,14 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 
 			var distance:Number = GeomUtil.simplePointDistance( ownerPoint, targetPoint );
 
-			if ( projectileVO.projectileConfigVO.projectileArcHeight != 0 )
+			if( projectileVO.projectileConfigVO.projectileArcHeight != 0 )
 			{
 				var angle:Number = GeomUtil.simplePointAngle( ownerPoint, targetPoint );
 
+				var archHeight:Number = ( distance / owner.getUnitConfigVO().attackRadius ) * projectileVO.projectileConfigVO.projectileArcHeight;
 				var middlePoint:SimplePoint = new SimplePoint(
 						ownerPoint.x + distance / 2 * Math.cos( angle ),
-						ownerPoint.y + distance / 2 * Math.sin( angle ) - projectileVO.projectileConfigVO.projectileArcHeight
+						ownerPoint.y + distance / 2 * Math.sin( angle ) - archHeight
 				);
 
 				TweenLite.to( projectileView, distance / projectileVO.projectileConfigVO.speed, {
@@ -68,7 +69,8 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 							{x: projectileView.x, y: projectileView.y},
 							{x: middlePoint.x, y: middlePoint.y},
 							{x: targetPoint.x, y: targetPoint.y}
-						]
+						],
+						autoRotate: [ "x", "y", "rotation", 0, true ]
 					},
 					onComplete: this.handleProjectileFinished,
 					onCompleteParams: [ projectileVO, projectileView ]
@@ -93,14 +95,14 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 		private function handleProjectileFinished( projectileVO:ProjectileVO, projectileView:ProjectileView ):void
 		{
 			var target:IUnitModule = projectileVO.target;
-			if ( target )
+			if( target )
 			{
 				target.damage( DamageCalculatorUtil.calculateDamage( projectileVO.owner, target ) );
 			}
 
-			for ( var i:int = 0; i < this._projectileViews.length; i++ )
+			for( var i:int = 0; i < this._projectileViews.length; i++ )
 			{
-				if ( this._projectileViews[i] == projectileView )
+				if( this._projectileViews[ i ] == projectileView )
 				{
 					this._projectileViews.splice( i, 1 );
 					break;
