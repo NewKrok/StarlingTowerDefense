@@ -14,6 +14,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		function getPosition():SimplePoint;
 
+		function attackMoveTo( pathVO:PathVO ):void;
+
 		function moveTo( pathVO:PathVO ):void;
 
 		function attack():void;
@@ -33,6 +35,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		function removeTarget():void
 
 		function setTarget( value:IUnitModule ):void;
+
+		function getIsAttackMoveToInProgress():Boolean;
 
 		function getIsMoving():Boolean;
 

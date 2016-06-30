@@ -28,6 +28,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		private var _pathVO:PathVO;
 		private var _pathIndex:int;
 		private var _isMoving:Boolean;
+		private var _isAttackMoveToInProgress:Boolean;
 
 		public function UnitModule( unitConfigVO:UnitConfigVO, dragonBonesGraphicService:DragonBonesGraphicService ):void
 		{
@@ -55,8 +56,17 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			this._unitModel.setMana( unitConfigVO.maxMana );
 		}
 
+		public function attackMoveTo( pathVO:PathVO ):void
+		{
+			this.moveTo( pathVO );
+
+			this._isAttackMoveToInProgress = true;
+		}
+
 		public function moveTo( pathVO:PathVO ):void
 		{
+			this._isAttackMoveToInProgress = false;
+
 			this.removeTarget();
 
 			this._pathVO = pathVO;
@@ -78,6 +88,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function move( position:SimplePoint ):void
 		{
+			if(!position)
+			{
+				trace('hm');
+			}
+
 			if( position.x == this._unitView.x && position.y == this._unitView.y )
 			{
 				return;
@@ -140,6 +155,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			{
 				if( this._unitModel.getLastPositionBeforeFight().x == this._view.x && this._unitModel.getLastPositionBeforeFight().y == this._view.y )
 				{
+					this._unitModel.setLastPositionBeforeFight( null );
 					this._unitView.idle();
 				}
 				else
@@ -149,6 +165,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			}
 			else
 			{
+				this._isAttackMoveToInProgress = false;
 				this._unitView.idle();
 			}
 		}
@@ -253,6 +270,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function die():void
 		{
+			TweenLite.killTweensOf( this._unitView );
 			TweenLite.killTweensOf( this );
 
 			TweenLite.to( this._unitView, 1, {alpha: 0, onComplete: onDiedHandler} );
@@ -302,7 +320,10 @@ package net.fpp.starlingtowerdefense.game.module.unit
 					this._unitModel.damageDelayTween.kill();
 				}
 
-				this._unitModel.setLastPositionBeforeFight( new SimplePoint( this._view.x, this._view.y ) );
+				if ( !this._unitModel.getLastPositionBeforeFight() )
+				{
+					this._unitModel.setLastPositionBeforeFight( new SimplePoint( this._view.x, this._view.y ) );
+				}
 
 				this._unitView.run();
 				this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
@@ -318,7 +339,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 			this._unitModel.setTarget( null );
 
-			if( this._pathVO && this._pathVO.path && this._pathVO.path.length > 0 && this._pathIndex != this._pathVO.path.length )
+			if( this._pathVO && this._pathVO.path && this._pathVO.path.length > 0 && ( this._pathIndex != this._pathVO.path.length || this._isAttackMoveToInProgress ) )
 			{
 				if( this._pathIndex > 0 )
 				{
@@ -328,12 +349,6 @@ package net.fpp.starlingtowerdefense.game.module.unit
 				this._unitView.run();
 				this.runNextPathData();
 			}
-			else if( this._unitModel.getTarget() )
-			{
-				this.moveLastPositionAfterFight();
-			}
-
-			this._unitModel.setTarget( null );
 		}
 
 		private function moveLastPositionAfterFight():void
@@ -350,6 +365,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public function setPlayerGroup( value:String ):void
 		{
 			this._unitModel.setPlayerGroup( value );
+		}
+
+		public function getIsAttackMoveToInProgress():Boolean
+		{
+			return this._isAttackMoveToInProgress;
 		}
 
 		public function getIsMoving():Boolean

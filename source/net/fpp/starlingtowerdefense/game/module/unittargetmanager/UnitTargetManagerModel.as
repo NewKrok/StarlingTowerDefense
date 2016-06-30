@@ -33,7 +33,7 @@ package net.fpp.starlingtowerdefense.game.module.unittargetmanager
 				var unitA:IUnitModule = unitDistanceVOs[ i ].unitA;
 				var unitB:IUnitModule = unitDistanceVOs[ i ].unitB;
 
-				if ( unitA.getIsMoving() )
+				if ( unitA.getIsMoving() && !unitA.getIsAttackMoveToInProgress() )
 				{
 					continue;
 				}
@@ -47,7 +47,11 @@ package net.fpp.starlingtowerdefense.game.module.unittargetmanager
 
 				if( unitA.getTarget() == unitB )
 				{
-					if( distance < unitA.getAttackRadius() )
+					if( unitB.getIsDead() )
+					{
+						unitA.removeTarget();
+					}
+					else if( distance < unitA.getAttackRadius() )
 					{
 						unitA.attack();
 					}

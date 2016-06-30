@@ -10,11 +10,11 @@ package net.fpp.starlingtowerdefense.game.config.unit
 	import net.fpp.starlingtowerdefense.game.module.unit.constant.CAttackType;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 
-	public class ArcherUnitConfigVO extends UnitConfigVO
+	public class HeroArcherUnitConfigVO extends UnitConfigVO
 	{
-		public function ArcherUnitConfigVO()
+		public function HeroArcherUnitConfigVO()
 		{
-			this.name = 'Archer';
+			this.name = 'Hero Archer';
 			this.skeleton = 'Archer';
 
 			this.sizeRadius = 30;
@@ -44,8 +44,8 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.areaDamage = 0;
 			this.areaDamageRadius = 0;
 
-			this.attackSpeed = 1.2;
-			this.attackAnimationSpeed = .6;
+			this.attackSpeed = .5;
+			this.attackAnimationSpeed = .4;
 			this.attackType = CAttackType.NORMAL;
 
 			this.criticalHitChance = .01;
@@ -53,7 +53,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.attackActionDelay = .4;
 
-			this.maxLife = 15;
+			this.maxLife = 200;
 			this.lifeRegeneration = 2;
 
 			this.maxMana = 10;

@@ -6,6 +6,7 @@ package net.fpp.starlingtowerdefense.game
 	import assets.GameAssets;
 	import assets.TerrainTextures;
 
+	import com.greensock.TweenLite;
 	import com.greensock.plugins.BezierPlugin;
 	import com.greensock.plugins.TweenPlugin;
 
@@ -21,8 +22,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.ArcherUnitConfigVO;
-	import net.fpp.starlingtowerdefense.game.config.unit.MageUnitConfigVO;
-	import net.fpp.starlingtowerdefense.game.config.unit.TestEnemyUitConfigVO;
+	import net.fpp.starlingtowerdefense.game.config.unit.HeroArcherUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
@@ -155,26 +155,9 @@ package net.fpp.starlingtowerdefense.game
 			this._viewContainer.addChild( this._projectileManagerModule.getView() );
 			this.injector.mapValue( IProjectileManagerModule, this._projectileManagerModule );
 
-			this.createUnit( 300, 300, new ArcherUnitConfigVO() );
+			this.createUnit( 300, 300, new HeroArcherUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
-
-			this.createUnit( 150, 280, new MageUnitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
-			this._unitControllerModule.setTarget( this._units[ 0 ] );
-
-			this.createUnit( 50, 280, new WarriorUnitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
-			this._unitControllerModule.setTarget( this._units[ 0 ] );
-
-			this.createUnit( 650, 350, new TestEnemyUitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
-
-			this.createUnit( 750, 550, new TestEnemyUitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
-
-			this.createUnit( 1050, 700, new TestEnemyUitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 
 			this._waveHandlerModule = this.createModule( WaveHandlerModule ) as IWaveHandlerModule;
 
@@ -187,6 +170,61 @@ package net.fpp.starlingtowerdefense.game
 			this.startUpdateHandling();
 
 			this.drawDebugDatas();
+
+			this.startTestWave();
+		}
+
+		private function startTestWave():void
+		{
+			TweenLite.delayedCall( 25, this.startTestWave );
+
+			var pathVO1:PathVO = new PathVO();
+			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			this.createUnit( 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
+
+			pathVO1 = new PathVO();
+			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			this.createUnit( 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
+
+			pathVO1 = new PathVO();
+			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			this.createUnit( 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
+
+			pathVO1 = new PathVO();
+			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			this.createUnit( 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
+
+			var pathVO2:PathVO = new PathVO();
+			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			this.createUnit( 900 - 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
+
+			pathVO2 = new PathVO();
+			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			this.createUnit( 900 - 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
+
+			pathVO2 = new PathVO();
+			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			this.createUnit( 900 - 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
+
+			pathVO2 = new PathVO();
+			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			this.createUnit( 900 - 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
 		}
 
 		private function createBackgroundModules():void
