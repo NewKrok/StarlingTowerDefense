@@ -8,8 +8,6 @@ package net.fpp.starlingtowerdefense.game.module.unittargetmanager
 	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.IUnitDistanceCalculatorModule;
 	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo.UnitDistanceVO;
 
-	import starling.display.DisplayObject;
-
 	public class UnitTargetManagerModel extends AModel
 	{
 		private var _unitDistanceCalculatorModule:IUnitDistanceCalculatorModule;
@@ -28,12 +26,12 @@ package net.fpp.starlingtowerdefense.game.module.unittargetmanager
 			var unitDistanceVOs:Vector.<UnitDistanceVO> = this._unitDistanceCalculatorModule.getUnitDistanceVOs();
 			var length:int = unitDistanceVOs.length;
 
-			for ( var i:int = 0; i < length; i++ )
+			for( var i:int = 0; i < length; i++ )
 			{
 				var unitA:IUnitModule = unitDistanceVOs[ i ].unitA;
 				var unitB:IUnitModule = unitDistanceVOs[ i ].unitB;
 
-				if ( unitA.getIsMoving() && !unitA.getIsAttackMoveToInProgress() )
+				if( unitA.getIsMoving() && !unitA.getIsAttackMoveToInProgress() )
 				{
 					continue;
 				}

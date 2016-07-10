@@ -128,6 +128,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public function setUnitConfigVO( value:UnitConfigVO ):void
 		{
 			this._unitConfigVO = value;
+
+			this.dispatchEvent( new UnitModelEvent( UnitModelEvent.UNIT_CONFIG_CHANGED ) );
 		}
 
 		public function getUnitConfigVO():UnitConfigVO

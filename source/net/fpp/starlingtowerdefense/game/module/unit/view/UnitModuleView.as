@@ -44,6 +44,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		private var _armatureClip:Sprite;
 
 		private var _currentAnimation:String;
+		private var _currentSkeleton:String;
 
 		public function UnitModuleView()
 		{
@@ -54,21 +55,39 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 			super.setModel( model );
 
 			this._unitModel = model as UnitModel;
+
+			this._unitModel.addEventListener( UnitModelEvent.UNIT_CONFIG_CHANGED, this.onUnitConfigChanged );
 		}
 
-		override protected function onInit():void
+		public function onUnitConfigChanged( e:UnitModelEvent ):void
 		{
-			this._armature = this._dragonBonesGraphicService.buildArmature( this._unitModel.getUnitConfigVO().skeleton );
+			if ( this._currentSkeleton != this._unitModel.getUnitConfigVO().skeleton && this._armature )
+			{
+				this.disposeArmature();
+			}
+
+			this._currentSkeleton = this._unitModel.getUnitConfigVO().skeleton;
+
+			this.createArmature();
+		}
+
+		private function createArmature():void
+		{
+			this._armature = this._dragonBonesGraphicService.buildArmature( this._currentSkeleton );
 			this._armatureClip = this._armature.display as Sprite;
-			this.scaleX = this.scaleY = 1 / StaticAssetManager.instance.scaleFactor;
 
 			WorldClock.clock.add( this._armature );
 
 			this.addChild( this._armatureClip );
 
-			this.createUnitBars();
-
 			this.idle();
+		}
+
+		override protected function onInit():void
+		{
+			this.scaleX = this.scaleY = 1 / StaticAssetManager.instance.scaleFactor;
+
+			this.createUnitBars();
 		}
 
 		private function createUnitBars():void
@@ -78,11 +97,13 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 			this.createLifeBar();
 			this.onLifeChangedHandler();
+			this._unitModel.addEventListener( UnitModelEvent.LIFE_CHANGED, this.onLifeChangedHandler );
 
 			if( this._unitModel.getUnitConfigVO().maxMana > 0 )
 			{
 				this.createManaBar();
 				this.onManaChangedHandler();
+				this._unitModel.addEventListener( UnitModelEvent.MANA_CHANGED, this.onManaChangedHandler );
 			}
 
 			this._unitBarContainer.x = -this._unitBarContainer.width / 2;
@@ -101,8 +122,6 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 			this._lifeBar.setBackgroundAlpha( this.LINE_BAR_BACKGROUND_ALPHA );
 			this._lifeBar.setLineColor( CColor.LIFE_BAR_COLOR );
 
-			this._unitModel.addEventListener( UnitModelEvent.LIFE_CHANGED, onLifeChangedHandler );
-
 			this._unitBarContainer.addChild( lifeBarView );
 		}
 
@@ -120,8 +139,6 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 			this._manaBar.setViewSize( new SimplePoint( this._unitModel.getUnitConfigVO().sizeRadius * 2, this.LINE_BAR_HEIGHT ) );
 			this._manaBar.setBackgroundAlpha( this.LINE_BAR_BACKGROUND_ALPHA );
 			this._manaBar.setLineColor( CColor.MANA_BAR_COLOR );
-
-			this._unitModel.addEventListener( UnitModelEvent.MANA_CHANGED, onManaChangedHandler );
 
 			this._unitBarContainer.addChild( manaBarView );
 		}
@@ -216,17 +233,40 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		{
 			this._currentAnimation = '';
 
-			this._armature.removeEventListener( AnimationEvent.COMPLETE, aramtureEventHandler );
+			this._armature.removeEventListener( AnimationEvent.COMPLETE, this.aramtureEventHandler );
 
 			this.idle();
 		}
 
+		private function disposeArmature():void
+		{
+			WorldClock.clock.remove( this._armature );
+
+			this._armature.removeEventListener( AnimationEvent.COMPLETE, this.aramtureEventHandler );
+			this._armature.dispose();
+			this._armature = null;
+
+			this.removeChild( this._armatureClip );
+			this._armatureClip.dispose();
+			this._armatureClip = null;
+		}
+
 		override public function dispose():void
 		{
-			this._unitModel.removeEventListener( UnitModelEvent.LIFE_CHANGED, onLifeChangedHandler );
+			this._unitModel.removeEventListener( UnitModelEvent.UNIT_CONFIG_CHANGED, this.onUnitConfigChanged );
 
+			if ( this._armature )
+			{
+				this.disposeArmature();
+			}
+
+			this._unitModel.removeEventListener( UnitModelEvent.LIFE_CHANGED, this.onLifeChangedHandler );
 			this._lifeBar.dispose();
 			this._lifeBar = null;
+
+			this._unitModel.removeEventListener( UnitModelEvent.MANA_CHANGED, this.onManaChangedHandler );
+			this._manaBar.dispose();
+			this._manaBar = null;
 
 			super.dispose();
 		}

@@ -9,6 +9,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.events
 	{
 		public static const LIFE_CHANGED:String = 'UnitModelEvent.LIFE_CHANGED';
 		public static const MANA_CHANGED:String = 'UnitModelEvent.MANA_CHANGED';
+		public static const UNIT_CONFIG_CHANGED:String = 'UnitModelEvent.UNIT_CONFIG_CHANGED';
 
 		public function UnitModelEvent( type:String )
 		{

@@ -17,6 +17,10 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.starling.module.AApplicationContext;
 	import net.fpp.common.util.jsonbitmapatlas.JSONBitmapAtlas;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
+	import net.fpp.common.util.objectpool.IObjectPool;
+	import net.fpp.common.util.objectpool.IPoolableObject;
+	import net.fpp.common.util.objectpool.ObjectPool;
+	import net.fpp.common.util.objectpool.ObjectPoolSettingVO;
 	import net.fpp.common.util.pathfinding.PathfFindingUtil;
 	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
 	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
@@ -38,6 +42,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.touchzoom.TouchZoomModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.UnitModule;
+	import net.fpp.starlingtowerdefense.game.module.unit.factory.UnitModuleFactory;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.unitcontroller.IUnitControllerModule;
@@ -83,6 +88,9 @@ package net.fpp.starlingtowerdefense.game
 
 		private var _units:Vector.<IUnitModule> = new <IUnitModule>[];
 
+		private var _unitModuleObjectPool:IObjectPool;
+		private var _unitModuleFactory:UnitModuleFactory;
+
 		private var _levelDataVO:LevelDataVO;
 		private var _viewContainer:Sprite;
 
@@ -91,17 +99,29 @@ package net.fpp.starlingtowerdefense.game
 			TweenPlugin.activate( [ BezierPlugin ] );
 			DamageCalculatorUtil.setConfig();
 
+			this.createUnitModuleObjectPool();
+
 			this.configureInjector();
 
-			this._dragonBonesGraphicService = new DragonBonesGraphicService();
-
 			this.loadDragonBonesGraphicAssets();
+		}
+
+		private function createUnitModuleObjectPool():void
+		{
+			var unitModuleObjectPoolSettingVO:ObjectPoolSettingVO = new ObjectPoolSettingVO();
+			unitModuleObjectPoolSettingVO.objectPoolFactory = new UnitModuleFactory;
+			unitModuleObjectPoolSettingVO.poolSize = 10;
+
+			this._unitModuleObjectPool = new ObjectPool( unitModuleObjectPoolSettingVO );
 		}
 
 		private function configureInjector():void
 		{
 			this._mapModule = new MapModule();
 			this.injector.mapValue( IMapModule, this._mapModule );
+
+			this._dragonBonesGraphicService = new DragonBonesGraphicService();
+			this.injector.mapValue( DragonBonesGraphicService, this._dragonBonesGraphicService );
 		}
 
 		public function setLevelDataVO( value:LevelDataVO ):void
@@ -269,11 +289,11 @@ package net.fpp.starlingtowerdefense.game
 
 		private function createUnit( x:Number, y:Number, unitConfigVO:UnitConfigVO ):void
 		{
-			var unitModule:IUnitModule = this.createModule( UnitModule, [ unitConfigVO, this._dragonBonesGraphicService ] ) as IUnitModule;
+			var unitModule:IUnitModule = this._unitModuleObjectPool.getObject() as IUnitModule;
+			this.registerModule( unitModule );
+			unitModule.setUnitConfigVO( unitConfigVO );
 
 			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, removeUnit );
-
-			this.injector.injectInto( unitModule );
 
 			this._units.push( unitModule );
 
@@ -287,6 +307,9 @@ package net.fpp.starlingtowerdefense.game
 		private function removeUnit( e:UnitModuleEvent ):void
 		{
 			var unitModule:IUnitModule = e.target as IUnitModule;
+
+			this.unregisterModule( unitModule );
+			this._unitModuleObjectPool.releaseObject( unitModule );
 
 			this._zOrderModule.removeUnit( unitModule );
 			this._unitDistanceCalculatorModule.removeUnit( unitModule );

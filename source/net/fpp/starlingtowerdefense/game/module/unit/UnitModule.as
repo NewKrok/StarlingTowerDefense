@@ -22,6 +22,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		[Inject]
 		public var projectileManagerModule:IProjectileManagerModule;
 
+		[Inject]
+		public var _dragonBonesGraphicService:DragonBonesGraphicService;
+
 		private var _unitView:UnitModuleView;
 		private var _unitModel:UnitModel;
 
@@ -30,14 +33,19 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		private var _isMoving:Boolean;
 		private var _isAttackMoveToInProgress:Boolean;
 
-		public function UnitModule( unitConfigVO:UnitConfigVO, dragonBonesGraphicService:DragonBonesGraphicService ):void
+		public function UnitModule():void
 		{
 			this._unitModel = this.createModel( UnitModel ) as UnitModel;
+		}
 
-			this.processUnitConfigVO( unitConfigVO );
-
+		public function init():void
+		{
 			this._unitView = this.createModuleView( UnitModuleView ) as UnitModuleView;
-			this._unitView.setDragonBonesGraphicService( dragonBonesGraphicService );
+		}
+
+		override public function onRegistered():void
+		{
+			this._unitView.setDragonBonesGraphicService( this._dragonBonesGraphicService );
 		}
 
 		public function onUpdate():void
@@ -46,6 +54,15 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			{
 				this._unitModel.regenerateLifeAndMana();
 			}
+		}
+
+		public function reset():void
+		{
+		}
+
+		public function setUnitConfigVO( value:UnitConfigVO ):void
+		{
+			this.processUnitConfigVO( value );
 		}
 
 		private function processUnitConfigVO( unitConfigVO:UnitConfigVO ):void
@@ -88,9 +105,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function move( position:SimplePoint ):void
 		{
-			if(!position)
+			if( !position )
 			{
-				trace('hm');
+				trace( 'hm' );
 			}
 
 			if( position.x == this._unitView.x && position.y == this._unitView.y )
@@ -320,7 +337,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 					this._unitModel.damageDelayTween.kill();
 				}
 
-				if ( !this._unitModel.getLastPositionBeforeFight() )
+				if( !this._unitModel.getLastPositionBeforeFight() )
 				{
 					this._unitModel.setLastPositionBeforeFight( new SimplePoint( this._view.x, this._view.y ) );
 				}

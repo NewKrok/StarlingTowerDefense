@@ -5,10 +5,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 {
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.IUpdatableModule;
+	import net.fpp.common.util.objectpool.IPoolableObject;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 
-	public interface IUnitModule extends IUpdatableModule
+	public interface IUnitModule extends IUpdatableModule, IPoolableObject
 	{
 		function setPosition( x:Number, y:Number ):void;
 
@@ -53,5 +54,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		function getUnitHeight():Number;
 
 		function getUnitConfigVO():UnitConfigVO;
+
+		function setUnitConfigVO( value:UnitConfigVO ):void;
 	}
 }
