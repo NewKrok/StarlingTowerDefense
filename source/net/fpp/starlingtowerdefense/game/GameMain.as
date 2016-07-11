@@ -87,7 +87,6 @@ package net.fpp.starlingtowerdefense.game
 		private var _units:Vector.<IUnitModule> = new <IUnitModule>[];
 
 		private var _unitModuleObjectPool:IObjectPool;
-		private var _unitModuleFactory:UnitModuleFactory;
 
 		private var _levelDataVO:LevelDataVO;
 		private var _viewContainer:Sprite;
@@ -403,6 +402,9 @@ package net.fpp.starlingtowerdefense.game
 
 			this._touchDragModule.dispose();
 			this._touchDragModule = null;
+
+			this._unitModuleObjectPool.dispose();
+			this._unitModuleObjectPool = null;
 
 			this._viewContainer.removeFromParent( true );
 			this._viewContainer = null;

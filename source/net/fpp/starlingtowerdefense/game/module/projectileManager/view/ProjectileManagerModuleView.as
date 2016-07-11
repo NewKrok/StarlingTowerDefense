@@ -10,8 +10,12 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.common.starling.module.AModuleView;
 	import net.fpp.common.util.GeomUtil;
+	import net.fpp.common.util.objectpool.IObjectPool;
+	import net.fpp.common.util.objectpool.ObjectPool;
+	import net.fpp.common.util.objectpool.ObjectPoolSettingVO;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.ProjectileManagerModel;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.events.ProjectileManagerModelEvent;
+	import net.fpp.starlingtowerdefense.game.module.projectileManager.factory.ProjectileViewFactory;
 	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 	import net.fpp.starlingtowerdefense.game.util.DamageCalculatorUtil;
@@ -21,6 +25,19 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 		private var _projectileManagerModel:ProjectileManagerModel;
 
 		private var _projectileViews:Vector.<ProjectileView> = new <ProjectileView>[];
+
+		private var _projectileViewObjectPool:IObjectPool;
+
+		public function ProjectileManagerModuleView()
+		{
+			var projectileViewObjectPoolSettingVO:ObjectPoolSettingVO = new ObjectPoolSettingVO();
+			projectileViewObjectPoolSettingVO.objectPoolFactory = new ProjectileViewFactory();
+			projectileViewObjectPoolSettingVO.poolSize = 30;
+			projectileViewObjectPoolSettingVO.increaseCount = 10;
+			projectileViewObjectPoolSettingVO.isDynamicPool = true;
+
+			this._projectileViewObjectPool = new ObjectPool( projectileViewObjectPoolSettingVO );
+		}
 
 		override public function setModel( model:AModel ):void
 		{
@@ -40,7 +57,8 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 					owner.getView().y + projectileVO.projectileConfigVO.startPointOffset.y
 			);
 
-			var projectileView:ProjectileView = new ProjectileView( projectileVO.projectileConfigVO.skinId );
+			var projectileView:ProjectileView = this._projectileViewObjectPool.getObject() as ProjectileView;
+			projectileView.setSkin( projectileVO.projectileConfigVO.skinId );
 			projectileView.x = ownerPoint.x;
 			projectileView.y = ownerPoint.y;
 
@@ -57,9 +75,9 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 				var angle:Number = GeomUtil.simplePointAngle( ownerPoint, targetPoint );
 
 				var archHeight:Number = ( distance / owner.getUnitConfigVO().attackRadius ) * projectileVO.projectileConfigVO.projectileArcHeight;
-				var middlePoint:SimplePoint = new SimplePoint(
-						ownerPoint.x + distance / 2 * Math.cos( angle ),
-						ownerPoint.y + distance / 2 * Math.sin( angle ) - archHeight
+				var bezierControlPoint:SimplePoint = new SimplePoint(
+						ownerPoint.x + distance / 3 * Math.cos( angle ),
+						ownerPoint.y + distance / 3 * Math.sin( angle ) - archHeight
 				);
 
 				TweenLite.to( projectileView, distance / projectileVO.projectileConfigVO.speed, {
@@ -67,7 +85,7 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 					bezier: {
 						values: [
 							{x: projectileView.x, y: projectileView.y},
-							{x: middlePoint.x, y: middlePoint.y},
+							{x: bezierControlPoint.x, y: bezierControlPoint.y},
 							{x: targetPoint.x, y: targetPoint.y}
 						],
 						autoRotate: [ "x", "y", "rotation", 0, true ]
@@ -118,6 +136,9 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 		{
 			this._projectileManagerModel.removeEventListener( ProjectileManagerModelEvent.PROJECTILE_ADDED, this.onProjectileAddedHandler );
 			this._projectileManagerModel = null;
+
+			this._projectileViewObjectPool.dispose();
+			this._projectileViewObjectPool = null;
 
 			super.dispose();
 		}
