@@ -15,18 +15,17 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.StaticAssetManager;
 	import net.fpp.common.starling.module.AApplicationContext;
+	import net.fpp.common.util.GeomUtil;
 	import net.fpp.common.util.jsonbitmapatlas.JSONBitmapAtlas;
 	import net.fpp.common.util.jsonbitmapatlas.vo.BitmapDataVO;
 	import net.fpp.common.util.objectpool.IObjectPool;
-	import net.fpp.common.util.objectpool.IPoolableObject;
 	import net.fpp.common.util.objectpool.ObjectPool;
 	import net.fpp.common.util.objectpool.ObjectPoolSettingVO;
-	import net.fpp.common.util.pathfinding.PathfFindingUtil;
-	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
-	import net.fpp.common.util.pathfinding.vo.PathRequestVO;
+	import net.fpp.common.util.pathfinding.astar.AStarUtil;
+	import net.fpp.common.util.pathfinding.astar.vo.AStarNodeVO;
+	import net.fpp.common.util.pathfinding.astar.vo.AStarPathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.ArcherUnitConfigVO;
-	import net.fpp.starlingtowerdefense.game.config.unit.HeroArcherUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
@@ -41,9 +40,8 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.module.touchzoom.ITouchZoomModule;
 	import net.fpp.starlingtowerdefense.game.module.touchzoom.TouchZoomModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
-	import net.fpp.starlingtowerdefense.game.module.unit.UnitModule;
-	import net.fpp.starlingtowerdefense.game.module.unit.factory.UnitModuleFactory;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
+	import net.fpp.starlingtowerdefense.game.module.unit.factory.UnitModuleFactory;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.unitcontroller.IUnitControllerModule;
 	import net.fpp.starlingtowerdefense.game.module.unitcontroller.UnitControllerModule;
@@ -110,7 +108,9 @@ package net.fpp.starlingtowerdefense.game
 		{
 			var unitModuleObjectPoolSettingVO:ObjectPoolSettingVO = new ObjectPoolSettingVO();
 			unitModuleObjectPoolSettingVO.objectPoolFactory = new UnitModuleFactory;
-			unitModuleObjectPoolSettingVO.poolSize = 10;
+			unitModuleObjectPoolSettingVO.poolSize = 20;
+			unitModuleObjectPoolSettingVO.increaseCount = 5;
+			unitModuleObjectPoolSettingVO.isDynamicPool = true;
 
 			this._unitModuleObjectPool = new ObjectPool( unitModuleObjectPoolSettingVO );
 		}
@@ -175,9 +175,9 @@ package net.fpp.starlingtowerdefense.game
 			this._viewContainer.addChild( this._projectileManagerModule.getView() );
 			this.injector.mapValue( IProjectileManagerModule, this._projectileManagerModule );
 
-			this.createUnit( 300, 300, new HeroArcherUnitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
-			this._unitControllerModule.setTarget( this._units[ 0 ] );
+			//this.createUnit( 300, 300, new HeroArcherUnitConfigVO() );
+			//this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			//this._unitControllerModule.setTarget( this._units[ 0 ] );
 
 			this._waveHandlerModule = this.createModule( WaveHandlerModule ) as IWaveHandlerModule;
 
@@ -196,26 +196,26 @@ package net.fpp.starlingtowerdefense.game
 
 		private function startTestWave():void
 		{
-			TweenLite.delayedCall( 25, this.startTestWave );
+			TweenLite.delayedCall( 10, this.startTestWave );
 
 			var pathVO1:PathVO = new PathVO();
 			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
 			this.createUnit( 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
+			/*
+			 pathVO1 = new PathVO();
+			 pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			 this.createUnit( 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
+			 this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
 
-			pathVO1 = new PathVO();
-			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
-			this.createUnit( 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
-			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
-
-			pathVO1 = new PathVO();
-			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
-			this.createUnit( 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
-			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
-
+			 pathVO1 = new PathVO();
+			 pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			 this.createUnit( 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
+			 this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
+			 */
 			pathVO1 = new PathVO();
 			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
 			this.createUnit( 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
@@ -227,19 +227,19 @@ package net.fpp.starlingtowerdefense.game
 			this.createUnit( 900 - 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
+			/*
+			 pathVO2 = new PathVO();
+			 pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			 this.createUnit( 900 - 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
+			 this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
 
-			pathVO2 = new PathVO();
-			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
-			this.createUnit( 900 - 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
-			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
-
-			pathVO2 = new PathVO();
-			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
-			this.createUnit( 900 - 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
-			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
-			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
-
+			 pathVO2 = new PathVO();
+			 pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			 this.createUnit( 900 - 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
+			 this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
+			 */
 			pathVO2 = new PathVO();
 			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
 			this.createUnit( 900 - 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
@@ -266,7 +266,7 @@ package net.fpp.starlingtowerdefense.game
 		{
 			var debugLayer:Sprite = this._viewContainer.addChild( new Sprite() ) as Sprite;
 			debugLayer.touchable = false;
-			var map:Vector.<Vector.<PathNodeVO>> = this._mapModule.getMapNodes();
+			var map:Vector.<Vector.<AStarNodeVO>> = this._mapModule.getMapNodes();
 
 			for( var i:int = 0; i < map.length; i++ )
 			{
@@ -293,7 +293,7 @@ package net.fpp.starlingtowerdefense.game
 			this.registerModule( unitModule );
 			unitModule.setUnitConfigVO( unitConfigVO );
 
-			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, removeUnit );
+			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, releaseUnit );
 
 			this._units.push( unitModule );
 
@@ -304,7 +304,7 @@ package net.fpp.starlingtowerdefense.game
 			this._viewContainer.addChild( unitModule.getView() );
 		}
 
-		private function removeUnit( e:UnitModuleEvent ):void
+		private function releaseUnit( e:UnitModuleEvent ):void
 		{
 			var unitModule:IUnitModule = e.target as IUnitModule;
 
@@ -328,7 +328,6 @@ package net.fpp.starlingtowerdefense.game
 			{
 				if( this._units[ i ] == unitModule )
 				{
-					this._units[ i ].dispose();
 					this._units[ i ] = null;
 					this._units.splice( i, 1 );
 
@@ -336,7 +335,12 @@ package net.fpp.starlingtowerdefense.game
 				}
 			}
 
-			this._unitControllerModule.setTarget( this._units[ 0 ] );
+			if( this._units.length > 0 )
+			{
+				this._unitControllerModule.setTarget( this._units[ 0 ] );
+			}
+
+			this._viewContainer.removeChild( unitModule.getView() );
 		}
 
 		override protected function onUpdate():void
@@ -354,17 +358,19 @@ package net.fpp.starlingtowerdefense.game
 
 		private function unitMoveTo( unit:IUnitModule, position:SimplePoint ):void
 		{
-			var pathRequestVO:PathRequestVO = new PathRequestVO();
+			var pathRequestVO:AStarPathRequestVO = new AStarPathRequestVO();
 			pathRequestVO.startPosition = MapPositionUtil.changePositionToMapNodePoint( unit.getPosition() );
 			pathRequestVO.endPosition = MapPositionUtil.changePositionToMapNodePoint( position );
 			pathRequestVO.mapNodes = this._mapModule.getMapNodes();
 
-			if( !pathRequestVO.mapNodes[ pathRequestVO.endPosition.x ][ pathRequestVO.endPosition.y ].isWalkable )
+			if( !pathRequestVO.mapNodes[ pathRequestVO.endPosition.x ][ pathRequestVO.endPosition.y ].isWalkable ||
+					GeomUtil.isSimplePointEqual( pathRequestVO.startPosition, pathRequestVO.endPosition )
+			)
 			{
 				return;
 			}
 
-			var pathVO:PathVO = PathfFindingUtil.getPath( pathRequestVO );
+			var pathVO:PathVO = AStarUtil.getPath( pathRequestVO );
 			if( pathVO && pathVO.path && pathVO.path.length > 0 )
 			{
 				pathVO.path = MapPositionUtil.changeMapNodePointVectorToPositionVector( pathVO.path );

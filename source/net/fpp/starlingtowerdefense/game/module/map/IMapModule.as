@@ -3,10 +3,10 @@
  */
 package net.fpp.starlingtowerdefense.game.module.map
 {
-	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
+	import net.fpp.common.util.pathfinding.astar.vo.AStarNodeVO;
 
 	public interface IMapModule
 	{
-		function getMapNodes():Vector.<Vector.<PathNodeVO>>;
+		function getMapNodes():Vector.<Vector.<AStarNodeVO>>;
 	}
 }

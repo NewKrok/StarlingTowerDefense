@@ -28,10 +28,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		private var _unitView:UnitModuleView;
 		private var _unitModel:UnitModel;
 
-		private var _pathVO:PathVO;
-		private var _pathIndex:int;
 		private var _isMoving:Boolean;
 		private var _isAttackMoveToInProgress:Boolean;
+
+		private var _pathVO:PathVO;
+		private var _pathIndex:int;
 
 		public function UnitModule():void
 		{
@@ -41,6 +42,22 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public function init():void
 		{
 			this._unitView = this.createModuleView( UnitModuleView ) as UnitModuleView;
+		}
+
+		public function reset():void
+		{
+			TweenLite.killTweensOf( this._unitView );
+			TweenLite.killTweensOf( this );
+
+			this._isMoving = false;
+			this._isAttackMoveToInProgress = false;
+
+			this._pathIndex = 0;
+			this._pathVO = null;
+
+			this._unitView.alpha = 1;
+
+			this.processUnitConfigVO( this._unitModel.getUnitConfigVO() );
 		}
 
 		override public function onRegistered():void
@@ -54,10 +71,6 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			{
 				this._unitModel.regenerateLifeAndMana();
 			}
-		}
-
-		public function reset():void
-		{
 		}
 
 		public function setUnitConfigVO( value:UnitConfigVO ):void
@@ -105,11 +118,6 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function move( position:SimplePoint ):void
 		{
-			if( !position )
-			{
-				trace( 'hm' );
-			}
-
 			if( position.x == this._unitView.x && position.y == this._unitView.y )
 			{
 				return;
@@ -422,6 +430,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		public function getUnitConfigVO():UnitConfigVO
 		{
 			return this._unitModel.getUnitConfigVO();
+		}
+
+		override public function dispose():void
+		{
+			super.dispose();
 		}
 	}
 }

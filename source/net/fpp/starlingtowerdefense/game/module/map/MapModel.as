@@ -4,18 +4,18 @@
 package net.fpp.starlingtowerdefense.game.module.map
 {
 	import net.fpp.common.starling.module.AModel;
-	import net.fpp.common.util.pathfinding.vo.PathNodeVO;
+	import net.fpp.common.util.pathfinding.astar.vo.AStarNodeVO;
 
 	public class MapModel extends AModel
 	{
-		private var _mapNodes:Vector.<Vector.<PathNodeVO>> = new <Vector.<PathNodeVO>>[];
+		private var _mapNodes:Vector.<Vector.<AStarNodeVO>> = new <Vector.<AStarNodeVO>>[];
 
-		public function get mapNodes():Vector.<Vector.<PathNodeVO>>
+		public function get mapNodes():Vector.<Vector.<AStarNodeVO>>
 		{
 			return this._mapNodes;
 		}
 
-		public function set mapNodes( value:Vector.<Vector.<PathNodeVO>> ):void
+		public function set mapNodes( value:Vector.<Vector.<AStarNodeVO>> ):void
 		{
 			this._mapNodes = value;
 		}
