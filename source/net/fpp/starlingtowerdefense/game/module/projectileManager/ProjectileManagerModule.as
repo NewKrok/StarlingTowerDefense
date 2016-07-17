@@ -20,10 +20,6 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager
 			this._projectileManagerView = this.createModuleView( ProjectileManagerModuleView ) as ProjectileManagerModuleView;
 		}
 
-		public function onUpdate():void
-		{
-		}
-
 		public function addProjectile( projectileVO:ProjectileVO ):void
 		{
 			this._projectileManagerModel.addProjectile( projectileVO );

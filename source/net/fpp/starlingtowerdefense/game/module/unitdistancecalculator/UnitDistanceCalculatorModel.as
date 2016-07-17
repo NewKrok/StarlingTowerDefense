@@ -4,9 +4,8 @@
 package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 {
 	import net.fpp.common.starling.module.AModel;
-	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo.UnitDistanceVO;
-
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
+	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo.UnitDistanceVO;
 
 	import starling.display.DisplayObject;
 
@@ -23,6 +22,13 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 
 		public function addUnit( value:IUnitModule ):void
 		{
+			var length:int = this._units.length;
+
+			for( var i:int = 0; i < length; i++ )
+			{
+				this._unitDistanceVOs.push( new UnitDistanceVO( value, this._units[ i ], Number.MAX_VALUE ) );
+			}
+
 			this._units.push( value );
 		}
 
@@ -30,47 +36,48 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 		{
 			var length:int = this._units.length;
 
-			for ( var i:int; i < length; i++ )
+			for( var i:int = 0; i < length; i++ )
 			{
-				if ( this._units[i] == value )
+				if( this._units[ i ] == value )
 				{
 					this._units.splice( i, 1 );
-					return;
+					break;
+				}
+			}
+
+			length = this._unitDistanceVOs.length;
+
+			for( i = 0; i < length; i++ )
+			{
+				if( this._unitDistanceVOs[ i ].unitA == value || this._unitDistanceVOs[ i ].unitB == value )
+				{
+					this._unitDistanceVOs.splice( i, 1 );
+					i--;
 				}
 			}
 		}
 
 		public function calculateDistances():void
 		{
-			this._unitDistanceVOs.length = 0;
+			var distanceListLength:int = this._unitDistanceVOs.length;
+			var unitListLength:int = this._units.length;
 
-			var length:int = this._units.length;
-
-			for( var i:int = 0; i < length; i++ )
+			for( var i:int = 0; i < distanceListLength; i++ )
 			{
-				for( var j:int = 0; j < length; j++ )
+				var unitA:IUnitModule = this._unitDistanceVOs[ i ].unitA;
+				var unitB:IUnitModule = this._unitDistanceVOs[ i ].unitB;
+
+				if( !unitA || !unitB || unitA.getIsDead() || unitB.getIsDead() )
 				{
-					if( i != j )
-					{
-						var unitA:IUnitModule = this._units[ i ] as IUnitModule;
-						var unitB:IUnitModule = this._units[ j ] as IUnitModule;
-
-						if( unitA.getIsDead() || unitB.getIsDead() )
-						{
-							break;
-						}
-
-						var unitAView:DisplayObject = unitA.getView() as DisplayObject;
-						var unitBView:DisplayObject = unitB.getView() as DisplayObject;
-
-						var distance:Number = Math.sqrt(
-								Math.pow( unitAView.x - unitBView.x, 2 ) +
-								Math.pow( unitAView.y - unitBView.y, 2 )
-						);
-
-						this._unitDistanceVOs.push( new UnitDistanceVO( unitA, unitB, Math.floor( distance ) ) );
-					}
+					break;
 				}
+
+				var unitAView:DisplayObject = unitA.getView() as DisplayObject;
+				var unitBView:DisplayObject = unitB.getView() as DisplayObject;
+
+				var distance:Number = Math.sqrt( (unitBView.x - unitAView.x) * (unitBView.x - unitAView.x) + (unitBView.y - unitAView.y) * (unitBView.y - unitAView.y) );
+
+				this._unitDistanceVOs[ i ].distance = distance << 0;
 			}
 		}
 

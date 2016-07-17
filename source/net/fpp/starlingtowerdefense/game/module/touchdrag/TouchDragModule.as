@@ -4,6 +4,7 @@
 package net.fpp.starlingtowerdefense.game.module.touchdrag
 {
 	import net.fpp.common.starling.module.AModule;
+	import net.fpp.common.util.GeomUtil;
 	import net.fpp.starlingtowerdefense.game.module.touchdrag.constant.CTouchDrag;
 
 	import starling.display.DisplayObjectContainer;
@@ -62,7 +63,7 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 						this._touchDragModel.gameContainer.y -= ( this._touchDragModel.lastTouchPoint.y - touch.globalY );
 					}
 					this._touchDragModel.swipeForce = Math.sqrt( Math.pow( Math.abs( touch.previousGlobalX - touch.globalX ), 2 ) + Math.pow( Math.abs( touch.previousGlobalY - touch.globalY ), 2 ) );
-					this._touchDragModel.swipeDirection = Math.atan2( touch.globalY - touch.previousGlobalY, touch.globalX - touch.previousGlobalX );
+					this._touchDragModel.swipeDirection = GeomUtil.atan2( touch.globalY - touch.previousGlobalY, touch.globalX - touch.previousGlobalX );
 					this._touchDragModel.lastTouchPoint.setTo( touch.globalX, touch.globalY );
 					break;
 			}
@@ -83,6 +84,11 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 				this._touchDragModel.gameContainer.x = getNormalizedWorldXPosition( this._touchDragModel.gameContainer.x );
 				this._touchDragModel.gameContainer.y = getNormalizedWorldYPosition( this._touchDragModel.gameContainer.y );
 			}
+		}
+
+		public function getUpdateFrequency():int
+		{
+			return 5;
 		}
 
 		private function getNormalizedWorldXPosition( x:Number ):Number

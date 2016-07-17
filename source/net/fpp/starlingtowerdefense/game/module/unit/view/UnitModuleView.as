@@ -48,6 +48,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function UnitModuleView()
 		{
+			this.touchable = false;
 		}
 
 		override public function setModel( model:AModel ):void
@@ -61,6 +62,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		public function onUnitConfigChanged( e:UnitModelEvent ):void
 		{
+			return;
 			if ( this._currentSkeleton != this._unitModel.getUnitConfigVO().skeleton && this._armature )
 			{
 				this.disposeArmature();
@@ -76,7 +78,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 			this._armature = this._dragonBonesGraphicService.buildArmature( this._currentSkeleton );
 			this._armatureClip = this._armature.display as Sprite;
 
-			WorldClock.clock.add( this._armature );
+			//WorldClock.clock.add( this._armature );
 
 			this.addChild( this._armatureClip );
 
@@ -240,7 +242,7 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 		private function disposeArmature():void
 		{
-			WorldClock.clock.remove( this._armature );
+			//WorldClock.clock.remove( this._armature );
 
 			this._armature.removeEventListener( AnimationEvent.COMPLETE, this.aramtureEventHandler );
 			this._armature.dispose();

@@ -27,6 +27,11 @@ package net.fpp.starlingtowerdefense.game.module.zorder
 			this._zOrderModel.updateZOrder();
 		}
 
+		public function getUpdateFrequency():int
+		{
+			return 5;
+		}
+
 		public function addUnit( value:IUnitModule ):void
 		{
 			this._zOrderModel.addUnit( value );

@@ -26,6 +26,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.astar.vo.AStarPathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.ArcherUnitConfigVO;
+	import net.fpp.starlingtowerdefense.game.config.unit.HeroArcherUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.MageUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
@@ -160,29 +161,29 @@ package net.fpp.starlingtowerdefense.game
 			this._unitControllerModule.addEventListener( UnitControllerModuleEvent.UNIT_MOVE_TO_REQUEST, this.unitMoveToRequest );
 			this._viewContainer.addChild( this._unitControllerModule.getView() );
 
-			this._zOrderModule = this.createModule( ZOrderModule ) as IZOrderModule;
-			this._zOrderModule.setUnitContainer( this._viewContainer );
+			//this._zOrderModule = this.createModule( ZOrderModule ) as IZOrderModule;
+			//this._zOrderModule.setUnitContainer( this._viewContainer );
 
 			this._unitDistanceCalculatorModule = this.createModule( UnitDistanceCalculatorModule ) as IUnitDistanceCalculatorModule;
 
 			this._unitDistanceHolderModule = this.createModule( UnitDistanceHolderModule ) as IUnitDistanceHolderModule;
 			this._unitDistanceHolderModule.setUnitDistanceCalculator( this._unitDistanceCalculatorModule );
 
-			this._unitTargetManagerModule = this.createModule( UnitTargetManagerModule ) as IUnitTargetManagerModule;
-			this._unitTargetManagerModule.setUnitDistanceCalculator( this._unitDistanceCalculatorModule );
+			//this._unitTargetManagerModule = this.createModule( UnitTargetManagerModule ) as IUnitTargetManagerModule;
+			//this._unitTargetManagerModule.setUnitDistanceCalculator( this._unitDistanceCalculatorModule );
 
-			this._projectileManagerModule = this.createModule( ProjectileManagerModule ) as IProjectileManagerModule;
-			this._viewContainer.addChild( this._projectileManagerModule.getView() );
-			this.injector.mapValue( IProjectileManagerModule, this._projectileManagerModule );
+			//this._projectileManagerModule = this.createModule( ProjectileManagerModule ) as IProjectileManagerModule;
+			//this._viewContainer.addChild( this._projectileManagerModule.getView() );
+			//this.injector.mapValue( IProjectileManagerModule, this._projectileManagerModule );
 
-			//this.createUnit( 300, 300, new HeroArcherUnitConfigVO() );
-			//this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
-			//this._unitControllerModule.setTarget( this._units[ 0 ] );
+			this.createUnit( 300, 300, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+			this._unitControllerModule.setTarget( this._units[ 0 ] );
 
-			this._waveHandlerModule = this.createModule( WaveHandlerModule ) as IWaveHandlerModule;
+			//this._waveHandlerModule = this.createModule( WaveHandlerModule ) as IWaveHandlerModule;
 
-			this._touchZoomModule = this.createModule( TouchZoomModule ) as ITouchZoomModule;
-			this._touchZoomModule.setGameContainer( this._viewContainer );
+			//this._touchZoomModule = this.createModule( TouchZoomModule ) as ITouchZoomModule;
+			//this._touchZoomModule.setGameContainer( this._viewContainer );
 
 			this._touchDragModule = this.createModule( TouchDragModule ) as ITouchDragModule;
 			this._touchDragModule.setGameContainer( this._viewContainer );
@@ -191,7 +192,31 @@ package net.fpp.starlingtowerdefense.game
 
 			this.drawDebugDatas();
 
-			this.startTestWave();
+			//this.startTestWave();
+
+			this._viewContainer.scaleX = this._viewContainer.scaleY = .5;
+			this.performanceTest1();
+		}
+
+		private function performanceTest1():void
+		{
+			this.createTestWarriorUnit( this._units.length < 51 ? '1' : '2', Math.random() * this._viewContainer.width, Math.random() * this._viewContainer.height );
+
+			trace( 'New warrior unit created. Total number of units: ' + this._units.length );
+
+			if ( this._units.length < 100 )
+			{
+				TweenLite.delayedCall( .1, this.performanceTest1 );
+			}
+		}
+
+		private function createTestWarriorUnit( playerGroup:String, x:Number, y:Number ):void
+		{
+			var pathVO1:PathVO = new PathVO();
+			pathVO1.path = new <SimplePoint> [ new SimplePoint( Math.random() * this._viewContainer.width, Math.random() * this._viewContainer.height ) ];
+			this.createUnit( x, y, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( playerGroup );
+			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
 		}
 
 		private function startTestWave():void
@@ -297,7 +322,7 @@ package net.fpp.starlingtowerdefense.game
 
 			this._units.push( unitModule );
 
-			this._zOrderModule.addUnit( unitModule );
+			//this._zOrderModule.addUnit( unitModule );
 			this._unitDistanceCalculatorModule.addUnit( unitModule );
 
 			unitModule.setPosition( x, y );
@@ -311,7 +336,7 @@ package net.fpp.starlingtowerdefense.game
 			this.unregisterModule( unitModule );
 			this._unitModuleObjectPool.releaseObject( unitModule );
 
-			this._zOrderModule.removeUnit( unitModule );
+			//this._zOrderModule.removeUnit( unitModule );
 			this._unitDistanceCalculatorModule.removeUnit( unitModule );
 
 			var length:int = this._units.length;
@@ -345,12 +370,12 @@ package net.fpp.starlingtowerdefense.game
 
 		override protected function onUpdate():void
 		{
-			WorldClock.clock.advanceTime( -1 );
+			//WorldClock.clock.advanceTime( -1 );
 		}
 
 		private function unitMoveToRequest( e:UnitControllerModuleEvent, request:UnitMoveToRequest ):void
 		{
-			if( !this._touchDragModule.getIsTouchDragged() && !this._touchZoomModule.getIsZoomInProgress() )
+			if( !this._touchDragModule.getIsTouchDragged()/* && !this._touchZoomModule.getIsZoomInProgress()*/ )
 			{
 				this.unitMoveTo( request.unit, request.position );
 			}

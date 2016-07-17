@@ -7,12 +7,12 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo
 
 	public class UnitDistanceVO
 	{
-		public var unitB:IUnitModule;
 		public var unitA:IUnitModule;
+		public var unitB:IUnitModule;
 
 		public var distance:Number;
 
-		public function UnitDistanceVO( unitA:IUnitModule, unitB:IUnitModule, distance:Number )
+		public function UnitDistanceVO( unitA:IUnitModule = null, unitB:IUnitModule = null, distance:Number = 0 )
 		{
 			this.unitA = unitA;
 			this.unitB = unitB;

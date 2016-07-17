@@ -65,5 +65,10 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 				this._unitControllerModuleView.updateSelectionMarkerPosition();
 			}
 		}
+
+		public function getUpdateFrequency():int
+		{
+			return 1;
+		}
 	}
 }

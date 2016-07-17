@@ -22,6 +22,11 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 			this._unitDistanceCalculatorModel.calculateDistances();
 		}
 
+		public function getUpdateFrequency():int
+		{
+			return 20;
+		}
+
 		public function addUnit( value:IUnitModule ):void
 		{
 			this._unitDistanceCalculatorModel.addUnit( value );

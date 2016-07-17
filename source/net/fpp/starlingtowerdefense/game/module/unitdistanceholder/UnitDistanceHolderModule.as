@@ -25,6 +25,11 @@ package net.fpp.starlingtowerdefense.game.module.unitdistanceholder
 			this._unitDistanceHolderModel.setUnitDistances();
 		}
 
+		public function getUpdateFrequency():int
+		{
+			return 5;
+		}
+
 		override public function dispose():void
 		{
 			this._unitDistanceHolderModel = null;

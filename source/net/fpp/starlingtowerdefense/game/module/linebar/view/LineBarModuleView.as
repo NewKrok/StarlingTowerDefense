@@ -19,6 +19,8 @@ package net.fpp.starlingtowerdefense.game.module.linebar.view
 
 		public function LineBarModuleView()
 		{
+			this.touchable = false;
+
 			this._background = new Quad( 100, 10, 0x0 );
 			this.addChild( this._background );
 

@@ -13,6 +13,6 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 
 		function removeUnit( value:IUnitModule ):void;
 
-		function getUnitDistanceVOs():Vector.<UnitDistanceVO>
+		function getUnitDistanceVOs():Vector.<UnitDistanceVO>;
 	}
 }

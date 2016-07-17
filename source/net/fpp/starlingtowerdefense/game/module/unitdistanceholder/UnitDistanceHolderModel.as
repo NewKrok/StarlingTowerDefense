@@ -4,6 +4,7 @@
 package net.fpp.starlingtowerdefense.game.module.unitdistanceholder
 {
 	import net.fpp.common.starling.module.AModel;
+	import net.fpp.common.util.GeomUtil;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.IUnitDistanceCalculatorModule;
 	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo.UnitDistanceVO;
@@ -27,20 +28,20 @@ package net.fpp.starlingtowerdefense.game.module.unitdistanceholder
 			var unitDistanceVOs:Vector.<UnitDistanceVO> = this._unitDistanceCalculatorModule.getUnitDistanceVOs();
 			var length:int = unitDistanceVOs.length;
 
-			for ( var i:int = 0; i < length; i++ )
+			for( var i:int = 0; i < length; i++ )
 			{
-				var unitA:IUnitModule = unitDistanceVOs[i].unitA;
-				var unitB:IUnitModule = unitDistanceVOs[i].unitB;
+				var unitA:IUnitModule = unitDistanceVOs[ i ].unitA;
+				var unitB:IUnitModule = unitDistanceVOs[ i ].unitB;
 
-				var distance:Number = unitDistanceVOs[i].distance;
+				var distance:Number = unitDistanceVOs[ i ].distance;
 
 				var unitARadius:Number = unitA.getSizeRadius();
 				var unitBRadius:Number = unitB.getSizeRadius();
 
 				if( distance < unitARadius / 2 + unitBRadius / 2 && unitA.getTarget() == null && unitB.getTarget() == null )
 				{
-					var unitAView:DisplayObject = unitDistanceVOs[i].unitA.getView();
-					var unitBView:DisplayObject = unitDistanceVOs[i].unitB.getView();
+					var unitAView:DisplayObject = unitDistanceVOs[ i ].unitA.getView();
+					var unitBView:DisplayObject = unitDistanceVOs[ i ].unitB.getView();
 
 					var unitAOffset:Number;
 					var unitBOffset:Number;
@@ -60,7 +61,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistanceholder
 						unitBOffset = 0;
 					}
 
-					var angle:Number = Math.atan2( unitAView.y - unitBView.y, unitAView.x - unitBView.x );
+					var angle:Number = GeomUtil.atan2( unitAView.y - unitBView.y, unitAView.x - unitBView.x );
 
 					unitA.setPosition( unitAView.x + unitAOffset * Math.cos( angle ), unitAView.y + unitAOffset * Math.sin( angle ) );
 					unitB.setPosition( unitBView.x - unitBOffset * Math.cos( angle ), unitBView.y - unitBOffset * Math.sin( angle ) );
