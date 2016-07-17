@@ -76,8 +76,8 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 
 				var archHeight:Number = ( distance / owner.getUnitConfigVO().attackRadius ) * projectileVO.projectileConfigVO.projectileArcHeight;
 				var bezierControlPoint:SimplePoint = new SimplePoint(
-						ownerPoint.x + distance / 3 * Math.cos( angle ),
-						ownerPoint.y + distance / 3 * Math.sin( angle ) - archHeight
+						ownerPoint.x + distance / 2 * Math.cos( angle ),
+						ownerPoint.y + distance / 2 * Math.sin( angle ) - archHeight
 				);
 
 				TweenLite.to( projectileView, distance / projectileVO.projectileConfigVO.speed, {

@@ -15,7 +15,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 		public function MageUnitConfigVO()
 		{
 			this.name = 'Mage';
-			this.skeleton = 'Warrior';
+			this.skeleton = 'Mage';
 
 			this.sizeRadius = 30;
 			this.unitHeight = 100;
@@ -30,12 +30,12 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.projectileConfigVO = new ProjectileSettingVO();
 			this.projectileConfigVO.skinId = CSkin.MAGE_PROJECTILE;
-			this.projectileConfigVO.minDamage = 3
-			this.projectileConfigVO.maxDamage = 6;
+			this.projectileConfigVO.minDamage = 25;
+			this.projectileConfigVO.maxDamage = 45;
 			this.projectileConfigVO.attackType = CAttackType.MAGIC;
-			this.projectileConfigVO.speed = 500;
+			this.projectileConfigVO.speed = 250;
 			this.projectileConfigVO.isEnemyFollower = true;
-			this.projectileConfigVO.startPointOffset = new SimplePoint( 30, -50 );
+			this.projectileConfigVO.startPointOffset = new SimplePoint( 30, -20 );
 			this.projectileConfigVO.projectileArcHeight = 0;
 
 			this.minDamage = 1;
@@ -44,22 +44,22 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.areaDamage = 0;
 			this.areaDamageRadius = 0;
 
-			this.attackSpeed = .7;
+			this.attackSpeed = 2.5;
 			this.attackAnimationSpeed = .5;
 			this.attackType = CAttackType.NORMAL;
 
 			this.criticalHitChance = .01;
 			this.criticalHitDamageMultiple = 1.5;
 
-			this.attackActionDelay = .3;
+			this.attackActionDelay = .2;
 
-			this.maxLife = 100;
+			this.maxLife = 20;
 			this.lifeRegeneration = 2;
 
 			this.maxMana = 40;
 			this.manaRegeneration = 4;
 
-			this.movementSpeed = 220;
+			this.movementSpeed = 80;
 		}
 	}
 }

@@ -30,13 +30,13 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.projectileConfigVO = new ProjectileSettingVO();
 			this.projectileConfigVO.skinId = CSkin.ARCHER_ARROW;
-			this.projectileConfigVO.minDamage = 25;
-			this.projectileConfigVO.maxDamage = 35;
+			this.projectileConfigVO.minDamage = 35;
+			this.projectileConfigVO.maxDamage = 40;
 			this.projectileConfigVO.attackType = CAttackType.PIERCING;
-			this.projectileConfigVO.speed = 300;
+			this.projectileConfigVO.speed = 350;
 			this.projectileConfigVO.isEnemyFollower = false;
 			this.projectileConfigVO.startPointOffset = new SimplePoint( 30, -50 );
-			this.projectileConfigVO.projectileArcHeight = 60;
+			this.projectileConfigVO.projectileArcHeight = 40;
 
 			this.minDamage = 3;
 			this.maxDamage = 7;
@@ -44,7 +44,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 			this.areaDamage = 0;
 			this.areaDamageRadius = 0;
 
-			this.attackSpeed = 1.2;
+			this.attackSpeed = 1.5;
 			this.attackAnimationSpeed = .6;
 			this.attackType = CAttackType.NORMAL;
 

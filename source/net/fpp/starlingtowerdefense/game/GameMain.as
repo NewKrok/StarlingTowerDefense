@@ -26,6 +26,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.common.util.pathfinding.astar.vo.AStarPathRequestVO;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.ArcherUnitConfigVO;
+	import net.fpp.starlingtowerdefense.game.config.unit.MageUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
@@ -198,49 +199,49 @@ package net.fpp.starlingtowerdefense.game
 			TweenLite.delayedCall( 10, this.startTestWave );
 
 			var pathVO1:PathVO = new PathVO();
-			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
-			this.createUnit( 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
+			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 + Math.random() * 20 ) ];
+			this.createUnit( 100, 300 + Math.random() * 20, new MageUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
-			/*
+
 			 pathVO1 = new PathVO();
-			 pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			 pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 + Math.random() * 20 ) ];
 			 this.createUnit( 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
 			 this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
-
+			/*
 			 pathVO1 = new PathVO();
-			 pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			 pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 + Math.random() * 20 ) ];
 			 this.createUnit( 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
 			 this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
 			 */
 			pathVO1 = new PathVO();
-			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 ) ];
+			pathVO1.path = new <SimplePoint> [ new SimplePoint( 800, 300 + Math.random() * 20 ) ];
 			this.createUnit( 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 			this._units[ this._units.length - 1 ].attackMoveTo( pathVO1 );
 
 			var pathVO2:PathVO = new PathVO();
-			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 + Math.random() * 20 ) ];
 			this.createUnit( 900 - 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
-			/*
-			 pathVO2 = new PathVO();
-			 pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
-			 this.createUnit( 900 - 100, 300 + Math.random() * 20, new ArcherUnitConfigVO() );
-			 this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
-			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
 
 			 pathVO2 = new PathVO();
-			 pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			 pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 + Math.random() * 20 ) ];
+			 this.createUnit( 900 - 100, 300 + Math.random() * 20, new MageUnitConfigVO() );
+			 this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
+			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
+			 /*
+			 pathVO2 = new PathVO();
+			 pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 + Math.random() * 20 ) ];
 			 this.createUnit( 900 - 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
 			 this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 			 this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
 			 */
 			pathVO2 = new PathVO();
-			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 ) ];
+			pathVO2.path = new <SimplePoint> [ new SimplePoint( 100, 300 + Math.random() * 20 ) ];
 			this.createUnit( 900 - 150, 300 + Math.random() * 20, new WarriorUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '2' );
 			this._units[ this._units.length - 1 ].attackMoveTo( pathVO2 );
