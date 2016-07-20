@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 23/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo
+package net.fpp.starlingtowerdefense.game.module.unitdistancemanager.vo
 {
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 

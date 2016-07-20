@@ -1,20 +1,19 @@
 /**
  * Created by newkrok on 21/03/16.
  */
-package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
+package net.fpp.starlingtowerdefense.game.module.unitdistancemanager
 {
 	import net.fpp.common.starling.module.AModule;
-
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
-	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo.UnitDistanceVO;
+	import net.fpp.starlingtowerdefense.game.module.unitdistancemanager.distanceaction.IUnitDistanceAction;
 
-	public class UnitDistanceCalculatorModule extends AModule implements IUnitDistanceCalculatorModule
+	public class UnitDistanceManagerModule extends AModule implements IUnitDistanceManagerModule
 	{
-		private var _unitDistanceCalculatorModel:UnitDistanceCalculatorModel;
+		private var _unitDistanceCalculatorModel:UnitDistanceManagerModel;
 
-		public function UnitDistanceCalculatorModule()
+		public function UnitDistanceManagerModule()
 		{
-			this._unitDistanceCalculatorModel = this.createModel( UnitDistanceCalculatorModel ) as UnitDistanceCalculatorModel;
+			this._unitDistanceCalculatorModel = this.createModel( UnitDistanceManagerModel ) as UnitDistanceManagerModel;
 		}
 
 		public function onUpdate():void
@@ -27,6 +26,11 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 			return 20;
 		}
 
+		public function addDistanceAction( value:IUnitDistanceAction ):void
+		{
+			this._unitDistanceCalculatorModel.addDistanceAction( value );
+		}
+
 		public function addUnit( value:IUnitModule ):void
 		{
 			this._unitDistanceCalculatorModel.addUnit( value );
@@ -35,11 +39,6 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 		public function removeUnit( value:IUnitModule ):void
 		{
 			this._unitDistanceCalculatorModel.removeUnit( value );
-		}
-
-		public function getUnitDistanceVOs():Vector.<UnitDistanceVO>
-		{
-			return this._unitDistanceCalculatorModel.getUnitDistanceVOs();
 		}
 
 		override public function dispose():void

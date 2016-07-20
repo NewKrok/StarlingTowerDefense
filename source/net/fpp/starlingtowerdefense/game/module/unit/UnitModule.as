@@ -19,7 +19,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 	public class UnitModule extends AModule implements IUnitModule
 	{
-		//[Inject]
+		[Inject]
 		public var projectileManagerModule:IProjectileManagerModule;
 
 		[Inject]
@@ -62,7 +62,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		override public function onRegistered():void
 		{
-			//this._unitView.setDragonBonesGraphicService( this._dragonBonesGraphicService );
+			this._unitView.setDragonBonesGraphicService( this._dragonBonesGraphicService );
 		}
 
 		public function onUpdate():void
@@ -111,7 +111,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			this._pathIndex = 0;
 
 			this.runNextPathData();
-			//this._unitView.run();
+			this._unitView.run();
 		}
 
 		private function runNextPathData():void
@@ -131,7 +131,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			if( this._unitView.x != position.x )
 			{
 				this._unitModel.setDirection( this.calculateScaleByEndX( position.x ) )
-				//this._unitView.setDirection( this._unitModel.getDirection() );
+				this._unitView.setDirection( this._unitModel.getDirection() );
 			}
 
 			TweenLite.killTweensOf( this._unitView );
@@ -167,7 +167,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 				{
 					this.clearRouteData();
 					this._isMoving = false;
-					//this._unitView.idle();
+					this._unitView.idle();
 				}
 				else if( !this._unitModel.getTarget() )
 				{
@@ -179,14 +179,14 @@ package net.fpp.starlingtowerdefense.game.module.unit
 				this._unitView.idle();
 
 				this._unitModel.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) )
-				//this._unitView.setDirection( this._unitModel.getDirection() );
+				this._unitView.setDirection( this._unitModel.getDirection() );
 			}
 			else if( this._unitModel.getLastPositionBeforeFight() )
 			{
 				if( this._unitModel.getLastPositionBeforeFight().x == this._view.x && this._unitModel.getLastPositionBeforeFight().y == this._view.y )
 				{
 					this._unitModel.setLastPositionBeforeFight( null );
-					//this._unitView.idle();
+					this._unitView.idle();
 				}
 				else
 				{
@@ -196,7 +196,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			else
 			{
 				this._isAttackMoveToInProgress = false;
-				//this._unitView.idle();
+				this._unitView.idle();
 			}
 		}
 
@@ -245,9 +245,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			{
 				this._unitModel.setLastAttackTime( now );
 
-				//this._unitView.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) );
+				this._unitView.setDirection( this.calculateScaleByEndX( this._unitModel.getTarget().getView().x ) );
 
-				//this._unitView.attack();
+				this._unitView.attack();
 
 				this._unitModel.damageDelayTween = TweenLite.delayedCall( this._unitModel.getUnitConfigVO().attackActionDelay, runAttackAction )
 			}
@@ -355,7 +355,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 					this._unitModel.setLastPositionBeforeFight( new SimplePoint( this._view.x, this._view.y ) );
 				}
 
-				//this._unitView.run();
+				this._unitView.run();
 				this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
 			}
 		}
@@ -376,14 +376,14 @@ package net.fpp.starlingtowerdefense.game.module.unit
 					this._pathIndex--;
 				}
 
-				//this._unitView.run();
+				this._unitView.run();
 				this.runNextPathData();
 			}
 		}
 
 		private function moveLastPositionAfterFight():void
 		{
-			//this._unitView.run();
+			this._unitView.run();
 			this.move( this._unitModel.getLastPositionBeforeFight() );
 		}
 

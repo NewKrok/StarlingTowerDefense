@@ -1,23 +1,31 @@
 /**
  * Created by newkrok on 21/03/16.
  */
-package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
+package net.fpp.starlingtowerdefense.game.module.unitdistancemanager
 {
 	import net.fpp.common.starling.module.AModel;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
-	import net.fpp.starlingtowerdefense.game.module.unitdistancecalculator.vo.UnitDistanceVO;
+	import net.fpp.starlingtowerdefense.game.module.unitdistancemanager.distanceaction.IUnitDistanceAction;
+	import net.fpp.starlingtowerdefense.game.module.unitdistancemanager.vo.UnitDistanceVO;
 
 	import starling.display.DisplayObject;
 
-	public class UnitDistanceCalculatorModel extends AModel
+	public class UnitDistanceManagerModel extends AModel
 	{
 		private var _units:Vector.<IUnitModule>;
 		private var _unitDistanceVOs:Vector.<UnitDistanceVO>;
+		private var _distanceActions:Vector.<IUnitDistanceAction>;
 
-		public function UnitDistanceCalculatorModel()
+		public function UnitDistanceManagerModel()
 		{
 			this._units = new <IUnitModule>[];
 			this._unitDistanceVOs = new <UnitDistanceVO>[];
+			this._distanceActions = new <IUnitDistanceAction>[];
+		}
+
+		public function addDistanceAction( value:IUnitDistanceAction ):void
+		{
+			this._distanceActions.push( value );
 		}
 
 		public function addUnit( value:IUnitModule ):void
@@ -52,6 +60,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 				if( this._unitDistanceVOs[ i ].unitA == value || this._unitDistanceVOs[ i ].unitB == value )
 				{
 					this._unitDistanceVOs.splice( i, 1 );
+					length--;
 					i--;
 				}
 			}
@@ -62,22 +71,44 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancecalculator
 			var distanceListLength:int = this._unitDistanceVOs.length;
 			var unitListLength:int = this._units.length;
 
+			var unitDistanceVO:UnitDistanceVO;
+			var unitA:IUnitModule;
+			var unitB:IUnitModule;
+			var unitAView:DisplayObject;
+			var unitBView:DisplayObject;
+			var xDistance:Number;
+			var yDistance:Number;
+			var distance:Number;
+
 			for( var i:int = 0; i < distanceListLength; i++ )
 			{
-				var unitA:IUnitModule = this._unitDistanceVOs[ i ].unitA;
-				var unitB:IUnitModule = this._unitDistanceVOs[ i ].unitB;
+				unitDistanceVO = this._unitDistanceVOs[ i ];
 
-				if( !unitA || !unitB || unitA.getIsDead() || unitB.getIsDead() )
+				unitA = unitDistanceVO.unitA;
+				unitB = unitDistanceVO.unitB;
+
+				if( unitA.getIsDead() || unitB.getIsDead() )
 				{
-					break;
+					continue;
 				}
 
-				var unitAView:DisplayObject = unitA.getView() as DisplayObject;
-				var unitBView:DisplayObject = unitB.getView() as DisplayObject;
+				unitAView = unitA.getView();
+				unitBView = unitB.getView();
 
-				var distance:Number = Math.sqrt( (unitBView.x - unitAView.x) * (unitBView.x - unitAView.x) + (unitBView.y - unitAView.y) * (unitBView.y - unitAView.y) );
+				xDistance = unitBView.x - unitAView.x;
+				yDistance = unitBView.y - unitAView.y;
 
-				this._unitDistanceVOs[ i ].distance = distance << 0;
+				unitDistanceVO.distance = Math.sqrt( xDistance * xDistance + yDistance * yDistance ) << 0;
+
+				this.executeDistanceActions( unitDistanceVO );
+			}
+		}
+
+		private function executeDistanceActions( value:UnitDistanceVO ):void
+		{
+			for ( var i:int = 0; i < this._distanceActions.length; i++ )
+			{
+				this._distanceActions[i].execute( value );
 			}
 		}
 
