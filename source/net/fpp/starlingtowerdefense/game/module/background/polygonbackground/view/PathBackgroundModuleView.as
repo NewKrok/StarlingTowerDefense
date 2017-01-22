@@ -77,7 +77,7 @@ package net.fpp.starlingtowerdefense.game.module.background.polygonbackground.vi
 					offsetMatrix.ty = -j * MAXIMUM_TEXTURE_SIZE;
 					tmpBitmapData.draw( generatedTerrain, offsetMatrix );
 
-					var piece:Image = new Image( Texture.fromBitmap( new Bitmap( tmpBitmapData ) ) );
+					var piece:Image = new Image( Texture.fromBitmap( new Bitmap( tmpBitmapData ), false, false, 2 ) );
 					piece.x = i * MAXIMUM_TEXTURE_SIZE;
 					piece.y = j * MAXIMUM_TEXTURE_SIZE;
 					piece.touchable = false;

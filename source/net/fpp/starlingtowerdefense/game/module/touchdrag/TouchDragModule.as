@@ -88,7 +88,7 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 
 		public function getUpdateFrequency():int
 		{
-			return 5;
+			return 100;
 		}
 
 		private function getNormalizedWorldXPosition( x:Number ):Number

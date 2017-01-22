@@ -56,5 +56,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		function getUnitConfigVO():UnitConfigVO;
 
 		function setUnitConfigVO( value:UnitConfigVO ):void;
+
+		function getInstanceId():int;
 	}
 }

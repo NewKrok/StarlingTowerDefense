@@ -68,7 +68,7 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 
 		public function getUpdateFrequency():int
 		{
-			return 1;
+			return 10;
 		}
 	}
 }

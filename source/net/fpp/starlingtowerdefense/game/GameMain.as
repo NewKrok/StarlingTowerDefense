@@ -6,7 +6,6 @@ package net.fpp.starlingtowerdefense.game
 	import assets.GameAssets;
 	import assets.TerrainTextures;
 
-	import com.greensock.TweenLite;
 	import com.greensock.plugins.BezierPlugin;
 	import com.greensock.plugins.TweenPlugin;
 
@@ -31,6 +30,7 @@ package net.fpp.starlingtowerdefense.game
 	import net.fpp.starlingtowerdefense.game.config.unit.WarriorUnitConfigVO;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.IPolygonBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.polygonbackground.PolygonBackgroundModule;
+	import net.fpp.starlingtowerdefense.game.module.background.rectanglebackground.IRectangleBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.background.rectanglebackground.RectangleBackgroundModule;
 	import net.fpp.starlingtowerdefense.game.module.map.IMapModule;
 	import net.fpp.starlingtowerdefense.game.module.map.MapModule;
@@ -114,10 +114,10 @@ package net.fpp.starlingtowerdefense.game
 		private function configureInjector():void
 		{
 			this._mapModule = new MapModule();
-			this.injector.mapValue( IMapModule, this._mapModule );
+			this.injector.mapToValue( IMapModule, this._mapModule );
 
 			this._dragonBonesGraphicService = new DragonBonesGraphicService();
-			this.injector.mapValue( DragonBonesGraphicService, this._dragonBonesGraphicService );
+			this.injector.mapToValue( DragonBonesGraphicService, this._dragonBonesGraphicService );
 		}
 
 		public function setLevelDataVO( value:LevelDataVO ):void
@@ -151,7 +151,7 @@ package net.fpp.starlingtowerdefense.game
 
 			this.createBackgroundModules();
 
-			this._unitControllerModule = this.createModule( UnitControllerModule ) as IUnitControllerModule;
+			this._unitControllerModule = this.createModule( 'unitControllerModule', UnitControllerModule, IUnitControllerModule ) as IUnitControllerModule;
 			this._unitControllerModule.setGameContainer( this._viewContainer );
 			this._unitControllerModule.addEventListener( UnitControllerModuleEvent.UNIT_MOVE_TO_REQUEST, this.unitMoveToRequest );
 			this._viewContainer.addChild( this._unitControllerModule.getView() );
@@ -159,24 +159,30 @@ package net.fpp.starlingtowerdefense.game
 			//this._zOrderModule = this.createModule( ZOrderModule ) as IZOrderModule;
 			//this._zOrderModule.setUnitContainer( this._viewContainer );
 
-			this._unitDistanceCalculatorModule = this.createModule( UnitDistanceManagerModule ) as IUnitDistanceManagerModule;
+			this._unitDistanceCalculatorModule = this.createModule( 'unitDistanceManagerModule', UnitDistanceManagerModule, IUnitDistanceManagerModule ) as IUnitDistanceManagerModule;
 			this._unitDistanceCalculatorModule.addDistanceAction( new UnitDistanceHolderAction() );
 			this._unitDistanceCalculatorModule.addDistanceAction( new UnitTargetSelectorAction() );
 
-			this._projectileManagerModule = this.createModule( ProjectileManagerModule ) as IProjectileManagerModule;
+			this._projectileManagerModule = this.createModule( 'projectileManagerModule', ProjectileManagerModule, IProjectileManagerModule ) as IProjectileManagerModule;
 			this._viewContainer.addChild( this._projectileManagerModule.getView() );
-			this.injector.mapValue( IProjectileManagerModule, this._projectileManagerModule );
+			this.injector.mapToValue( IProjectileManagerModule, this._projectileManagerModule );
 
 			this.createUnit( 300, 300, new HeroArcherUnitConfigVO() );
 			this._units[ this._units.length - 1 ].setPlayerGroup( '0' );
 			this._unitControllerModule.setTarget( this._units[ 0 ] );
 
-			this._waveHandlerModule = this.createModule( WaveHandlerModule ) as IWaveHandlerModule;
+			this.createUnit( 500, 300, new WarriorUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
 
-			this._touchZoomModule = this.createModule( TouchZoomModule ) as ITouchZoomModule;
+			this.createUnit( 900, 300, new MageUnitConfigVO() );
+			this._units[ this._units.length - 1 ].setPlayerGroup( '1' );
+
+			this._waveHandlerModule = this.createModule( 'waveHandlerModule', WaveHandlerModule, IWaveHandlerModule ) as IWaveHandlerModule;
+
+			this._touchZoomModule = this.createModule( 'touchZoomModule', TouchZoomModule, ITouchZoomModule ) as ITouchZoomModule;
 			this._touchZoomModule.setGameContainer( this._viewContainer );
 
-			this._touchDragModule = this.createModule( TouchDragModule ) as ITouchDragModule;
+			this._touchDragModule = this.createModule( 'touchDragModule', TouchDragModule, ITouchDragModule ) as ITouchDragModule;
 			this._touchDragModule.setGameContainer( this._viewContainer );
 
 			this.startUpdateHandling();
@@ -190,12 +196,12 @@ package net.fpp.starlingtowerdefense.game
 		{
 			var bitmapTextures:Vector.<BitmapDataVO> = JSONBitmapAtlas.getBitmapDataVOs( new TerrainTextures.AtlasImage, new TerrainTextures.AtlasDescription );
 
-			this._rectangleBackgroundModule = this.createModule( RectangleBackgroundModule ) as RectangleBackgroundModule;
+			this._rectangleBackgroundModule = this.createModule( 'rectangleBackgroundModule', RectangleBackgroundModule, IRectangleBackgroundModule ) as RectangleBackgroundModule;
 			this._viewContainer.addChild( this._rectangleBackgroundModule.getView() );
 			this._rectangleBackgroundModule.setTerrainInformations( bitmapTextures );
 			this._rectangleBackgroundModule.setRectangleBackgroundVO( this._levelDataVO.rectangleBackgroundData );
 
-			this._pathBackgroundModule = this.createModule( PolygonBackgroundModule ) as PolygonBackgroundModule;
+			this._pathBackgroundModule = this.createModule( 'polygonBackgroundModule', PolygonBackgroundModule, IPolygonBackgroundModule ) as PolygonBackgroundModule;
 			this._viewContainer.addChild( this._pathBackgroundModule.getView() );
 			this._pathBackgroundModule.setTerrainInformations( bitmapTextures );
 			this._pathBackgroundModule.setPolygonBackgroundVO( this._levelDataVO.polygonBackgroundData );
@@ -229,7 +235,7 @@ package net.fpp.starlingtowerdefense.game
 		private function createUnit( x:Number, y:Number, unitConfigVO:UnitConfigVO ):void
 		{
 			var unitModule:IUnitModule = this._unitModuleObjectPool.getObject() as IUnitModule;
-			this.registerModule( unitModule );
+			this.registerModule( 'unitModule' + unitModule.getInstanceId(), unitModule, IUnitModule );
 			unitModule.setUnitConfigVO( unitConfigVO );
 
 			unitModule.addEventListener( UnitModuleEvent.UNIT_DIED, releaseUnit );

@@ -23,7 +23,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancemanager
 
 		public function getUpdateFrequency():int
 		{
-			return 20;
+			return 100;
 		}
 
 		public function addDistanceAction( value:IUnitDistanceAction ):void

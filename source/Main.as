@@ -2,7 +2,7 @@ package
 {
 	import net.fpp.common.starling.StaticAssetManager;
 	import net.fpp.common.starling.constant.CAspectRatio;
-	import net.fpp.common.starling.display.AStarlingMain;
+	import net.fpp.common.starling.core.AStarlingMain;
 
 	import starling.core.Starling;
 
@@ -16,13 +16,6 @@ package
 			super();
 		}
 
-		override protected function onInit():void
-		{
-			this.createStarling( God );
-
-			this.setAppConfig();
-		}
-
 		private function setPreAppConfig():void
 		{
 			this._aspectRatio = CAspectRatio.LANDSCAPE;
@@ -32,6 +25,13 @@ package
 			Starling.multitouchEnabled = true;
 		}
 
+		override protected function onInit():void
+		{
+			this.createStarling( God );
+
+			this.setAppConfig();
+		}
+
 		private function setAppConfig():void
 		{
 			this._starlingObject.simulateMultitouch = false;
@@ -39,6 +39,12 @@ package
 			this._starlingObject.antiAliasing = 3;
 
 			Starling.current.showStats = true;
+		}
+
+		override protected function onStarlingRootCreated():void
+		{
+			var mainContext:God = this._starlingObject.root as God;
+			mainContext.start();
 		}
 	}
 }

@@ -34,6 +34,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		private var _pathVO:PathVO;
 		private var _pathIndex:int;
 
+		private static var staticInstanceId:int = 0;
+		private var _instanceId:int = staticInstanceId++;
+
 		public function UnitModule():void
 		{
 			this._unitModel = this.createModel( UnitModel ) as UnitModel;
@@ -60,7 +63,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 			this.processUnitConfigVO( this._unitModel.getUnitConfigVO() );
 		}
 
-		override public function onRegistered():void
+		override public function onInited():void
 		{
 			this._unitView.setDragonBonesGraphicService( this._dragonBonesGraphicService );
 		}
@@ -75,7 +78,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function getUpdateFrequency():int
 		{
-			return 20;
+			return 500;
 		}
 
 		public function setUnitConfigVO( value:UnitConfigVO ):void
@@ -440,6 +443,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		override public function dispose():void
 		{
 			super.dispose();
+		}
+
+		public function getInstanceId():int
+		{
+			return this._instanceId;
 		}
 	}
 }
