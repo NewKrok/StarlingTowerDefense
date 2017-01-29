@@ -53,7 +53,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 
 			this.attackActionDelay = .4;
 
-			this.maxLife = 15;
+			this.maxLife = 5;
 			this.lifeRegeneration = 2;
 
 			this.maxMana = 10;

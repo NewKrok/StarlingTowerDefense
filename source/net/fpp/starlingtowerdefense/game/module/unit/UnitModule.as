@@ -119,6 +119,11 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function runNextPathData():void
 		{
+			if ( this._pathIndex < 0 || !this._pathVO.path || this._pathIndex >= this._pathVO.path.length )
+			{
+				return;
+			}
+
 			this.move( this._pathVO.path[ this._pathIndex ] );
 
 			this._pathIndex++;

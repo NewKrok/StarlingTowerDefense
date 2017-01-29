@@ -69,7 +69,10 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 
 			this._currentSkeleton = this._unitModel.getUnitConfigVO().skeleton;
 
-			this.createArmature();
+			if ( !this._armature )
+			{
+				this.createArmature();
+			}
 		}
 
 		private function createArmature():void
@@ -243,13 +246,12 @@ package net.fpp.starlingtowerdefense.game.module.unit.view
 		{
 			WorldClock.clock.remove( this._armature );
 
+			this._armatureClip.removeFromParent( true );
+			this._armatureClip = null;
+
 			this._armature.removeEventListener( AnimationEvent.COMPLETE, this.aramtureEventHandler );
 			this._armature.dispose();
 			this._armature = null;
-
-			this.removeChild( this._armatureClip );
-			this._armatureClip.dispose();
-			this._armatureClip = null;
 		}
 
 		override public function dispose():void
