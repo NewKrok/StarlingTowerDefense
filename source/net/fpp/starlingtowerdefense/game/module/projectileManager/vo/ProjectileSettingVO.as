@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 26/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.projectileManager.vo
+package net.fpp.starlingtowerdefense.game.module.projectilemanager.vo
 {
 	import net.fpp.common.geom.SimplePoint;
 

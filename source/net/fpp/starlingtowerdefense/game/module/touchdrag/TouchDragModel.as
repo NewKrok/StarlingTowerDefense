@@ -6,11 +6,8 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModel;
 
-	import starling.display.DisplayObjectContainer;
-
 	public class TouchDragModel extends AModel
 	{
-		public var gameContainer:DisplayObjectContainer;
 		public var touchStartPoint:SimplePoint = new SimplePoint();
 		public var isTouched:Boolean;
 		public var lastTouchPoint:SimplePoint;

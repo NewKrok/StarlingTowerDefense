@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 27/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.projectileManager.view
+package net.fpp.starlingtowerdefense.game.module.projectilemanager.view
 {
 	import net.fpp.common.starling.StaticAssetManager;
 	import net.fpp.common.util.objectpool.IPoolableObject;

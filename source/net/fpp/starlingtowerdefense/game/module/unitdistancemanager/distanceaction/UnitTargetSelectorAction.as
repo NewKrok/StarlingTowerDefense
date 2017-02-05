@@ -24,7 +24,7 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancemanager.distanceact
 				return;
 			}
 
-			if( distance < unitA.getUnitDetectionRadius() && unitA.getPlayerGroup() != unitB.getPlayerGroup() && unitA.getTarget() == null )
+			if( unitA.getTarget() == null && distance < unitA.getUnitDetectionRadius() && unitA.getPlayerGroup() != unitB.getPlayerGroup() )
 			{
 				unitA.setTarget( unitB );
 			}

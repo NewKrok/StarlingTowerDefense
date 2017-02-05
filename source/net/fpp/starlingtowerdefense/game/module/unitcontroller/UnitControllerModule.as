@@ -7,9 +7,11 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModule;
+	import net.fpp.common.util.pathfinding.vo.PathVO;
+	import net.fpp.starlingtowerdefense.game.module.pathfinder.IPathFinderModule;
+	import net.fpp.starlingtowerdefense.game.module.touchdrag.ITouchDragModule;
+	import net.fpp.starlingtowerdefense.game.module.touchzoom.ITouchZoomModule;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
-	import net.fpp.starlingtowerdefense.game.module.unitcontroller.events.UnitControllerModuleEvent;
-	import net.fpp.starlingtowerdefense.game.module.unitcontroller.request.UnitMoveToRequest;
 	import net.fpp.starlingtowerdefense.game.module.unitcontroller.view.UnitControllerModuleView;
 
 	import starling.display.DisplayObjectContainer;
@@ -18,6 +20,15 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 
 	public class UnitControllerModule extends AModule implements IUnitControllerModule
 	{
+		[Inject]
+		public var pathFinderModule:IPathFinderModule;
+
+		[Inject]
+		public var touchDragModule:ITouchDragModule;
+
+		[Inject]
+		public var touchZoomModule:ITouchZoomModule;
+
 		private var _unitControllerModel:UnitControllerModel;
 		private var _unitControllerModuleView:UnitControllerModuleView;
 
@@ -38,13 +49,19 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 		{
 			if( e.touches[ 0 ].phase == TouchPhase.ENDED )
 			{
-				var unitMoveToRequest:UnitMoveToRequest = new UnitMoveToRequest();
-				unitMoveToRequest.unit = this._unitControllerModel.getTarget();
+				if( !touchDragModule.getIsTouchDragged() && !touchZoomModule.getIsZoomInProgress() )
+				{
+					var touchPoint:Point = e.touches[ 0 ].getLocation( this._unitControllerModuleView );
 
-				var touchPoint:Point = e.touches[ 0 ].getLocation( this._unitControllerModuleView );
-				unitMoveToRequest.position = new SimplePoint( touchPoint.x, touchPoint.y );
+					trace('MOVE TO', this._unitControllerModel.getTarget().getPosition(), touchPoint );
 
-				this.dispatchEvent( new UnitControllerModuleEvent( UnitControllerModuleEvent.UNIT_MOVE_TO_REQUEST, unitMoveToRequest ) );
+					var pathVO:PathVO = pathFinderModule.getPath( this._unitControllerModel.getTarget().getPosition(), new SimplePoint( touchPoint.x, touchPoint.y ) );
+
+					if( pathVO.path && pathVO.path.length > 0 )
+					{
+						this._unitControllerModel.getTarget().moveTo( pathVO );
+					}
+				}
 			}
 		}
 

@@ -7,13 +7,16 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 	import net.fpp.common.util.GeomUtil;
 	import net.fpp.starlingtowerdefense.game.module.touchdrag.constant.CTouchDrag;
 
-	import starling.display.DisplayObjectContainer;
+	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 
 	public class TouchDragModule extends AModule implements ITouchDragModule
 	{
+		[Inject(id="viewContainer")]
+		public var viewContainer:Sprite;
+
 		private var _touchDragModel:TouchDragModel;
 
 		public function TouchDragModule()
@@ -21,10 +24,9 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 			this._touchDragModel = this.createModel( TouchDragModel ) as TouchDragModel;
 		}
 
-		public function setGameContainer( value:DisplayObjectContainer ):void
+		override public function onInited():void
 		{
-			this._touchDragModel.gameContainer = value;
-			this._touchDragModel.gameContainer.addEventListener( TouchEvent.TOUCH, this.onTouchHandler );
+			viewContainer.addEventListener( TouchEvent.TOUCH, this.onTouchHandler );
 		}
 
 		private function onTouchHandler( e:TouchEvent ):void
@@ -59,8 +61,8 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 
 					if( this._touchDragModel.isTouchDragged )
 					{
-						this._touchDragModel.gameContainer.x -= ( this._touchDragModel.lastTouchPoint.x - touch.globalX );
-						this._touchDragModel.gameContainer.y -= ( this._touchDragModel.lastTouchPoint.y - touch.globalY );
+						viewContainer.x -= ( this._touchDragModel.lastTouchPoint.x - touch.globalX );
+						viewContainer.y -= ( this._touchDragModel.lastTouchPoint.y - touch.globalY );
 					}
 					this._touchDragModel.swipeForce = Math.sqrt( Math.pow( Math.abs( touch.previousGlobalX - touch.globalX ), 2 ) + Math.pow( Math.abs( touch.previousGlobalY - touch.globalY ), 2 ) );
 					this._touchDragModel.swipeDirection = GeomUtil.atan2( touch.globalY - touch.previousGlobalY, touch.globalX - touch.previousGlobalX );
@@ -73,16 +75,16 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 		{
 			if ( this._touchDragModel.swipeForce > 1 )
 			{
-				this._touchDragModel.gameContainer.x = getNormalizedWorldXPosition( this._touchDragModel.gameContainer.x + this._touchDragModel.swipeForce / 2 * Math.cos( this._touchDragModel.swipeDirection ) );
-				this._touchDragModel.gameContainer.y = getNormalizedWorldYPosition( this._touchDragModel.gameContainer.y + this._touchDragModel.swipeForce / 2 * Math.sin( this._touchDragModel.swipeDirection ) );
+				viewContainer.x = getNormalizedWorldXPosition( viewContainer.x + this._touchDragModel.swipeForce / 2 * Math.cos( this._touchDragModel.swipeDirection ) );
+				viewContainer.y = getNormalizedWorldYPosition( viewContainer.y + this._touchDragModel.swipeForce / 2 * Math.sin( this._touchDragModel.swipeDirection ) );
 
 				this._touchDragModel.swipeForce *= .96;
 			}
 			else if ( this._touchDragModel.swipeForce != 0 )
 			{
 				this._touchDragModel.swipeForce = 0;
-				this._touchDragModel.gameContainer.x = getNormalizedWorldXPosition( this._touchDragModel.gameContainer.x );
-				this._touchDragModel.gameContainer.y = getNormalizedWorldYPosition( this._touchDragModel.gameContainer.y );
+				viewContainer.x = getNormalizedWorldXPosition( viewContainer.x );
+				viewContainer.y = getNormalizedWorldYPosition( viewContainer.y );
 			}
 		}
 
@@ -93,12 +95,12 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 
 		private function getNormalizedWorldXPosition( x:Number ):Number
 		{
-			return Math.max( -this._touchDragModel.gameContainer.width + this._touchDragModel.gameContainer.stage.stageWidth, Math.min( 0, x ) );
+			return Math.max( -viewContainer.width + viewContainer.stage.stageWidth, Math.min( 0, x ) );
 		}
 
 		private function getNormalizedWorldYPosition( y:Number ):Number
 		{
-			return Math.max( -this._touchDragModel.gameContainer.height + this._touchDragModel.gameContainer.stage.stageHeight, Math.min( 0, y ) );
+			return Math.max( -viewContainer.height + viewContainer.stage.stageHeight, Math.min( 0, y ) );
 		}
 
 		public function getIsTouchDragged():Boolean
@@ -108,9 +110,9 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 
 		override public function dispose():void
 		{
-			if( this._touchDragModel.gameContainer )
+			if( viewContainer )
 			{
-				this._touchDragModel.gameContainer.removeEventListener( TouchEvent.TOUCH, this.onTouchHandler );
+				viewContainer.removeEventListener( TouchEvent.TOUCH, this.onTouchHandler );
 			}
 
 			super.dispose();

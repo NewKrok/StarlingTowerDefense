@@ -3,7 +3,7 @@
  */
 package net.fpp.starlingtowerdefense.game.module.unit.vo
 {
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileSettingVO;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.vo.ProjectileSettingVO;
 
 	public class UnitConfigVO
 	{

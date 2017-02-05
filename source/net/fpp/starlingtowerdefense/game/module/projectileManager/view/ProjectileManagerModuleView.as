@@ -1,7 +1,7 @@
 /**
  * Created by newkrok on 26/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.projectileManager.view
+package net.fpp.starlingtowerdefense.game.module.projectilemanager.view
 {
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Linear;
@@ -13,10 +13,10 @@ package net.fpp.starlingtowerdefense.game.module.projectileManager.view
 	import net.fpp.common.util.objectpool.IObjectPool;
 	import net.fpp.common.util.objectpool.ObjectPool;
 	import net.fpp.common.util.objectpool.ObjectPoolSettingVO;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.ProjectileManagerModel;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.events.ProjectileManagerModelEvent;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.factory.ProjectileViewFactory;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.ProjectileManagerModel;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.events.ProjectileManagerModelEvent;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.factory.ProjectileViewFactory;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.vo.ProjectileVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.IUnitModule;
 	import net.fpp.starlingtowerdefense.game.util.DamageCalculatorUtil;
 

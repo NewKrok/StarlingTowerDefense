@@ -9,8 +9,6 @@ package net.fpp.starlingtowerdefense.game.module.touchdrag
 
 	public interface ITouchDragModule extends IUpdatableModule
 	{
-		function setGameContainer( value:DisplayObjectContainer ):void;
-
 		function getIsTouchDragged():Boolean
 	}
 }

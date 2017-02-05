@@ -9,8 +9,6 @@ package net.fpp.starlingtowerdefense.game.module.touchzoom
 
 	public interface ITouchZoomModule extends IModule
 	{
-		function setGameContainer( value:DisplayObjectContainer ):void;
-
 		function getIsZoomInProgress():Boolean;
 	}
 }

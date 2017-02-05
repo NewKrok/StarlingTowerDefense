@@ -1,11 +1,11 @@
 /**
  * Created by newkrok on 26/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.projectileManager
+package net.fpp.starlingtowerdefense.game.module.projectilemanager
 {
 	import net.fpp.common.starling.module.AModule;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.view.ProjectileManagerModuleView;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.view.ProjectileManagerModuleView;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.vo.ProjectileVO;
 
 	public class ProjectileManagerModule extends AModule implements IProjectileManagerModule
 	{

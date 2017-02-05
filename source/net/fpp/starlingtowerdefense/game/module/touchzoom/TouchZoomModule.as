@@ -8,13 +8,16 @@ package net.fpp.starlingtowerdefense.game.module.touchzoom
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModule;
 
-	import starling.display.DisplayObjectContainer;
+	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 
 	public class TouchZoomModule extends AModule implements ITouchZoomModule
 	{
+		[Inject(id="viewContainer")]
+		public var viewContainer:Sprite;
+
 		private var _touchZoomModel:TouchZoomModel;
 
 		public function TouchZoomModule()
@@ -22,12 +25,11 @@ package net.fpp.starlingtowerdefense.game.module.touchzoom
 			this._touchZoomModel = this.createModel( TouchZoomModel ) as TouchZoomModel;
 		}
 
-		public function setGameContainer( value:DisplayObjectContainer ):void
+		override public function onInited():void
 		{
-			this._touchZoomModel.gameContainer = value;
-			this._touchZoomModel.gameContainer.addEventListener( TouchEvent.TOUCH, this.onTouchHandler );
+			viewContainer.addEventListener( TouchEvent.TOUCH, onTouchHandler );
 
-			this._touchZoomModel.zoomValue = value.scaleX;
+			_touchZoomModel.zoomValue = viewContainer.scaleX;
 		}
 
 		private function onTouchHandler( e:TouchEvent ):void
@@ -42,10 +44,10 @@ package net.fpp.starlingtowerdefense.game.module.touchzoom
 
 			if( touchA.phase == TouchPhase.ENDED || touchB.phase == TouchPhase.ENDED )
 			{
-				this._touchZoomModel.gameContainer.x -= this._touchZoomModel.gameContainer.pivotX;
-				this._touchZoomModel.gameContainer.pivotX = 0
-				this._touchZoomModel.gameContainer.y -= this._touchZoomModel.gameContainer.pivotY;
-				this._touchZoomModel.gameContainer.pivotY = 0;
+				viewContainer.x -= viewContainer.pivotX;
+				viewContainer.pivotX = 0
+				viewContainer.y -= viewContainer.pivotY;
+				viewContainer.pivotY = 0;
 
 				this._touchZoomModel.zoomStartOffset = 0;
 				this._touchZoomModel.isZoomInProgress = false;
@@ -66,46 +68,46 @@ package net.fpp.starlingtowerdefense.game.module.touchzoom
 				var newMapZoom:Number = this._touchZoomModel.zoomValueAtStart + zoomOffsetFromStart / 250;
 				newMapZoom = Math.max( .5, newMapZoom );
 				newMapZoom = Math.min( 2, newMapZoom );
-				this._touchZoomModel.gameContainer.scaleX = this._touchZoomModel.gameContainer.scaleY = newMapZoom;
+				viewContainer.scaleX = viewContainer.scaleY = newMapZoom;
 
-				if( this._touchZoomModel.gameContainer.width < this._touchZoomModel.gameContainer.stage.stageWidth )
+				if( viewContainer.width < viewContainer.stage.stageWidth )
 				{
-					this._touchZoomModel.gameContainer.width = this._touchZoomModel.gameContainer.stage.stageWidth;
-					this._touchZoomModel.gameContainer.scaleY = this._touchZoomModel.gameContainer.scaleX;
+					viewContainer.width = viewContainer.stage.stageWidth;
+					viewContainer.scaleY = viewContainer.scaleX;
 				}
-				else if( this._touchZoomModel.gameContainer.height < this._touchZoomModel.gameContainer.stage.stageHeight )
+				else if( viewContainer.height < viewContainer.stage.stageHeight )
 				{
-					this._touchZoomModel.gameContainer.height = this._touchZoomModel.gameContainer.stage.stageHeight;
-					this._touchZoomModel.gameContainer.scaleX = this._touchZoomModel.gameContainer.scaleY;
+					viewContainer.height = viewContainer.stage.stageHeight;
+					viewContainer.scaleX = viewContainer.scaleY;
 				}
 
-				this._touchZoomModel.zoomValue = this._touchZoomModel.gameContainer.scaleX;
+				this._touchZoomModel.zoomValue = viewContainer.scaleX;
 
 				if( this._touchZoomModel.zoomMiddlePoint == null )
 				{
-					var _zoomTouchPointA:Point = touchA.getLocation( this._touchZoomModel.gameContainer );
-					var _zoomTouchPointB:Point = touchB.getLocation( this._touchZoomModel.gameContainer );
+					var _zoomTouchPointA:Point = touchA.getLocation( viewContainer );
+					var _zoomTouchPointB:Point = touchB.getLocation( viewContainer );
 					this._touchZoomModel.zoomMiddlePoint = new SimplePoint( ( _zoomTouchPointA.x + _zoomTouchPointB.x ) / 2, ( _zoomTouchPointA.y + _zoomTouchPointB.y ) / 2 );
 
 					this._touchZoomModel.zoomPointOffset.setTo( ( touchA.globalX + touchB.globalX ) / 2, ( touchA.globalY + touchB.globalY ) / 2 );
 				}
 
-				this._touchZoomModel.gameContainer.x = this._touchZoomModel.zoomPointOffset.x - this._touchZoomModel.zoomMiddlePoint.x * newMapZoom;
-				this._touchZoomModel.gameContainer.y = this._touchZoomModel.zoomPointOffset.y - this._touchZoomModel.zoomMiddlePoint.y * newMapZoom;
+				viewContainer.x = this._touchZoomModel.zoomPointOffset.x - this._touchZoomModel.zoomMiddlePoint.x * newMapZoom;
+				viewContainer.y = this._touchZoomModel.zoomPointOffset.y - this._touchZoomModel.zoomMiddlePoint.y * newMapZoom;
 
-				this._touchZoomModel.gameContainer.x = getNormalizedWorldXPosition( this._touchZoomModel.gameContainer.x );
-				this._touchZoomModel.gameContainer.y = getNormalizedWorldYPosition( this._touchZoomModel.gameContainer.y );
+				viewContainer.x = getNormalizedWorldXPosition( viewContainer.x );
+				viewContainer.y = getNormalizedWorldYPosition( viewContainer.y );
 			}
 		}
 
 		private function getNormalizedWorldXPosition( x:Number ):Number
 		{
-			return Math.max( -this._touchZoomModel.gameContainer.width + this._touchZoomModel.gameContainer.stage.stageWidth, Math.min( 0, x ) );
+			return Math.max( -viewContainer.width + viewContainer.stage.stageWidth, Math.min( 0, x ) );
 		}
 
 		private function getNormalizedWorldYPosition( y:Number ):Number
 		{
-			return Math.max( -this._touchZoomModel.gameContainer.height + this._touchZoomModel.gameContainer.stage.stageHeight, Math.min( 0, y ) );
+			return Math.max( -viewContainer.height + viewContainer.stage.stageHeight, Math.min( 0, y ) );
 		}
 
 		public function getIsZoomInProgress():Boolean
@@ -115,9 +117,9 @@ package net.fpp.starlingtowerdefense.game.module.touchzoom
 
 		override public function dispose():void
 		{
-			if( this._touchZoomModel.gameContainer )
+			if( viewContainer )
 			{
-				this._touchZoomModel.gameContainer.removeEventListener( TouchEvent.TOUCH, this.onTouchHandler );
+				viewContainer.removeEventListener( TouchEvent.TOUCH, this.onTouchHandler );
 			}
 
 			super.dispose();

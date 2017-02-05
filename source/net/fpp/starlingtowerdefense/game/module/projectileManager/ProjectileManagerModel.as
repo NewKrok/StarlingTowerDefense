@@ -1,11 +1,11 @@
 /**
  * Created by newkrok on 26/06/16.
  */
-package net.fpp.starlingtowerdefense.game.module.projectileManager
+package net.fpp.starlingtowerdefense.game.module.projectilemanager
 {
 	import net.fpp.common.starling.module.AModel;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.events.ProjectileManagerModelEvent;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.events.ProjectileManagerModelEvent;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.vo.ProjectileVO;
 
 	public class ProjectileManagerModel extends AModel
 	{

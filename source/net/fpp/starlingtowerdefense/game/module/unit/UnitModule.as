@@ -9,8 +9,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.common.starling.module.AModule;
 	import net.fpp.common.util.pathfinding.vo.PathVO;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.IProjectileManagerModule;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileVO;
+	import net.fpp.starlingtowerdefense.game.module.pathfinder.IPathFinderModule;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.IProjectileManagerModule;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.vo.ProjectileVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.events.UnitModuleEvent;
 	import net.fpp.starlingtowerdefense.game.module.unit.view.UnitModuleView;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
@@ -21,6 +22,9 @@ package net.fpp.starlingtowerdefense.game.module.unit
 	{
 		[Inject]
 		public var projectileManagerModule:IProjectileManagerModule;
+
+		[Inject]
+		public var pathFinderModule:IPathFinderModule;
 
 		[Inject]
 		public var _dragonBonesGraphicService:DragonBonesGraphicService;
@@ -119,10 +123,10 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function runNextPathData():void
 		{
-			if ( this._pathIndex < 0 || !this._pathVO.path || this._pathIndex >= this._pathVO.path.length )
+			/*if ( this._pathIndex < 0 || !this._pathVO.path || this._pathIndex >= this._pathVO.path.length )
 			{
 				return;
-			}
+			}*/
 
 			this.move( this._pathVO.path[ this._pathIndex ] );
 
@@ -131,6 +135,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function move( position:SimplePoint ):void
 		{
+			trace('MOVE',_instanceId, position);
 			if( position.x == this._unitView.x && position.y == this._unitView.y )
 			{
 				return;
@@ -364,7 +369,8 @@ package net.fpp.starlingtowerdefense.game.module.unit
 				}
 
 				this._unitView.run();
-				this.move( new SimplePoint( this._unitModel.getTarget().getView().x, this._unitModel.getTarget().getView().y ) );
+
+				moveTo( pathFinderModule.getPath( getPosition(), _unitModel.getTarget().getPosition() ) );
 			}
 		}
 
@@ -392,7 +398,7 @@ package net.fpp.starlingtowerdefense.game.module.unit
 		private function moveLastPositionAfterFight():void
 		{
 			this._unitView.run();
-			this.move( this._unitModel.getLastPositionBeforeFight() );
+			moveTo( pathFinderModule.getPath( getPosition(), this._unitModel.getLastPositionBeforeFight() ) );
 		}
 
 		public function getPlayerGroup():String

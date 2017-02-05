@@ -5,7 +5,7 @@ package net.fpp.starlingtowerdefense.game.config.unit
 {
 	import net.fpp.common.geom.SimplePoint;
 	import net.fpp.starlingtowerdefense.constant.CSkin;
-	import net.fpp.starlingtowerdefense.game.module.projectileManager.vo.ProjectileSettingVO;
+	import net.fpp.starlingtowerdefense.game.module.projectilemanager.vo.ProjectileSettingVO;
 	import net.fpp.starlingtowerdefense.game.module.unit.constant.CArmorType;
 	import net.fpp.starlingtowerdefense.game.module.unit.constant.CAttackType;
 	import net.fpp.starlingtowerdefense.game.module.unit.vo.UnitConfigVO;
