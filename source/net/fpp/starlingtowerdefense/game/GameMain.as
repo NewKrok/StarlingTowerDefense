@@ -205,22 +205,22 @@ package net.fpp.starlingtowerdefense.game
 
 		private function massTestHelper():void
 		{
-			var teamAStartPoint:SimplePoint = new SimplePoint( 100, 500 );
-			var teamBStartPoint:SimplePoint = new SimplePoint( Math.random() * 1000, Math.random() * 1000 );
+			var teamAStartPoint:SimplePoint = new SimplePoint( 400, 500 );
+			var teamBStartPoint:SimplePoint = new SimplePoint( 1200, 700 );
 
-			/*var unit:IUnitModule = this.createUnit( teamAStartPoint.x + Math.random() * 50, teamAStartPoint.y + Math.random() * 50, new WarriorUnitConfigVO(), '0' ) as IUnitModule;
+			var unit:IUnitModule = this.createUnit( teamAStartPoint.x + Math.random() * 50, teamAStartPoint.y + Math.random() * 50, new WarriorUnitConfigVO(), '0' ) as IUnitModule;
 			unitMoveTo( unit, teamBStartPoint, true );
 			unit = this.createUnit( teamAStartPoint.x + Math.random() * 50, teamAStartPoint.y + Math.random() * 50, new WarriorUnitConfigVO(), '0' ) as IUnitModule;
 			unitMoveTo( unit, teamBStartPoint, true );
-			unit = this.createUnit( teamAStartPoint.x + Math.random() * 50, teamAStartPoint.y + Math.random() * 50, new WarriorUnitConfigVO(), '0' ) as IUnitModule;
-			unitMoveTo( unit, teamBStartPoint, true );*/
+			unit = this.createUnit( teamAStartPoint.x + Math.random() * 50, teamAStartPoint.y + Math.random() * 50, new ArcherUnitConfigVO(), '0' ) as IUnitModule;
+			unitMoveTo( unit, teamBStartPoint, true );
 
-			/*unit = this.createUnit( teamBStartPoint.x + Math.random() * 50, teamBStartPoint.y + Math.random() * 50, new ArcherUnitConfigVO(), '1' ) as IUnitModule;
+			unit = this.createUnit( teamBStartPoint.x + Math.random() * 50, teamBStartPoint.y + Math.random() * 50, new WarriorUnitConfigVO(), '1' ) as IUnitModule;
+			unitMoveTo( unit, teamAStartPoint, true );
+			unit = this.createUnit( teamBStartPoint.x + Math.random() * 50, teamBStartPoint.y + Math.random() * 50, new WarriorUnitConfigVO(), '1' ) as IUnitModule;
 			unitMoveTo( unit, teamAStartPoint, true );
 			unit = this.createUnit( teamBStartPoint.x + Math.random() * 50, teamBStartPoint.y + Math.random() * 50, new ArcherUnitConfigVO(), '1' ) as IUnitModule;
 			unitMoveTo( unit, teamAStartPoint, true );
-			unit = this.createUnit( teamBStartPoint.x + Math.random() * 50, teamBStartPoint.y + Math.random() * 50, new ArcherUnitConfigVO(), '1' ) as IUnitModule;
-			unitMoveTo( unit, teamAStartPoint, true );*/
 
 			TweenLite.delayedCall( 10, this.massTestHelper );
 		}

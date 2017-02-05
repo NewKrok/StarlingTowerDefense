@@ -53,18 +53,22 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		public function reset():void
 		{
-			TweenLite.killTweensOf( this._unitView );
+			TweenLite.killTweensOf( _unitView );
 			TweenLite.killTweensOf( this );
 
-			this._isMoving = false;
-			this._isAttackMoveToInProgress = false;
+			_isMoving = false;
+			_isAttackMoveToInProgress = false;
 
-			this._pathIndex = 0;
-			this._pathVO = null;
+			_pathIndex = 0;
+			_pathVO = null;
 
-			this._unitView.alpha = 1;
+			_unitView.x = 0;
+			_unitView.y = 0;
+			_unitView.alpha = 1;
 
-			this.processUnitConfigVO( this._unitModel.getUnitConfigVO() );
+			_unitModel.setDirection( 1 );
+
+			processUnitConfigVO( _unitModel.getUnitConfigVO() );
 		}
 
 		override public function onInited():void
@@ -111,23 +115,21 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 			this.removeTarget();
 
-			this._pathVO = pathVO;
+			if ( pathVO.path )
+			{
+				this._pathVO = pathVO;
 
-			this._isMoving = true;
+				this._isMoving = true;
 
-			this._pathIndex = 0;
+				this._pathIndex = 0;
 
-			this.runNextPathData();
-			this._unitView.run();
+				this.runNextPathData();
+				this._unitView.run();
+			}
 		}
 
 		private function runNextPathData():void
 		{
-			/*if ( this._pathIndex < 0 || !this._pathVO.path || this._pathIndex >= this._pathVO.path.length )
-			{
-				return;
-			}*/
-
 			this.move( this._pathVO.path[ this._pathIndex ] );
 
 			this._pathIndex++;
@@ -135,7 +137,6 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function move( position:SimplePoint ):void
 		{
-			trace('MOVE',_instanceId, position);
 			if( position.x == this._unitView.x && position.y == this._unitView.y )
 			{
 				return;
@@ -397,18 +398,18 @@ package net.fpp.starlingtowerdefense.game.module.unit
 
 		private function moveLastPositionAfterFight():void
 		{
-			this._unitView.run();
-			moveTo( pathFinderModule.getPath( getPosition(), this._unitModel.getLastPositionBeforeFight() ) );
+			_unitView.run();
+			moveTo( pathFinderModule.getPath( getPosition(), _unitModel.getLastPositionBeforeFight() ) );
 		}
 
 		public function getPlayerGroup():String
 		{
-			return this._unitModel.getPlayerGroup();
+			return _unitModel.getPlayerGroup();
 		}
 
 		public function setPlayerGroup( value:String ):void
 		{
-			this._unitModel.setPlayerGroup( value );
+			_unitModel.setPlayerGroup( value );
 		}
 
 		public function getIsAttackMoveToInProgress():Boolean

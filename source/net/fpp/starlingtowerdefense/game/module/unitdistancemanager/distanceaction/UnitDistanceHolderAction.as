@@ -23,8 +23,8 @@ package net.fpp.starlingtowerdefense.game.module.unitdistancemanager.distanceact
 				var unitAView:DisplayObject = value.unitA.getView();
 				var unitBView:DisplayObject = value.unitB.getView();
 
-				var unitAOffset:Number;
-				var unitBOffset:Number;
+				var unitAOffset:Number = 0;
+				var unitBOffset:Number = 0;
 
 				if( unitARadius == unitBRadius )
 				{

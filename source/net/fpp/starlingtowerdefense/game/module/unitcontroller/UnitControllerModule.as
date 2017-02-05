@@ -53,8 +53,6 @@ package net.fpp.starlingtowerdefense.game.module.unitcontroller
 				{
 					var touchPoint:Point = e.touches[ 0 ].getLocation( this._unitControllerModuleView );
 
-					trace('MOVE TO', this._unitControllerModel.getTarget().getPosition(), touchPoint );
-
 					var pathVO:PathVO = pathFinderModule.getPath( this._unitControllerModel.getTarget().getPosition(), new SimplePoint( touchPoint.x, touchPoint.y ) );
 
 					if( pathVO.path && pathVO.path.length > 0 )
